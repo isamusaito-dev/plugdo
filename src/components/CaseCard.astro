@@ -54,13 +54,17 @@ const { item } = Astro.props;
       {item.title}
     </h3>
 
-    <!-- 成果ハイライト -->
+    <!-- 成果ハイライト（Before → After） -->
     {item.metrics && item.metrics.length > 0 && (
-      <dl class="mt-4 flex flex-wrap gap-x-5 gap-y-2 border-t border-mist pt-4">
-        {item.metrics.map((m) => (
-          <div>
-            <dd class="font-display text-xl font-bold text-pink leading-none">{m.value}</dd>
-            <dt class="mt-0.5 text-[11px] text-gray leading-snug">{m.label}</dt>
+      <dl class="mt-4 space-y-1.5 border-t border-mist pt-4">
+        {item.metrics.slice(0, 3).map((m) => (
+          <div class="flex items-center justify-between gap-2 text-xs">
+            <dt class="text-gray/70 truncate">{m.label}</dt>
+            <dd class="flex flex-shrink-0 items-center gap-1.5 font-bold">
+              <span class="text-ink/30 line-through">{m.before}</span>
+              <span class="text-gray/30">→</span>
+              <span class="text-pink">{m.after}</span>
+            </dd>
           </div>
         ))}
       </dl>

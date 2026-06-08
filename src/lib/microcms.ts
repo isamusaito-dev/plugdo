@@ -37,8 +37,9 @@ export type Blog = {
 };
 
 export type CaseMetric = {
-  value: string;
-  label: string;
+  label: string;   // 指標名（例：月間問い合わせ数）
+  before: string;  // 施策前の値（例：1〜2件）
+  after: string;   // 施策後の値（例：9件）
 };
 
 export type Case = {
