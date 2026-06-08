@@ -21,10 +21,17 @@ const { item } = Astro.props;
 const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
 
 const sections = [
-  { label: 'Challenge', heading: '課題', html: item.challenge },
-  { label: 'Solution', heading: '施策', html: item.solution },
-  { label: 'Result', heading: '成果', html: item.result },
+  { label: 'Challenge', heading: '課題', html: item.challenge, icon: 'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z' },
+  { label: 'Solution', heading: '施策', html: item.solution, icon: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z' },
+  { label: 'Result',   heading: '成果', html: item.result,   icon: 'M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941' },
 ];
+
+const planColor: Record<string, string> = {
+  Basic:   'bg-slate/10 text-slate',
+  Growth:  'bg-pink/10 text-pink',
+  Partner: 'bg-navy/10 text-navy',
+};
+const planBadgeClass = item.plan ? (planColor[item.plan] ?? 'bg-mist text-navy') : '';
 
 const caseLd = {
   '@context': 'https://schema.org',
@@ -62,62 +69,115 @@ const breadcrumbLd = {
   jsonLd={[caseLd, breadcrumbLd]}
 >
   <article>
-    <header class="hero-gradient">
-      <div class="container-pd py-14 md:py-16">
-        <nav class="mb-5 text-xs text-gray" aria-label="パンくず">
-          <a href="/" class="hover:text-pink">ホーム</a>
-          <span class="mx-1.5">/</span>
-          <a href="/cases" class="hover:text-pink">導入事例</a>
+    <!-- ヘッダー -->
+    <header class="hero-gradient border-b border-navy/6">
+      <div class="container-pd py-14 md:py-18">
+        <nav class="mb-6 flex items-center gap-1.5 text-xs text-gray" aria-label="パンくず">
+          <a href="/" class="hover:text-pink transition-colors">ホーム</a>
+          <svg class="h-3 w-3 flex-shrink-0 opacity-40" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+          <a href="/cases" class="hover:text-pink transition-colors">導入事例</a>
+          <svg class="h-3 w-3 flex-shrink-0 opacity-40" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+          <span class="text-navy/60 line-clamp-1">{item.title}</span>
         </nav>
-        <div class="flex flex-wrap items-center gap-2 text-xs">
-          {
-            item.industry && (
-              <span class="rounded-full bg-mist px-2.5 py-1 font-bold text-navy">
-                {item.industry}
-              </span>
-            )
-          }
-          <span class="text-gray">{item.clientName}</span>
+
+        <div class="flex flex-wrap items-center gap-2">
+          {item.industry && (
+            <span class="rounded-full bg-mist px-3 py-1 text-xs font-bold text-navy">
+              {item.industry}
+            </span>
+          )}
+          {item.plan && (
+            <span class={`rounded-full px-3 py-1 text-xs font-bold ${planBadgeClass}`}>
+              {item.plan} プラン
+            </span>
+          )}
+          <span class="text-xs text-gray">{item.clientName}</span>
         </div>
-        <h1 class="mt-4 max-w-3xl text-2xl font-black leading-snug text-navy md:text-3xl">
+
+        <h1 class="mt-4 max-w-3xl text-2xl font-black leading-snug text-navy md:text-[1.875rem]">
           {item.title}
         </h1>
       </div>
     </header>
 
-    <div class="container-pd py-12 md:py-16">
-      <div class="mx-auto max-w-3xl space-y-12">
-        {
-          item.thumbnail && (
-            <img
-              src={`${item.thumbnail.url}?w=1200`}
-              alt={item.title}
-              width="1200"
-              height="675"
-              class="w-full rounded-lg"
-            />
-          )
-        }
+    <!-- 成果数値バー（metricsがある場合） -->
+    {item.metrics && item.metrics.length > 0 && (
+      <div class="bg-navy">
+        <div class="container-pd">
+          <dl class={`grid divide-x divide-white/10 ${item.metrics.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+            {item.metrics.map((m) => (
+              <div class="px-6 py-6 text-center">
+                <dd class="font-display text-3xl font-bold text-white md:text-4xl">{m.value}</dd>
+                <dt class="mt-1 text-[11px] leading-snug text-white/50">{m.label}</dt>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    )}
 
-        {
-          sections.map((s) => (
-            <section>
-              <p class="section-label">- {s.label} -</p>
-              <h2 class="section-title">{s.heading}</h2>
-              <div class="prose-pd mt-5 max-w-none" set:html={s.html} />
-            </section>
-          ))
-        }
+    <!-- 本文 -->
+    <div class="container-pd py-14 md:py-20">
+      <div class="mx-auto max-w-3xl">
 
-        {
-          item.voice && (
-            <section class="card border-pink bg-pink/5 p-8">
-              <p class="section-label">- Voice -</p>
-              <h2 class="text-lg font-bold text-navy">クライアントの声</h2>
-              <p class="mt-4 leading-relaxed text-ink">{item.voice}</p>
+        <!-- サムネイル -->
+        {item.thumbnail && (
+          <img
+            src={`${item.thumbnail.url}?w=1200`}
+            alt={item.title}
+            width="1200"
+            height="675"
+            class="mb-14 w-full rounded-2xl shadow-md"
+          />
+        )}
+
+        <!-- 課題・施策・成果 -->
+        <div class="space-y-14">
+          {sections.map((s, i) => (
+            <section data-animate data-animate-delay={String(i * 60)}>
+              <!-- ラベル行 -->
+              <div class="flex items-center gap-3 mb-5">
+                <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-navy/8">
+                  <svg class="h-4.5 w-4.5 text-navy" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d={s.icon} />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-pink">{s.label}</p>
+                  <h2 class="text-xl font-black text-navy leading-none">{s.heading}</h2>
+                </div>
+              </div>
+              <!-- 本文 -->
+              <div class="prose-pd rounded-xl border border-gray/10 bg-paper px-7 py-6 shadow-sm" set:html={s.html} />
             </section>
-          )
-        }
+          ))}
+        </div>
+
+        <!-- クライアントの声 -->
+        {item.voice && (
+          <section class="mt-14" data-animate>
+            <div class="relative overflow-hidden rounded-2xl border border-pink/20 bg-gradient-to-br from-pink/5 to-transparent px-8 py-9">
+              <!-- 装飾引用符 -->
+              <svg class="absolute -left-2 -top-2 h-16 w-16 text-pink/8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+              </svg>
+              <div class="flex items-center gap-2 mb-5">
+                <svg class="h-4 w-4 text-pink" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-pink">Voice</p>
+              </div>
+              <p class="relative text-base leading-[1.9] text-ink">{item.voice}</p>
+            </div>
+          </section>
+        )}
+
+        <!-- 他の事例を見る -->
+        <div class="mt-14 flex items-center justify-center">
+          <a href="/cases" class="btn-outline text-sm">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
+            導入事例一覧へ戻る
+          </a>
+        </div>
+
       </div>
     </div>
   </article>

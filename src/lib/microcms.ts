@@ -36,13 +36,20 @@ export type Blog = {
   revisedAt: string;
 };
 
+export type CaseMetric = {
+  value: string;
+  label: string;
+};
+
 export type Case = {
   id: string;
   title: string;
   slug: string;
   clientName: string;
   industry?: string;
+  plan?: string;          // 利用プラン名（例：Growth）
   thumbnail?: MicroCMSImage;
+  metrics?: CaseMetric[]; // 成果の数値ハイライト（最大3つ）
   challenge: string;
   solution: string;
   result: string;

@@ -23,20 +23,27 @@ const breadcrumbLd = {
   description="plugdoの導入事例。更新の止まったサイトを問い合わせ源に変えた中小企業の事例を、課題・施策・成果（数字）とともにご紹介します。"
   jsonLd={breadcrumbLd}
 >
-  <section class="hero-gradient">
+  <!-- ページヘッダー -->
+  <section class="hero-gradient border-b border-navy/6">
     <div class="container-pd py-16 md:py-20">
-      <p class="section-label">- Works -</p>
-      <h1 class="text-3xl font-black text-navy md:text-4xl">導入事例</h1>
-      <p class="mt-5 max-w-2xl text-base leading-relaxed text-ink">
-        plugdoで「作ったきり」を脱却した企業の事例です。課題・施策・成果を具体的にご紹介します。
+      <p class="section-label">Works</p>
+      <h1 class="mt-2 text-3xl font-black text-navy md:text-4xl">導入事例</h1>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed text-ink/70">
+        「作ったきり」を脱却し、サイトを問い合わせ・採用の武器に変えた企業の事例です。<br class="hidden md:inline" />
+        課題・施策・成果を数字とともにご紹介します。
       </p>
     </div>
   </section>
 
-  <section>
+  <!-- 事例一覧 -->
+  <section class="bg-mist">
     <div class="container-pd py-16 md:py-20">
       <div class="grid gap-6 md:grid-cols-3">
-        {cases.map((item) => <CaseCard item={item} />)}
+        {cases.map((item, i) => (
+          <div data-animate data-animate-delay={String(i * 80)}>
+            <CaseCard item={item} />
+          </div>
+        ))}
       </div>
     </div>
   </section>
