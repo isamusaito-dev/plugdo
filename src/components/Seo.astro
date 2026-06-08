@@ -1,64 +1,67 @@
 ---
 // メタタグ・OGP・Twitter Card・canonical・JSON-LD を一括出力する。
-// 仕様書 §7 SEO/AIO 要件の中核コンポーネント。
-const SITE_NAME = 'plugdo（プラグドゥ）';
-const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+// SEO/AIO 要件の中核コンポーネント。
+import {
+  SITE_NAME,
+  SITE_URL,
+  OG_IMAGE_DEFAULT,
+  OG_IMAGE_WIDTH,
+  OG_IMAGE_HEIGHT,
+  THEME_COLOR,
+  COMPANY,
+  organizationLd,
+  websiteLd,
+} from '../lib/site';
 
 interface Props {
   title: string;
   description: string;
-  /** パスを除いた OGP 画像のパス（/ogp-default.png など）または絶対URL */
+  /** ルートからの OGP 画像パス（/ogp-default.png など）または絶対URL */
   ogImage?: string;
   ogType?: 'website' | 'article';
   /** 省略時は現在のURLを canonical にする */
   canonicalPath?: string;
-  /** ページ固有の JSON-LD（Organization は常に出力。これは追加分） */
+  /** ページ固有の JSON-LD（Organization / WebSite は常に出力。これは追加分） */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   noindex?: boolean;
+  /** article の公開・更新日時（ISO8601）。ブログ・事例で使用 */
+  publishedTime?: string;
+  modifiedTime?: string;
 }
 
 const {
   title,
   description,
-  ogImage = '/ogp-default.png',
+  ogImage = OG_IMAGE_DEFAULT,
   ogType = 'website',
   canonicalPath,
   jsonLd,
   noindex = false,
+  publishedTime,
+  modifiedTime,
 } = Astro.props;
 
-const fullTitle =
-  title === SITE_NAME ? title : `${title} | ${SITE_NAME}`;
+const fullTitle = title === SITE_NAME ? title : `${title} | ${SITE_NAME}`;
 
 const canonicalURL = new URL(
   canonicalPath ?? Astro.url.pathname,
   SITE_URL
 ).href;
 
+const isDefaultOg = ogImage === OG_IMAGE_DEFAULT;
 const ogImageURL = ogImage.startsWith('http')
   ? ogImage
   : new URL(ogImage, SITE_URL).href;
 
-// 全ページ共通の Organization 構造化データ（運営会社情報）
-const organizationLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: '株式会社ハンチス',
-  alternateName: 'HUNCHES',
-  url: SITE_URL,
-  email: 'info@hunches.co.jp',
-  foundingDate: '2024-01-16',
-  founder: {
-    '@type': 'Person',
-    name: '齋藤 勇',
-  },
-  description:
-    'webサイトの企画・制作・運営、webサイト/マーケティング/ブランドのコンサルティングを行う企業。plugdo を運営。',
-  logo: new URL('/favicon.svg', SITE_URL).href,
-};
+// クローラー指示。max-image-preview:large で AI/検索のリッチ表示・引用を許可。
+const robotsContent = noindex
+  ? 'noindex, nofollow'
+  : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
 
+// Organization / WebSite は全ページ共通。ページ固有分を後ろに連結。
 const jsonLdArray = [
   organizationLd,
+  websiteLd,
   ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []),
 ];
 ---
@@ -67,7 +70,14 @@ const jsonLdArray = [
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
-{noindex && <meta name="robots" content="noindex, nofollow" />}
+<meta name="robots" content={robotsContent} />
+<meta name="author" content={COMPANY.legalName} />
+<meta name="theme-color" content={THEME_COLOR} />
+<meta name="format-detection" content="telephone=no" />
+
+<!-- llms.txt（AI向けサイト要約）/ RSS の明示 -->
+<link rel="alternate" type="text/markdown" href={new URL('/llms.txt', SITE_URL).href} title="llms.txt" />
+<link rel="alternate" type="application/rss+xml" title="plugdo ブログ" href={new URL('/blog/rss.xml', SITE_URL).href} />
 
 <!-- OGP -->
 <meta property="og:site_name" content={SITE_NAME} />
@@ -76,7 +86,15 @@ const jsonLdArray = [
 <meta property="og:type" content={ogType} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:image" content={ogImageURL} />
+{isDefaultOg && <meta property="og:image:width" content={String(OG_IMAGE_WIDTH)} />}
+{isDefaultOg && <meta property="og:image:height" content={String(OG_IMAGE_HEIGHT)} />}
 <meta property="og:locale" content="ja_JP" />
+{ogType === 'article' && publishedTime && (
+  <meta property="article:published_time" content={publishedTime} />
+)}
+{ogType === 'article' && (modifiedTime || publishedTime) && (
+  <meta property="article:modified_time" content={modifiedTime || publishedTime} />
+)}
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />

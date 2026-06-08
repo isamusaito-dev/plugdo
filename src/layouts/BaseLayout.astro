@@ -12,10 +12,21 @@ interface Props {
   canonicalPath?: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   noindex?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
 }
 
-const { title, description, ogImage, ogType, canonicalPath, jsonLd, noindex } =
-  Astro.props;
+const {
+  title,
+  description,
+  ogImage,
+  ogType,
+  canonicalPath,
+  jsonLd,
+  noindex,
+  publishedTime,
+  modifiedTime,
+} = Astro.props;
 
 const GA_ID = import.meta.env.PUBLIC_GA_ID;
 ---
@@ -48,6 +59,8 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID;
       canonicalPath={canonicalPath}
       jsonLd={jsonLd}
       noindex={noindex}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
     />
 
     <!-- Google Analytics 4（測定IDが設定されている場合のみ） -->

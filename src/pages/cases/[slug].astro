@@ -40,12 +40,10 @@ const caseLd = {
   datePublished: item.publishedAt,
   dateModified: item.revisedAt || item.publishedAt,
   ...(item.thumbnail ? { image: item.thumbnail.url } : {}),
-  author: { '@type': 'Organization', name: '株式会社ハンチス' },
-  publisher: {
-    '@type': 'Organization',
-    name: '株式会社ハンチス',
-    logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
-  },
+  inLanguage: 'ja-JP',
+  author: { '@id': `${SITE_URL}/#organization` },
+  publisher: { '@id': `${SITE_URL}/#organization` },
+  isPartOf: { '@id': `${SITE_URL}/#website` },
   about: item.clientName,
   mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/cases/${item.slug}` },
 };
@@ -66,6 +64,8 @@ const breadcrumbLd = {
   description={`【導入事例】${item.clientName}（${item.industry ?? ''}）の課題・施策・成果。${item.title}`}
   ogType="article"
   ogImage={item.thumbnail?.url}
+  publishedTime={item.publishedAt}
+  modifiedTime={item.revisedAt || item.publishedAt}
   jsonLd={[caseLd, breadcrumbLd]}
 >
   <article>

@@ -1,13 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import ServiceCard from '../components/ServiceCard.astro';
 import PriceTable from '../components/PriceTable.astro';
 import CaseCard from '../components/CaseCard.astro';
 import BlogCard from '../components/BlogCard.astro';
 import CTASection from '../components/CTASection.astro';
 import { getCases, getBlogs } from '../lib/microcms';
 import { sampleCases, sampleBlogs } from '../lib/sampleData';
+import { plans } from '../lib/plans';
+import { SITE_URL } from '../lib/site';
 
 // 事例・ブログを取得（未接続時はサンプルにフォールバック）
 const casesRes = await getCases({ limit: 3 });
@@ -91,19 +92,71 @@ const services = [
 const serviceLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
+  '@id': `${SITE_URL}/#service`,
   serviceType: 'ホームページ運用・改善サービス',
-  name: 'plugdo',
-  provider: { '@type': 'Organization', name: '株式会社ハンチス' },
-  areaServed: 'JP',
+  name: 'plugdo（プラグドゥ）',
+  url: SITE_URL,
+  provider: { '@id': `${SITE_URL}/#organization` },
+  areaServed: { '@type': 'Country', name: 'Japan' },
+  audience: {
+    '@type': 'BusinessAudience',
+    name: 'Web担当者のいない中小企業・小規模事業者',
+  },
   description:
-    '作ったきりのホームページを、毎月の更新・改善とAI検索対応で問い合わせ・採用につなげるサービス。',
+    '作ったきりのホームページを、毎月の更新・改善とAI検索（AIO）対応で問い合わせ・採用につなげるWeb運用サービス。',
+  offers: plans.map((p) => ({
+    '@type': 'Offer',
+    name: p.name,
+    description: p.forWho,
+    price: p.price.replace(/[¥,]/g, ''),
+    priceCurrency: 'JPY',
+    url: `${SITE_URL}/price`,
+  })),
+};
+
+// よくある質問（FAQPage = AI検索に引用されやすいQ&A形式）
+const faqs = [
+  {
+    q: 'plugdoはどんなサービスですか？',
+    a: '作ったきりで止まってしまったホームページを、毎月の更新・改善とAI検索（AIO）対応で、問い合わせや採用につなげるWeb運用サービスです。Web担当者がいない中小企業・小規模事業者に代わって、社外のパートナーが「社内のWeb担当」のように毎月サイトを改善します。',
+  },
+  {
+    q: '料金はいくらですか？',
+    a: '月額制で、Basic（¥30,000〜）・Growth（¥60,000〜）・Partner（¥100,000〜）の3プランがあります（いずれも税別の最低月額）。サイトの規模や対応範囲により変動し、正確な金額は無料診断時にお伝えします。初期費用はかかりません。',
+  },
+  {
+    q: 'AIO（AI検索対応）とは何ですか？',
+    a: 'ChatGPTやPerplexity、GoogleのAI Overviewsなどの生成AI検索で「○○を相談したい」と調べたときに、あなたの会社の情報が正しく引用・紹介される状態をつくる取り組みです。構造化データ（JSON-LD）の整備、意味のあるHTML構造、FAQの整備などを行います。',
+  },
+  {
+    q: 'Web担当者がいなくても利用できますか？',
+    a: 'はい。むしろWeb担当者がいない会社のためのサービスです。更新・改善の提案から実装、レポートまでをplugdoが代行するため、専門知識がなくてもサイトを改善し続けられます。',
+  },
+  {
+    q: '契約期間や解約の条件はありますか？',
+    a: '最低利用期間は3ヶ月です。サイト改善は数ヶ月単位で効果が現れるため、一定期間の継続をお願いしています。4ヶ月目以降は当月末締めでいつでも解約でき、違約金はありません。',
+  },
+  {
+    q: 'まず何から始めればいいですか？',
+    a: '無料のサイト診断からお試しいただけます。30分のオンライン相談で、今のサイトのどこを直せば問い合わせが増えるのか、改善すべき箇所と優先順位をまとめたレポートをお渡しします。費用・契約は不要です。',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
 };
 ---
 
 <BaseLayout
   title="ホームページを、働かせる。｜中小企業のWeb改善サービス plugdo"
   description="ホームページを、働かせる。作ったきりのサイトを毎月の改善で問い合わせと採用につなげます。Web担当がいない中小企業・小規模事業者のためのWeb運用サービス plugdo（プラグドゥ）。"
-  jsonLd={serviceLd}
+  jsonLd={[serviceLd, faqLd]}
 >
   <Hero />
 
@@ -587,6 +640,27 @@ const serviceLd = {
           <div data-animate data-animate-delay={i * 100}>
             <BlogCard item={item} />
           </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- よくある質問（FAQ） -->
+  <section class="bg-mist">
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title">よくあるご質問</h2>
+      </div>
+      <div class="mx-auto mt-10 max-w-3xl space-y-4">
+        {faqs.map((f, i) => (
+          <details class="card group p-6 [&_summary]:cursor-pointer" data-animate data-animate-delay={i * 60}>
+            <summary class="flex list-none items-center justify-between gap-4 font-bold text-navy">
+              <span>{f.q}</span>
+              <span class="flex-shrink-0 text-pink transition-transform group-open:rotate-45" aria-hidden="true">＋</span>
+            </summary>
+            <p class="mt-4 text-sm leading-relaxed text-ink">{f.a}</p>
+          </details>
         ))}
       </div>
     </div>

@@ -1,5 +1,6 @@
 # plugdo.jp robots.txt
 # 検索エンジン・AIクローラーを明示的に許可（AIO対策）
+# AI向けサイト要約: https://plugdo.jp/llms.txt
 
 User-agent: *
 Allow: /
@@ -26,7 +27,34 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
+User-agent: Perplexity-User
+Allow: /
+
 User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Google-CloudVertexBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
 Allow: /
 
 Sitemap: https://plugdo.jp/sitemap-index.xml

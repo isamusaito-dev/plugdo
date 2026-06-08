@@ -37,13 +37,17 @@ const aioBenefits = [
   },
 ];
 
+const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+
 const serviceLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
+  '@id': `${SITE_URL}/#service`,
   serviceType: 'ホームページ運用・改善サービス',
-  name: 'plugdo',
-  provider: { '@type': 'Organization', name: '株式会社ハンチス' },
-  areaServed: 'JP',
+  name: 'plugdo（プラグドゥ）',
+  url: `${SITE_URL}/service`,
+  provider: { '@id': `${SITE_URL}/#organization` },
+  areaServed: { '@type': 'Country', name: 'Japan' },
   description:
     '作った後の改善に特化したホームページ運用サービス。診断・提案・実装・計測を毎月くり返してサイトを成長させます。',
 };
