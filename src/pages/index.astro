@@ -306,41 +306,36 @@ const serviceLd = {
         <p class="mx-auto mt-4 max-w-lg text-sm text-gray">plugdoは、ホームページの更新と改善をまるごと担います。<br />毎月やることを3つに整理しました。</p>
       </div>
 
-      <div class="mt-12 grid gap-6 md:grid-cols-3 md:items-stretch">
+      <div class="mt-10 space-y-5">
 
         <!-- 継続的な改善 -->
-        <div class="card flex h-full flex-col overflow-hidden" data-animate data-animate-delay="0">
-          <div class="flex h-40 flex-shrink-0 items-center justify-center bg-gradient-to-br from-sky to-mist">
-            <svg viewBox="0 0 140 96" class="h-32 w-auto" fill="none" aria-hidden="true">
-              <!-- ブラウザ -->
+        <div class="card flex flex-col overflow-hidden md:flex-row" data-animate data-animate-delay="0">
+          <div class="flex h-44 flex-shrink-0 items-center justify-center bg-gradient-to-br from-sky to-mist md:h-auto md:w-56">
+            <svg viewBox="0 0 140 96" class="h-28 w-auto" fill="none" aria-hidden="true">
               <rect x="10" y="8" width="88" height="68" rx="8" fill="white" opacity="0.9"/>
               <rect x="10" y="8" width="88" height="18" rx="8" fill="#EBEEF2"/>
               <rect x="10" y="20" width="88" height="6" fill="#EBEEF2"/>
               <circle cx="19" cy="17" r="2.5" fill="#103366" opacity="0.18"/>
               <circle cx="26" cy="17" r="2.5" fill="#103366" opacity="0.18"/>
-              <!-- コンテンツライン -->
               <rect x="18" y="34" width="62" height="5" rx="2.5" fill="#103366" opacity="0.08"/>
               <rect x="18" y="44" width="50" height="5" rx="2.5" fill="#103366" opacity="0.08"/>
               <rect x="18" y="54" width="56" height="5" rx="2.5" fill="#E43172" opacity="0.22"/>
               <rect x="18" y="64" width="42" height="5" rx="2.5" fill="#103366" opacity="0.08"/>
-              <!-- リフレッシュ矢印 -->
               <circle cx="118" cy="38" r="16" fill="white" opacity="0.65"/>
               <path d="M111 32 A9 9 0 0 1 127 38" stroke="#103366" stroke-width="2.5" stroke-linecap="round" fill="none"/>
               <path d="M126 33 L127 38 L122 37" stroke="#103366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               <path d="M125 44 A9 9 0 0 1 109 38" stroke="#103366" stroke-width="2.5" stroke-linecap="round" fill="none"/>
               <path d="M110 43 L109 38 L114 39" stroke="#103366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <!-- バッジ -->
               <rect x="58" y="80" width="74" height="14" rx="7" fill="#103366"/>
               <text x="95" y="90.5" text-anchor="middle" font-size="7.5" font-family="system-ui,sans-serif" fill="white" font-weight="700">毎月更新・改善</text>
             </svg>
           </div>
-          <div class="flex flex-1 flex-col p-7">
+          <div class="flex flex-1 flex-col justify-center p-7 md:p-8">
             <h3 class="text-lg font-bold text-navy">{services[0].title}</h3>
             <p class="mt-2 text-sm leading-relaxed text-ink/70">{services[0].description}</p>
-            <div class="flex-1"></div>
-            <ul class="mt-5 space-y-2.5 border-t border-mist pt-5">
+            <ul class="mt-5 grid grid-cols-2 gap-x-4 gap-y-2.5 border-t border-mist pt-5">
               {services[0].items.map((item) => (
-                <li class="flex items-start gap-2.5 text-sm text-ink/80">
+                <li class="flex items-start gap-2 text-sm text-ink/80">
                   <svg class="mt-0.5 h-4 w-4 flex-shrink-0 text-pink" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
@@ -352,10 +347,9 @@ const serviceLd = {
         </div>
 
         <!-- AI検索（AIO）対応 -->
-        <div class="card flex h-full flex-col overflow-hidden" data-animate data-animate-delay="120">
-          <div class="flex h-40 flex-shrink-0 items-center justify-center bg-gradient-to-br from-pink/8 to-white">
-            <svg viewBox="0 0 140 96" class="h-32 w-auto" fill="none" aria-hidden="true">
-              <!-- 検索バー -->
+        <div class="card flex flex-col overflow-hidden md:flex-row" data-animate data-animate-delay="80">
+          <div class="flex h-44 flex-shrink-0 items-center justify-center bg-gradient-to-br from-pink/8 to-white md:h-auto md:w-56">
+            <svg viewBox="0 0 140 96" class="h-28 w-auto" fill="none" aria-hidden="true">
               <rect x="8" y="6" width="124" height="18" rx="9" fill="white" opacity="0.9"/>
               <circle cx="19" cy="15" r="5" fill="none" stroke="#E43172" stroke-width="1.8"/>
               <line x1="23" y1="19" x2="27" y2="23" stroke="#E43172" stroke-width="1.8" stroke-linecap="round"/>
@@ -363,30 +357,26 @@ const serviceLd = {
               <text x="67" y="18.5" text-anchor="middle" font-size="6.5" font-family="system-ui,sans-serif" fill="#797979">AI検索で探す...</text>
               <rect x="114" y="8" width="16" height="12" rx="4" fill="#E43172" opacity="0.15"/>
               <text x="122" y="17" text-anchor="middle" font-size="7" font-family="system-ui,sans-serif" fill="#E43172" font-weight="700">AI</text>
-              <!-- 結果1（引用ハイライト） -->
               <rect x="8" y="28" width="124" height="20" rx="6" fill="white" opacity="0.95" stroke="#E43172" stroke-width="1" stroke-opacity="0.35"/>
               <rect x="14" y="33" width="5" height="5" rx="1.5" fill="#E43172" opacity="0.5"/>
               <rect x="22" y="33" width="56" height="4" rx="2" fill="#103366" opacity="0.22"/>
               <rect x="22" y="40" width="72" height="3" rx="1.5" fill="#103366" opacity="0.08"/>
               <rect x="104" y="30" width="24" height="14" rx="7" fill="#E43172" opacity="0.12"/>
               <text x="116" y="39.5" text-anchor="middle" font-size="6.5" font-family="system-ui,sans-serif" fill="#E43172" font-weight="700">引用</text>
-              <!-- 結果2 -->
               <rect x="8" y="52" width="124" height="16" rx="6" fill="white" opacity="0.6"/>
               <rect x="14" y="57" width="5" height="5" rx="1.5" fill="#103366" opacity="0.12"/>
               <rect x="22" y="58" width="58" height="4" rx="2" fill="#103366" opacity="0.08"/>
-              <!-- 結果3 -->
               <rect x="8" y="72" width="124" height="16" rx="6" fill="white" opacity="0.4"/>
               <rect x="14" y="77" width="5" height="5" rx="1.5" fill="#103366" opacity="0.08"/>
               <rect x="22" y="78" width="46" height="4" rx="2" fill="#103366" opacity="0.05"/>
             </svg>
           </div>
-          <div class="flex flex-1 flex-col p-7">
+          <div class="flex flex-1 flex-col justify-center p-7 md:p-8">
             <h3 class="text-lg font-bold text-navy">{services[1].title}</h3>
             <p class="mt-2 text-sm leading-relaxed text-ink/70">{services[1].description}</p>
-            <div class="flex-1"></div>
-            <ul class="mt-5 space-y-2.5 border-t border-mist pt-5">
+            <ul class="mt-5 grid grid-cols-2 gap-x-4 gap-y-2.5 border-t border-mist pt-5">
               {services[1].items.map((item) => (
-                <li class="flex items-start gap-2.5 text-sm text-ink/80">
+                <li class="flex items-start gap-2 text-sm text-ink/80">
                   <svg class="mt-0.5 h-4 w-4 flex-shrink-0 text-pink" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
@@ -398,35 +388,29 @@ const serviceLd = {
         </div>
 
         <!-- 社内のWeb担当のように動きます -->
-        <div class="card flex h-full flex-col overflow-hidden" data-animate data-animate-delay="240">
-          <div class="flex h-40 flex-shrink-0 items-center justify-center bg-gradient-to-br from-gold/15 to-mist">
-            <svg viewBox="0 0 140 96" class="h-32 w-auto" fill="none" aria-hidden="true">
-              <!-- ノートPC -->
+        <div class="card flex flex-col overflow-hidden md:flex-row" data-animate data-animate-delay="160">
+          <div class="flex h-44 flex-shrink-0 items-center justify-center bg-gradient-to-br from-gold/15 to-mist md:h-auto md:w-56">
+            <svg viewBox="0 0 140 96" class="h-28 w-auto" fill="none" aria-hidden="true">
               <rect x="16" y="24" width="76" height="52" rx="6" fill="white" opacity="0.9"/>
               <rect x="16" y="24" width="76" height="42" rx="6" fill="#EAF3FB"/>
-              <!-- 画面コンテンツ -->
               <rect x="24" y="32" width="48" height="4" rx="2" fill="#103366" opacity="0.15"/>
               <rect x="24" y="40" width="56" height="4" rx="2" fill="#103366" opacity="0.08"/>
               <rect x="24" y="48" width="38" height="4" rx="2" fill="#103366" opacity="0.08"/>
-              <!-- キーボード -->
               <rect x="10" y="76" width="88" height="8" rx="4" fill="#EBEEF2"/>
-              <!-- 人物アバター -->
               <circle cx="113" cy="38" r="16" fill="white" opacity="0.75"/>
               <circle cx="113" cy="33" r="7" fill="#C8A951" opacity="0.35"/>
               <path d="M101 54 Q101 47 113 47 Q125 47 125 54" fill="#C8A951" opacity="0.2"/>
-              <!-- チャットバブル -->
               <rect x="54" y="6" width="70" height="16" rx="8" fill="#103366"/>
               <polygon points="66,22 72,22 69,28" fill="#103366"/>
               <text x="89" y="17" text-anchor="middle" font-size="7" font-family="system-ui,sans-serif" fill="white" font-weight="700">いつでも相談を</text>
             </svg>
           </div>
-          <div class="flex flex-1 flex-col p-7">
+          <div class="flex flex-1 flex-col justify-center p-7 md:p-8">
             <h3 class="text-lg font-bold text-navy">{services[2].title}</h3>
             <p class="mt-2 text-sm leading-relaxed text-ink/70">{services[2].description}</p>
-            <div class="flex-1"></div>
-            <ul class="mt-5 space-y-2.5 border-t border-mist pt-5">
+            <ul class="mt-5 grid grid-cols-2 gap-x-4 gap-y-2.5 border-t border-mist pt-5">
               {services[2].items.map((item) => (
-                <li class="flex items-start gap-2.5 text-sm text-ink/80">
+                <li class="flex items-start gap-2 text-sm text-ink/80">
                   <svg class="mt-0.5 h-4 w-4 flex-shrink-0 text-pink" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
