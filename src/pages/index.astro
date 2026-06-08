@@ -362,16 +362,115 @@ const serviceLd = {
   <!-- 料金プラン -->
   <section class="bg-mist">
     <div class="container-pd py-20 md:py-28">
-      <div class="text-center">
+      <div class="text-center" data-animate="fade-in">
         <p class="section-label">Price</p>
         <h2 class="section-title">料金プラン</h2>
-        <p class="mt-4 text-sm text-gray">事業のフェーズに合わせて選べる3プラン。</p>
+        <p class="mt-4 text-sm text-gray">事業のフェーズに合わせて選べる3プラン。まずは無料相談から。</p>
       </div>
-      <div class="mt-12">
-        <PriceTable variant="summary" />
+
+      <div class="mt-14 grid gap-6 md:grid-cols-3 md:items-stretch">
+
+        <!-- Basic -->
+        <div class="flex flex-col rounded-2xl border border-gray/10 bg-white p-8 shadow-sm" data-animate data-animate-delay="0">
+          <div class="flex items-start justify-between">
+            <div>
+              <h3 class="font-display text-xl font-bold text-navy">Basic</h3>
+              <p class="mt-0.5 text-sm text-gray">まず動かす</p>
+            </div>
+            <span class="rounded-full bg-mist px-2.5 py-1 text-[10px] font-bold text-gray">AIO なし</span>
+          </div>
+          <div class="mt-5 flex items-end gap-1.5">
+            <span class="font-display text-4xl font-bold leading-none text-navy">¥30,000</span>
+            <span class="mb-0.5 text-sm text-gray">〜/月（税別）</span>
+          </div>
+          <p class="mt-4 rounded-xl bg-mist px-4 py-3 text-xs leading-relaxed text-ink/70">
+            「とにかくサイトを最新の状態に保ちたい」方に。
+          </p>
+          <ul class="mt-5 flex-1 space-y-2.5">
+            {[
+              'コンテンツ更新 月1回',
+              '月次アクセスレポート',
+              '軽微な修正・差し替え対応',
+              'メール相談 月3件まで',
+            ].map((f) => (
+              <li class="flex items-start gap-2 text-sm text-ink/80">
+                <svg class="mt-0.5 h-4 w-4 flex-shrink-0 text-navy/30" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                {f}
+              </li>
+            ))}
+          </ul>
+          <a href="/contact" class="btn-navy mt-8 w-full text-center text-sm">このプランを相談する</a>
+        </div>
+
+        <!-- Growth (おすすめ) -->
+        <div class="relative flex flex-col rounded-2xl border-2 border-pink bg-white p-8 shadow-[0_4px_32px_rgba(228,49,114,0.12)]" data-animate data-animate-delay="120">
+          <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-pink px-4 py-1 text-xs font-bold text-white">★ おすすめ</span>
+          <div class="flex items-start justify-between">
+            <div>
+              <h3 class="font-display text-xl font-bold text-navy">Growth</h3>
+              <p class="mt-0.5 text-sm text-gray">改善して増やす</p>
+            </div>
+            <span class="rounded-full bg-navy px-2.5 py-1 text-[10px] font-bold text-white">AIO対応</span>
+          </div>
+          <div class="mt-5 flex items-end gap-1.5">
+            <span class="font-display text-4xl font-bold leading-none text-navy">¥60,000</span>
+            <span class="mb-0.5 text-sm text-gray">〜/月（税別）</span>
+          </div>
+          <p class="mt-4 rounded-xl bg-pink/6 px-4 py-3 text-xs leading-relaxed text-navy/80">
+            「問い合わせを増やしたい。何を改善すればいいか教えてほしい」方に。
+          </p>
+          <ul class="mt-5 flex-1 space-y-2.5">
+            {[
+              'コンテンツ更新 月2回',
+              '月次改善提案レポート',
+              'AIO・構造化データ対応',
+              'ブログ記事制作 月1本',
+            ].map((f) => (
+              <li class="flex items-start gap-2 text-sm text-ink/80">
+                <svg class="mt-0.5 h-4 w-4 flex-shrink-0 text-pink" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                {f}
+              </li>
+            ))}
+          </ul>
+          <a href="/contact" class="btn-pink mt-8 w-full text-center text-sm">このプランを相談する</a>
+        </div>
+
+        <!-- Partner -->
+        <div class="flex flex-col rounded-2xl border border-gray/10 bg-white p-8 shadow-sm" data-animate data-animate-delay="240">
+          <div class="flex items-start justify-between">
+            <div>
+              <h3 class="font-display text-xl font-bold text-navy">Partner</h3>
+              <p class="mt-0.5 text-sm text-gray">戦略から伴走</p>
+            </div>
+            <span class="rounded-full bg-navy px-2.5 py-1 text-[10px] font-bold text-white">AIO対応</span>
+          </div>
+          <div class="mt-5 flex items-end gap-1.5">
+            <span class="font-display text-4xl font-bold leading-none text-navy">¥100,000</span>
+            <span class="mb-0.5 text-sm text-gray">〜/月（税別）</span>
+          </div>
+          <p class="mt-4 rounded-xl bg-mist px-4 py-3 text-xs leading-relaxed text-ink/70">
+            「サイトをビジネスの核に育てたい。採用・問い合わせ両方で成果を出したい」方に。
+          </p>
+          <ul class="mt-5 flex-1 space-y-2.5">
+            {[
+              '更新対応 無制限（緊急対応含む）',
+              '月次MTG + Web戦略の立案',
+              'AIO本格対応・引用モニタリング',
+              'ブログ記事制作 月2〜3本',
+            ].map((f) => (
+              <li class="flex items-start gap-2 text-sm text-ink/80">
+                <svg class="mt-0.5 h-4 w-4 flex-shrink-0 text-navy/30" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                {f}
+              </li>
+            ))}
+          </ul>
+          <a href="/contact" class="btn-navy mt-8 w-full text-center text-sm">このプランを相談する</a>
+        </div>
+
       </div>
+
       <div class="mt-10 text-center">
-        <a href="/price" class="btn-outline">料金の詳細を見る</a>
+        <a href="/price" class="btn-outline">詳細な機能一覧を見る</a>
       </div>
     </div>
   </section>
