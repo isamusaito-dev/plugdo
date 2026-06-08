@@ -30,7 +30,7 @@ const problems = [
     note: 1,
   },
   {
-    title: '問い合わせ・取引につながらない',
+    title: '問い合わせが増えない',
     text: '訪れても、行動に至らない。情報が古いだけで、ビジネスの機会を逃しています。',
     stat: '32.6',
     unit: '%',
@@ -63,7 +63,7 @@ const services = [
   },
   {
     title: 'AI検索（AIO）対応',
-    description: 'ChatGPTやPerplexityなどのAI検索に正しく読まれ、引用される構造へ対応します。',
+    description: 'ChatGPTやPerplexityなどのAI検索でも、あなたの会社の情報が出てくるよう、サイトの構造を整えます。',
     accent: 'bg-pink/10',
     iconStroke: '#E43172',
     items: [
@@ -74,8 +74,8 @@ const services = [
     ],
   },
   {
-    title: '社内担当のように伴走',
-    description: 'Web担当者を雇わなくても大丈夫。社外のパートナーが社内担当のように向き合います。',
+    title: '社内のWeb担当のように動きます',
+    description: 'Web担当者を雇わなくても大丈夫。社外のパートナーが、社内のWeb担当のように向き合います。',
     accent: 'bg-gold/15',
     iconStroke: '#C8A951',
     items: [
@@ -96,13 +96,13 @@ const serviceLd = {
   provider: { '@type': 'Organization', name: '株式会社ハンチス' },
   areaServed: 'JP',
   description:
-    '作ったきりのホームページを、継続的な改善とAIO対応で問い合わせ・採用につなげる伴走型サービス。',
+    '作ったきりのホームページを、毎月の更新・改善とAI検索対応で問い合わせ・採用につなげるサービス。',
 };
 ---
 
 <BaseLayout
-  title="plugdo（プラグドゥ）"
-  description="ホームページを、働かせる。作ったきりのサイトを、継続的な改善とAI検索対応で問い合わせと採用につなげる伴走型サービス。Web担当者がいない中小企業のためのplugdo。"
+  title="ホームページを、働かせる。｜中小企業のWeb改善サービス plugdo"
+  description="ホームページを、働かせる。作ったきりのサイトを毎月の改善で問い合わせと採用につなげます。Web担当がいない中小企業・小規模事業者のためのWeb運用サービス plugdo（プラグドゥ）。"
   jsonLd={serviceLd}
 >
   <Hero />
@@ -115,7 +115,7 @@ const serviceLd = {
         <h2 class="section-title">サイトはある。でも——</h2>
         <p class="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-gray">
           「ホームページがある会社は信頼できる」と答えた経営者は79.8%<sup class="text-pink">※1</sup>。
-          でも<strong class="text-navy">作ったきり</strong>では、その信頼はむしろ逆効果になります。
+          でも<strong class="text-navy">何年も更新されていないサイトは、逆に不信感につながります。</strong>
         </p>
       </div>
 
@@ -184,9 +184,9 @@ const serviceLd = {
     <div class="container-pd py-20 md:py-28">
       <div class="text-center" data-animate="fade-in">
         <p class="section-label">How it works</p>
-        <h2 class="section-title">月次サイクルで、<br />サイトが育っていく。</h2>
+        <h2 class="section-title">毎月のくり返しで、<br />サイトが育っていく。</h2>
         <p class="mx-auto mt-5 max-w-md text-sm leading-relaxed text-gray">
-          3ステップを毎月繰り返すことで、サイトが「成果を出す状態」になっていきます。
+          3つのステップを毎月繰り返すことで、サイトが「問い合わせにつながる状態」になっていきます。
         </p>
       </div>
 
@@ -221,7 +221,7 @@ const serviceLd = {
           <div class="flex-1 bg-mist p-7 text-center">
             <p class="select-none font-grotesk text-[3rem] font-bold leading-none text-navy/10">01</p>
             <h3 class="mt-2 text-xl font-bold text-navy">診断する</h3>
-            <p class="mt-3 text-sm leading-relaxed text-ink/70">現状のサイトを分析し、改善すべき課題を特定します。何から手をつければいいかが明確になります。</p>
+            <p class="mt-3 text-sm leading-relaxed text-ink/70">今のサイトを分析して、手をつけるべき課題を見つけます。何から始めればいいかがはっきりします。</p>
           </div>
         </div>
 
@@ -255,7 +255,7 @@ const serviceLd = {
           <div class="flex-1 bg-mist p-7 text-center">
             <p class="select-none font-grotesk text-[3rem] font-bold leading-none text-navy/10">02</p>
             <h3 class="mt-2 text-xl font-bold text-navy">改善する</h3>
-            <p class="mt-3 text-sm leading-relaxed text-ink/70">コンテンツ更新・SEO・AIO対応を毎月実施。作って終わりではなく、継続的に動かし続けます。</p>
+            <p class="mt-3 text-sm leading-relaxed text-ink/70">コンテンツの更新やSEO・AI検索対応を毎月実施。作って終わりではなく、動かし続けます。</p>
           </div>
         </div>
 
@@ -286,7 +286,7 @@ const serviceLd = {
           <div class="flex-1 bg-mist p-7 text-center">
             <p class="select-none font-grotesk text-[3rem] font-bold leading-none text-navy/10">03</p>
             <h3 class="mt-2 text-xl font-bold text-navy">計測する</h3>
-            <p class="mt-3 text-sm leading-relaxed text-ink/70">月次レポートで成果を確認し、次の改善に活かします。PDCAが自然に回り続けます。</p>
+            <p class="mt-3 text-sm leading-relaxed text-ink/70">毎月レポートで成果を確認し、次の改善に活かします。このくり返しがサイトを育てます。</p>
           </div>
         </div>
 
@@ -300,7 +300,7 @@ const serviceLd = {
       <div class="text-center">
         <p class="section-label">Service</p>
         <h2 class="section-title">毎月、こんなことをやります</h2>
-        <p class="mx-auto mt-4 max-w-lg text-sm text-gray">plugdoはホームページの「継続運用」を丸ごと担います。<br />毎月やることを3つのカテゴリに分けて整理しました。</p>
+        <p class="mx-auto mt-4 max-w-lg text-sm text-gray">plugdoは、ホームページの更新と改善をまるごとお任せいただけるサービスです。<br />毎月やることを3つに整理しました。</p>
       </div>
 
       <div class="mt-12 grid gap-6 md:grid-cols-3">
@@ -350,7 +350,7 @@ const serviceLd = {
           </ul>
         </div>
 
-        <!-- 社内担当のように伴走 -->
+        <!-- 社内のWeb担当のように動きます -->
         <div class="card flex flex-col p-7" data-animate data-animate-delay="240">
           <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-gold/15">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C8A951" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -392,7 +392,7 @@ const serviceLd = {
         <h2 class="section-title">まず、無料診断から<br />始めませんか。</h2>
         <p class="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-gray">
           「何を直せばいいか分からない」状態が一番もったいない。<br />
-          30分のヒアリングで、改善すべき箇所と優先順位を書いたレポートをお届けします。
+          30分の相談で、改善すべき箇所と優先順位を書いたレポートをお届けします。
         </p>
       </div>
 
@@ -451,8 +451,8 @@ const serviceLd = {
         <p class="mt-3 text-center text-xs text-gray/50">※お客様のサイトに合わせた内容でお届けします</p>
 
         <div class="mt-8 flex flex-col items-center gap-3">
-          <a href="/contact" class="btn-pink">無料でサイト診断を受ける</a>
-          <p class="text-xs text-gray">費用・契約なし。30分のオンラインヒアリングから。</p>
+          <a href="/contact" class="btn-pink">無料で診断を受ける</a>
+          <p class="text-xs text-gray">費用・契約なし。30分のオンライン相談から。</p>
         </div>
       </div>
     </div>
@@ -464,11 +464,11 @@ const serviceLd = {
       <div class="text-center" data-animate="fade-in">
         <p class="section-label">Price</p>
         <h2 class="section-title">料金プラン</h2>
-        <p class="mt-4 text-sm text-gray">事業のフェーズに合わせて選べる3プラン。まずは無料相談から。</p>
+        <p class="mt-4 text-sm text-gray">会社の状況に合わせて選べる3プラン。まずは無料相談から。</p>
         <!-- AIO 説明 -->
         <p class="mx-auto mt-4 max-w-lg rounded-xl bg-navy/5 px-5 py-3 text-xs leading-relaxed text-navy/70">
-          <strong class="font-bold">AIO（AI検索対応）とは？</strong>
-          ChatGPTやPerplexityなどのAI検索で「○○を相談したい」と調べたとき、<strong class="text-navy">あなたの会社が出てくる状態</strong>にする施策です。
+          <strong class="font-bold">AIOとは？</strong>
+          ChatGPTやPerplexityなどのAI検索で「○○を相談したい」と調べたとき、<strong class="text-navy">あなたの会社が出てくる状態</strong>にする取り組みです。
         </p>
       </div>
 
@@ -479,7 +479,7 @@ const serviceLd = {
           <div class="flex items-start justify-between">
             <div>
               <h3 class="font-display text-xl font-bold text-navy">Basic</h3>
-              <p class="mt-0.5 text-sm text-gray">止めずに、維持する</p>
+              <p class="mt-0.5 text-sm text-gray">止めずに、続ける</p>
             </div>
             <span class="rounded-full bg-mist px-2.5 py-1 text-[10px] font-bold text-gray">AIOなし</span>
           </div>
@@ -544,7 +544,7 @@ const serviceLd = {
           <div class="flex items-start justify-between">
             <div>
               <h3 class="font-display text-xl font-bold text-navy">Partner</h3>
-              <p class="mt-0.5 text-sm text-gray">戦略から伴走</p>
+              <p class="mt-0.5 text-sm text-gray">戦略から一緒に</p>
             </div>
             <span class="rounded-full bg-navy px-2.5 py-1 text-[10px] font-bold text-white">AIO対応</span>
           </div>

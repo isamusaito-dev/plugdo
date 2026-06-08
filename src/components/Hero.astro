@@ -14,20 +14,20 @@
       <div>
         <span class="inline-flex items-center gap-2 rounded-full border border-navy/10 bg-white px-4 py-1.5 text-xs font-bold text-gray shadow-sm">
           <span class="inline-block h-1.5 w-1.5 rounded-full bg-pink"></span>
-          Web担当者がいない中小企業のための伴走型サービス
+          Web担当がいない会社のための、ホームページ改善サービス
         </span>
         <h1 class="mt-6 text-[2.75rem] font-black leading-[1.15] tracking-tight text-navy md:text-[3.5rem]">
           ホームページを、<br />働かせる。
         </h1>
         <p class="mt-6 max-w-md text-base leading-[1.9] text-ink/70">
-          Web担当者を採用しなくても、制作会社に毎回頼まなくても。<br />
-          月次の改善サイクルで<strong class="font-bold text-navy">問い合わせと採用</strong>につなげます。
+          Web担当を雇わなくても、制作会社に毎回お願いしなくても。<br />
+          毎月少しずつ手を入れて、<strong class="font-bold text-navy">問い合わせと採用</strong>につながるホームページに育てます。
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <a href="/contact" class="btn-pink">無料でサイト診断を受ける</a>
+          <a href="/contact" class="btn-pink">無料で診断を受ける</a>
           <a href="/service" class="btn-outline text-sm">サービスを見る</a>
         </div>
-        <p class="mt-5 text-xs text-gray">費用・契約なし。まず30分のオンラインヒアリングから。</p>
+        <p class="mt-5 text-xs text-gray">費用も契約も不要。まずは30分のオンライン相談から。</p>
       </div>
 
       <!-- 右カラム: ダッシュボードイラスト -->
@@ -142,16 +142,16 @@
     <div class="container-pd">
       <dl class="grid grid-cols-2 divide-x divide-white/10 md:grid-cols-4">
         {[
-          { value: '¥30,000', unit: '〜/月',  label: '初期費用なし・月額制' },
-          { value: '3',       unit: 'ヶ月',   label: '最短から利用可能' },
-          { value: '3',       unit: 'プラン', label: 'フェーズに合わせて選択' },
-          { value: 'AIO',     unit: '対応',   label: 'Growth・Partnerに含む' },
+          { value: '月3万円〜',   unit: '',     label: '初期費用0円・月額制' },
+          { value: '最低3ヶ月〜', unit: '',     label: 'まずは試しやすい期間で' },
+          { value: '3つの',       unit: 'プラン', label: '会社の状況に合わせて選べる' },
+          { value: 'AI検索',      unit: '対応', label: 'ChatGPTでも見つかるサイトに' },
         ].map((s) => (
           <div class="px-6 py-6 text-center">
-            <dt class="text-[10px] uppercase tracking-widest text-white/40">{s.label}</dt>
-            <dd class="mt-2 font-display text-2xl font-bold text-white md:text-3xl">
+            <dd class="font-display text-2xl font-bold text-white md:text-3xl">
               {s.value}<span class="text-base font-bold text-pink">{s.unit}</span>
             </dd>
+            <dt class="mt-1 text-[10px] leading-snug text-white/40">{s.label}</dt>
           </div>
         ))}
       </dl>

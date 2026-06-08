@@ -87,7 +87,7 @@ export const plans: Plan[] = [
   {
     id: 'partner',
     name: 'Partner',
-    tagline: '戦略から伴走',
+    tagline: '戦略から一緒に',
     target: '戦略立案 + フル対応 + 月次MTG',
     forWho: '「サイトをビジネスの核に育てたい。採用・問い合わせ両方で成果を出したい」方に。',
     price: '¥100,000',
