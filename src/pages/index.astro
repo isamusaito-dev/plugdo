@@ -88,90 +88,63 @@ const serviceLd = {
 
   <!-- 課題提起 -->
   <section class="bg-mist">
-    <div class="container-pd py-16 md:py-20">
+    <div class="container-pd py-20 md:py-28">
       <div class="text-center" data-animate="fade-in">
         <p class="section-label">Problem</p>
         <h2 class="section-title">サイトはある。でも——</h2>
-        <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-gray">
+        <p class="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-gray">
           「ホームページがある会社は信頼できる」と答えた経営者は79.8%<sup class="text-pink">※1</sup>。
-          でも"作ったきり"では、その信頼はむしろ逆効果になります。
+          でも<strong class="text-navy">作ったきり</strong>では、その信頼はむしろ逆効果になります。
         </p>
       </div>
 
-      <div class="mt-12 grid gap-5 md:grid-cols-3">
+      <!-- 3つの数字 -->
+      <div class="mt-14 grid gap-12 md:grid-cols-3">
 
-        <!-- Card 0: 更新できていない -->
-        <div class="card flex flex-col overflow-hidden" data-animate data-animate-delay="0">
-          <div class="flex h-28 items-center justify-center bg-sky/60">
-            <div class="flex flex-col items-center gap-1.5 rounded-lg border-2 border-dashed border-navy/20 px-8 py-4 text-navy/30">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-              <span class="text-[10px] font-medium tracking-wide">イラスト（後で追加）</span>
-            </div>
+        <!-- 数字 0 -->
+        <div class="text-center" data-animate data-animate-delay="0">
+          <div class="font-display text-[5.5rem] font-black leading-none text-pink"
+               data-count={problems[0].stat} data-count-suffix={problems[0].unit}>
+            {problems[0].stat}{problems[0].unit}
           </div>
-          <div class="flex flex-1 flex-col p-6">
-            <h3 class="text-base font-bold text-navy">{problems[0].title}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-ink/80">{problems[0].text}</p>
-            <div class="mt-5 border-t border-mist pt-4">
-              <div class="flex items-baseline gap-1">
-                <span class="font-display text-4xl leading-none text-pink" data-count={problems[0].stat} data-count-suffix={problems[0].unit}>{problems[0].stat}{problems[0].unit}</span>
-                <sup class="ml-1 text-[10px] text-gray/50">※{problems[0].note}</sup>
-              </div>
-              <p class="mt-1.5 text-xs leading-snug text-ink">{problems[0].statLabel}</p>
-            </div>
-          </div>
+          <h3 class="mt-5 text-base font-bold text-navy">{problems[0].title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-gray">
+            {problems[0].statLabel}<sup class="ml-0.5 text-[9px] text-gray/40">※{problems[0].note}</sup>
+          </p>
         </div>
 
-        <!-- Card 1: 問い合わせにつながらない -->
-        <div class="card flex flex-col overflow-hidden" data-animate data-animate-delay="120">
-          <div class="flex h-28 items-center justify-center bg-pink/5">
-            <div class="flex flex-col items-center gap-1.5 rounded-lg border-2 border-dashed border-pink/30 px-8 py-4 text-pink/30">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-              <span class="text-[10px] font-medium tracking-wide">イラスト（後で追加）</span>
-            </div>
+        <!-- 数字 1 -->
+        <div class="text-center" data-animate data-animate-delay="120">
+          <div class="font-display text-[5.5rem] font-black leading-none text-pink"
+               data-count={problems[1].stat} data-count-suffix={problems[1].unit}>
+            {problems[1].stat}{problems[1].unit}
           </div>
-          <div class="flex flex-1 flex-col p-6">
-            <h3 class="text-base font-bold text-navy">{problems[1].title}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-ink/80">{problems[1].text}</p>
-            <div class="mt-5 border-t border-mist pt-4">
-              <div class="flex items-baseline gap-1">
-                <span class="font-display text-4xl leading-none text-pink" data-count={problems[1].stat} data-count-suffix={problems[1].unit}>{problems[1].stat}{problems[1].unit}</span>
-                <sup class="ml-1 text-[10px] text-gray/50">※{problems[1].note}</sup>
-              </div>
-              <p class="mt-1.5 text-xs leading-snug text-ink">{problems[1].statLabel}</p>
-            </div>
-          </div>
+          <h3 class="mt-5 text-base font-bold text-navy">{problems[1].title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-gray">
+            {problems[1].statLabel}<sup class="ml-0.5 text-[9px] text-gray/40">※{problems[1].note}</sup>
+          </p>
         </div>
 
-        <!-- Card 2: 直す人が社内にいない -->
-        <div class="card flex flex-col overflow-hidden" data-animate data-animate-delay="240">
-          <div class="flex h-28 items-center justify-center bg-gold/10">
-            <div class="flex flex-col items-center gap-1.5 rounded-lg border-2 border-dashed border-gold/40 px-8 py-4 text-gold/50">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-              <span class="text-[10px] font-medium tracking-wide">イラスト（後で追加）</span>
-            </div>
+        <!-- 数字 2 -->
+        <div class="text-center" data-animate data-animate-delay="240">
+          <div class="font-display text-[5.5rem] font-black leading-none text-pink"
+               data-count={problems[2].stat} data-count-suffix={problems[2].unit}>
+            {problems[2].stat}{problems[2].unit}
           </div>
-          <div class="flex flex-1 flex-col p-6">
-            <h3 class="text-base font-bold text-navy">{problems[2].title}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-ink/80">{problems[2].text}</p>
-            <div class="mt-5 border-t border-mist pt-4">
-              <div class="flex items-baseline gap-1">
-                <span class="font-display text-4xl leading-none text-pink" data-count={problems[2].stat} data-count-suffix={problems[2].unit}>{problems[2].stat}{problems[2].unit}</span>
-                <sup class="ml-1 text-[10px] text-gray/50">※{problems[2].note}</sup>
-              </div>
-              <p class="mt-1.5 text-xs leading-snug text-ink">{problems[2].statLabel}</p>
-            </div>
-          </div>
+          <h3 class="mt-5 text-base font-bold text-navy">{problems[2].title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-gray">
+            {problems[2].statLabel}<sup class="ml-0.5 text-[9px] text-gray/40">※{problems[2].note}</sup>
+          </p>
         </div>
 
       </div>
 
-      <div class="mt-10 flex items-center justify-center gap-4">
-        <div class="h-px max-w-xs flex-1 bg-navy/10"></div>
-        <p class="text-sm font-bold text-navy">その「もったいない」を、plugdoが解決します。</p>
-        <div class="h-px max-w-xs flex-1 bg-navy/10"></div>
+      <!-- ブリッジ -->
+      <div class="mt-16 border-t border-navy/10 pt-10 text-center" data-animate="fade-in">
+        <p class="text-base font-bold text-navy md:text-lg">その「もったいない」を、plugdoが解決します。</p>
       </div>
 
-      {/* 出典（控えめな脚注） */}
+      <!-- 出典（控えめな脚注） -->
       <p class="mt-6 text-center text-[11px] leading-relaxed text-gray/40">
         ※1
         <a href={SRC_PLUST} target="_blank" rel="noopener" class="underline decoration-gray/20 underline-offset-2 hover:text-gray/70">
@@ -185,9 +158,53 @@ const serviceLd = {
     </div>
   </section>
 
-  <!-- サービス概要 -->
+  <!-- How it works: 3ステップ -->
   <section>
-    <div class="container-pd py-16 md:py-20">
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">How it works</p>
+        <h2 class="section-title">月次サイクルで、<br />サイトが育っていく。</h2>
+        <p class="mx-auto mt-5 max-w-md text-sm leading-relaxed text-gray">
+          3ステップを毎月繰り返すことで、サイトが「成果を出す状態」になっていきます。
+        </p>
+      </div>
+
+      <div class="mt-14 grid gap-6 md:grid-cols-3">
+
+        <!-- Step 01 -->
+        <div class="rounded-2xl bg-mist p-8 text-center" data-animate data-animate-delay="0">
+          <p class="select-none font-grotesk text-[3.5rem] font-bold leading-none text-navy/10">01</p>
+          <h3 class="mt-3 text-xl font-bold text-navy">診断する</h3>
+          <p class="mt-3 text-sm leading-relaxed text-ink/70">
+            現状のサイトを分析し、改善すべき課題を特定します。何から手をつければいいかが明確になります。
+          </p>
+        </div>
+
+        <!-- Step 02 -->
+        <div class="rounded-2xl bg-mist p-8 text-center" data-animate data-animate-delay="120">
+          <p class="select-none font-grotesk text-[3.5rem] font-bold leading-none text-navy/10">02</p>
+          <h3 class="mt-3 text-xl font-bold text-navy">改善する</h3>
+          <p class="mt-3 text-sm leading-relaxed text-ink/70">
+            コンテンツ更新・SEO・AIO対応を毎月実施。作って終わりではなく、継続的に動かし続けます。
+          </p>
+        </div>
+
+        <!-- Step 03 -->
+        <div class="rounded-2xl bg-mist p-8 text-center" data-animate data-animate-delay="240">
+          <p class="select-none font-grotesk text-[3.5rem] font-bold leading-none text-navy/10">03</p>
+          <h3 class="mt-3 text-xl font-bold text-navy">計測する</h3>
+          <p class="mt-3 text-sm leading-relaxed text-ink/70">
+            月次レポートで成果を確認し、次の改善に活かします。PDCAが自然に回り続けます。
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- サービス概要 -->
+  <section class="bg-mist">
+    <div class="container-pd py-20 md:py-28">
       <div class="text-center">
         <p class="section-label">Service</p>
         <h2 class="section-title">3つの価値で、サイトを動かす</h2>
@@ -229,8 +246,8 @@ const serviceLd = {
   </section>
 
   <!-- 導入事例 -->
-  <section class="bg-mist">
-    <div class="container-pd py-16 md:py-20">
+  <section>
+    <div class="container-pd py-20 md:py-28">
       <div class="flex items-end justify-between">
         <div>
           <p class="section-label-left">Works</p>
@@ -251,8 +268,8 @@ const serviceLd = {
   </section>
 
   <!-- 料金プラン -->
-  <section>
-    <div class="container-pd py-16 md:py-20">
+  <section class="bg-mist">
+    <div class="container-pd py-20 md:py-28">
       <div class="text-center">
         <p class="section-label">Price</p>
         <h2 class="section-title">料金プラン</h2>
@@ -268,8 +285,8 @@ const serviceLd = {
   </section>
 
   <!-- ブログ最新記事 -->
-  <section class="bg-mist">
-    <div class="container-pd py-16 md:py-20">
+  <section>
+    <div class="container-pd py-20 md:py-28">
       <div class="flex items-end justify-between">
         <div>
           <p class="section-label-left">Blog</p>
