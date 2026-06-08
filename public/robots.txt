@@ -1,0 +1,32 @@
+# plugdo.jp robots.txt
+# 検索エンジン・AIクローラーを明示的に許可（AIO対策）
+
+User-agent: *
+Allow: /
+
+# AIクローラー（明示許可）
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://plugdo.jp/sitemap-index.xml

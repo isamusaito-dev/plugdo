@@ -1,0 +1,7 @@
+# Cloudflare Pages リダイレクト設定
+# 旧Studio構成のURLが残っている場合はここに 301 を追記する。
+# 例:
+#   /old-service   /service   301
+#   /company       /about     301
+#
+# 現状は新URL構成に統一。必要に応じて旧URLを追加すること。

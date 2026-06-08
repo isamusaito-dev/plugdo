@@ -1,0 +1,174 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import CTASection from '../../components/CTASection.astro';
+import { getBlogs, type Blog } from '../../lib/microcms';
+import { sampleBlogs } from '../../lib/sampleData';
+
+export async function getStaticPaths() {
+  const res = await getBlogs();
+  const blogs = res.contents.length ? res.contents : sampleBlogs;
+  return blogs.map((post) => ({
+    params: { slug: post.slug },
+    props: { post, all: blogs },
+  }));
+}
+
+interface Props {
+  post: Blog;
+  all: Blog[];
+}
+const { post, all } = Astro.props;
+
+const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+
+const date = new Date(post.publishedAt).toLocaleDateString('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+// --- 本文に見出しID付与 + 目次抽出 ---
+type Heading = { level: 2 | 3; text: string; id: string };
+const headings: Heading[] = [];
+let counter = 0;
+const bodyWithIds = post.body.replace(
+  /<h([23])>(.*?)<\/h\1>/g,
+  (_m, level: string, text: string) => {
+    const id = `heading-${counter++}`;
+    const plain = text.replace(/<[^>]+>/g, '');
+    headings.push({ level: Number(level) as 2 | 3, text: plain, id });
+    return `<h${level} id="${id}">${text}</h${level}>`;
+  }
+);
+
+// --- 関連記事（同カテゴリ優先、最大3件） ---
+const related = all
+  .filter((p) => p.id !== post.id)
+  .sort((a, b) => {
+    const sameA = a.category?.id === post.category?.id ? 0 : 1;
+    const sameB = b.category?.id === post.category?.id ? 0 : 1;
+    return sameA - sameB;
+  })
+  .slice(0, 3);
+
+// --- Article 構造化データ ---
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.title,
+  description: post.description,
+  datePublished: post.publishedAt,
+  dateModified: post.revisedAt || post.publishedAt,
+  ...(post.eyecatch ? { image: post.eyecatch.url } : {}),
+  author: { '@type': 'Organization', name: '株式会社ハンチス' },
+  publisher: {
+    '@type': 'Organization',
+    name: '株式会社ハンチス',
+    logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
+  },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${post.slug}` },
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'ブログ', item: `${SITE_URL}/blog` },
+    { '@type': 'ListItem', position: 3, name: post.title, item: `${SITE_URL}/blog/${post.slug}` },
+  ],
+};
+---
+
+<BaseLayout
+  title={post.title}
+  description={post.description}
+  ogType="article"
+  ogImage={post.eyecatch?.url}
+  jsonLd={[articleLd, breadcrumbLd]}
+>
+  <article>
+    <!-- 記事ヘッダー -->
+    <header class="hero-gradient">
+      <div class="container-pd py-14 md:py-16">
+        <nav class="mb-5 text-xs text-gray" aria-label="パンくず">
+          <a href="/" class="hover:text-pink">ホーム</a>
+          <span class="mx-1.5">/</span>
+          <a href="/blog" class="hover:text-pink">ブログ</a>
+        </nav>
+        <div class="flex items-center gap-2 text-xs">
+          {
+            post.category && (
+              <span class="rounded-full bg-pink/10 px-2.5 py-1 font-bold text-pink">
+                {post.category.name}
+              </span>
+            )
+          }
+          <time datetime={post.publishedAt} class="text-gray">{date}</time>
+        </div>
+        <h1 class="mt-4 max-w-3xl text-2xl font-black leading-snug text-navy md:text-3xl">
+          {post.title}
+        </h1>
+      </div>
+    </header>
+
+    <div class="container-pd py-12 md:py-16">
+      <div class="grid gap-12 lg:grid-cols-[1fr_260px]">
+        <!-- 本文 -->
+        <div>
+          {
+            post.eyecatch && (
+              <img
+                src={`${post.eyecatch.url}?w=1200`}
+                alt={post.title}
+                width="1200"
+                height="675"
+                class="mb-8 w-full rounded-lg"
+              />
+            )
+          }
+          <div class="prose-pd max-w-none" set:html={bodyWithIds} />
+        </div>
+
+        <!-- 目次（サイドバー・スティッキー） -->
+        {
+          headings.length > 0 && (
+            <aside class="lg:sticky lg:top-24 lg:self-start">
+              <div class="card p-6">
+                <h2 class="text-sm font-bold text-navy">目次</h2>
+                <nav class="mt-4" aria-label="目次">
+                  <ul class="space-y-2.5 text-sm">
+                    {headings.map((h) => (
+                      <li class:list={[h.level === 3 && 'pl-4']}>
+                        <a href={`#${h.id}`} class="text-ink transition-colors hover:text-pink">
+                          {h.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              </div>
+            </aside>
+          )
+        }
+      </div>
+    </div>
+
+    <!-- 関連記事 -->
+    {
+      related.length > 0 && (
+        <section class="bg-mist">
+          <div class="container-pd py-16">
+            <h2 class="section-title text-center">関連記事</h2>
+            <div class="mt-10 grid gap-6 md:grid-cols-3">
+              {related.map((item) => <BlogCard item={item} />)}
+            </div>
+          </div>
+        </section>
+      )
+    }
+  </article>
+
+  <CTASection />
+</BaseLayout>

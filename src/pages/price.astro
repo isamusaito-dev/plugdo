@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PriceTable from '../components/PriceTable.astro';
+import CTASection from '../components/CTASection.astro';
+
+const faqs = [
+  {
+    q: '契約期間はありますか？',
+    a: '最低利用期間は3ヶ月とさせていただいております。サイトの改善は数ヶ月単位で効果が現れるため、一定期間の継続をお願いしています。',
+  },
+  {
+    q: '解約はいつでもできますか？',
+    a: '最低利用期間（3ヶ月）以降は、当月末締めでいつでも解約いただけます。違約金などは発生しません。',
+  },
+  {
+    q: 'プランの途中変更はできますか？',
+    a: 'はい。事業の状況に合わせて、翌月から上位・下位プランへ変更いただけます。まずはBasicから始めて、必要に応じてGrowth・Partnerへ広げる方が多いです。',
+  },
+  {
+    q: '料金以外に初期費用はかかりますか？',
+    a: '運用プランには初期費用はかかりません。サイトの新規制作や大規模なリニューアルが必要な場合のみ、別途お見積もりとなります。',
+  },
+  {
+    q: '表示価格以外の費用は？',
+    a: '掲載の月額は税別の最低金額です。サイトの規模や対応範囲により変動するため、無料診断時に正確な金額をご提示します。',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
+    { '@type': 'ListItem', position: 2, name: '料金', item: 'https://plugdo.jp/price' },
+  ],
+};
+---
+
+<BaseLayout
+  title="料金プラン"
+  description="plugdoの料金プラン。Basic（¥30,000〜）/ Growth（¥60,000〜）/ Partner（¥100,000〜）の3プラン。更新・運用から戦略立案・AIO対応まで、中小企業のフェーズに合わせて選べます。"
+  jsonLd={[faqLd, breadcrumbLd]}
+>
+  <section class="hero-gradient">
+    <div class="container-pd py-16 md:py-20">
+      <p class="section-label">- Price -</p>
+      <h1 class="text-3xl font-black text-navy md:text-4xl">料金プラン</h1>
+      <p class="mt-5 max-w-2xl text-base leading-relaxed text-ink">
+        必要なところから、無理なく始められる3プラン。すべて月額制で、いつでもプラン変更できます。
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container-pd py-16 md:py-20">
+      <PriceTable variant="full" />
+      <p class="mt-8 text-center text-xs text-gray">
+        ※ 表示は税別の最低月額です。サイト規模・対応範囲により変動します。正確な金額は無料診断時にご提示します。
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="bg-mist">
+    <div class="container-pd py-16 md:py-20">
+      <div class="text-center">
+        <p class="section-label">- FAQ -</p>
+        <h2 class="section-title">よくあるご質問</h2>
+      </div>
+      <div class="mx-auto mt-10 max-w-3xl space-y-4">
+        {
+          faqs.map((f) => (
+            <details class="card group p-6 [&_summary]:cursor-pointer">
+              <summary class="flex items-center justify-between gap-4 list-none font-bold text-navy">
+                <span>{f.q}</span>
+                <span class="text-pink transition-transform group-open:rotate-45" aria-hidden="true">
+                  ＋
+                </span>
+              </summary>
+              <p class="mt-4 text-sm leading-relaxed text-ink">{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CTASection />
+</BaseLayout>

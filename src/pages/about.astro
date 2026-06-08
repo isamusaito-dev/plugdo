@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTASection from '../components/CTASection.astro';
+
+const company = [
+  { label: '社名', value: '株式会社ハンチス（HUNCHES）' },
+  { label: '設立日', value: '2024年1月16日' },
+  { label: '代表取締役', value: '齋藤 勇' },
+  { label: 'メール', value: 'info@hunches.co.jp', isEmail: true },
+  {
+    label: '事業内容',
+    value:
+      'webサイトの企画・制作・運営／webサイトのコンサルティング／マーケティングコンサルティング／ブランドコンサルティング',
+  },
+];
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
+    { '@type': 'ListItem', position: 2, name: '運営会社', item: 'https://plugdo.jp/about' },
+  ],
+};
+---
+
+<BaseLayout
+  title="運営会社"
+  description="plugdoを運営する株式会社ハンチス（HUNCHES）の会社情報。2024年設立、代表取締役 齋藤勇。webサイトの企画・制作・運営、マーケティング・ブランドコンサルティングを行っています。"
+  jsonLd={breadcrumbLd}
+>
+  <section class="hero-gradient">
+    <div class="container-pd py-16 md:py-20">
+      <p class="section-label">- About -</p>
+      <h1 class="text-3xl font-black text-navy md:text-4xl">運営会社</h1>
+      <p class="mt-5 max-w-2xl text-base leading-relaxed text-ink">
+        plugdoは、株式会社ハンチスが運営しています。
+      </p>
+    </div>
+  </section>
+
+  <!-- 想い -->
+  <section>
+    <div class="container-pd py-16 md:py-20">
+      <div class="mx-auto max-w-3xl">
+        <p class="section-label">- Our belief -</p>
+        <h2 class="section-title">「作ったサイトを、動かす」を、自分たちでも。</h2>
+        <div class="prose-pd mt-6">
+          <p>
+            ホームページは、作った瞬間がゴールではありません。むしろそこからが本当のスタートです。けれど多くの中小企業では、Web担当者を置く余裕がなく、せっかく作ったサイトが「あるだけ」で止まってしまいます。
+          </p>
+          <p>
+            私たちハンチスは、その「もったいない」をなくしたいと考えています。作りっぱなしにせず、改善し続け、ビジネスの成果につなげる。plugdoは、その姿勢をサービスにしたものです。
+          </p>
+          <p>
+            そして私たち自身も、自社のサイトやコンテンツを継続的に改善し、「作ったサイトを動かす」ことを日々実践しています。実践しているからこそ、お客様にも自信を持って伴走できると考えています。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 会社概要 -->
+  <section class="bg-mist">
+    <div class="container-pd py-16 md:py-20">
+      <div class="mx-auto max-w-3xl">
+        <p class="section-label">- Company -</p>
+        <h2 class="section-title">会社概要</h2>
+        <dl class="mt-8 overflow-hidden rounded-lg border border-mist bg-paper">
+          {
+            company.map((row, i) => (
+              <div
+                class:list={[
+                  'grid grid-cols-1 gap-1 px-6 py-5 sm:grid-cols-[140px_1fr] sm:gap-4',
+                  i !== 0 && 'border-t border-mist',
+                ]}
+              >
+                <dt class="text-sm font-bold text-navy">{row.label}</dt>
+                <dd class="text-sm leading-relaxed text-ink">
+                  {row.isEmail ? (
+                    <a href={`mailto:${row.value}`} class="text-pink underline underline-offset-2 hover:text-pinkAlt">
+                      {row.value}
+                    </a>
+                  ) : (
+                    row.value
+                  )}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="mt-4 text-xs text-gray">
+          ※ 所在地は非掲載とさせていただいております。お問い合わせはメールまたはお問い合わせフォームよりお願いします。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CTASection />
+</BaseLayout>

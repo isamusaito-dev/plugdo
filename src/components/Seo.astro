@@ -1,0 +1,96 @@
+---
+// メタタグ・OGP・Twitter Card・canonical・JSON-LD を一括出力する。
+// 仕様書 §7 SEO/AIO 要件の中核コンポーネント。
+const SITE_NAME = 'plugdo（プラグドゥ）';
+const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+
+interface Props {
+  title: string;
+  description: string;
+  /** パスを除いた OGP 画像のパス（/ogp-default.png など）または絶対URL */
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  /** 省略時は現在のURLを canonical にする */
+  canonicalPath?: string;
+  /** ページ固有の JSON-LD（Organization は常に出力。これは追加分） */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  ogImage = '/ogp-default.png',
+  ogType = 'website',
+  canonicalPath,
+  jsonLd,
+  noindex = false,
+} = Astro.props;
+
+const fullTitle =
+  title === SITE_NAME ? title : `${title} | ${SITE_NAME}`;
+
+const canonicalURL = new URL(
+  canonicalPath ?? Astro.url.pathname,
+  SITE_URL
+).href;
+
+const ogImageURL = ogImage.startsWith('http')
+  ? ogImage
+  : new URL(ogImage, SITE_URL).href;
+
+// 全ページ共通の Organization 構造化データ（運営会社情報）
+const organizationLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: '株式会社ハンチス',
+  alternateName: 'HUNCHES',
+  url: SITE_URL,
+  email: 'info@hunches.co.jp',
+  foundingDate: '2024-01-16',
+  founder: {
+    '@type': 'Person',
+    name: '齋藤 勇',
+  },
+  description:
+    'webサイトの企画・制作・運営、webサイト/マーケティング/ブランドのコンサルティングを行う企業。plugdo を運営。',
+  logo: new URL('/favicon.svg', SITE_URL).href,
+};
+
+const jsonLdArray = [
+  organizationLd,
+  ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []),
+];
+---
+
+<!-- 基本 -->
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- OGP -->
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:locale" content="ja_JP" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageURL} />
+
+<!-- JSON-LD -->
+{
+  jsonLdArray.map((obj) => (
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(obj)}
+    />
+  ))
+}

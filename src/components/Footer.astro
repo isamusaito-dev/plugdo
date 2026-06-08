@@ -1,0 +1,62 @@
+---
+const year = new Date().getFullYear();
+
+const cols = [
+  {
+    heading: 'サービス',
+    links: [
+      { label: 'サービス概要', href: '/service' },
+      { label: '料金プラン', href: '/price' },
+      { label: '導入事例', href: '/cases' },
+    ],
+  },
+  {
+    heading: '情報',
+    links: [
+      { label: 'ブログ', href: '/blog' },
+      { label: '運営会社', href: '/about' },
+      { label: 'お問い合わせ', href: '/contact' },
+    ],
+  },
+];
+---
+
+<footer class="mt-auto bg-slate text-paper">
+  <div class="container-pd grid gap-10 py-14 md:grid-cols-[1.5fr_1fr_1fr]">
+    <div>
+      <div class="flex items-center gap-2">
+        <img src="/favicon.svg" alt="" width="32" height="32" />
+        <span class="font-display text-xl">plugdo</span>
+      </div>
+      <p class="mt-4 text-sm leading-relaxed text-white/80">
+        ホームページを、働かせる。<br />
+        作ったきりのサイトを、問い合わせと採用につなげる継続改善サービスです。
+      </p>
+      <a href="/contact" class="btn-pink mt-6 text-sm">無料でサイト診断を受ける</a>
+    </div>
+
+    {
+      cols.map((col) => (
+        <nav aria-label={col.heading}>
+          <h2 class="text-sm font-bold text-white">{col.heading}</h2>
+          <ul class="mt-4 space-y-2.5">
+            {col.links.map((l) => (
+              <li>
+                <a href={l.href} class="text-sm text-white/80 transition-colors hover:text-pink">
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))
+    }
+  </div>
+
+  <div class="border-t border-white/15">
+    <div class="container-pd flex flex-col items-center justify-between gap-2 py-5 text-xs text-white/70 md:flex-row">
+      <p>運営: 株式会社ハンチス（HUNCHES）</p>
+      <p>&copy; {year} HUNCHES Inc. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

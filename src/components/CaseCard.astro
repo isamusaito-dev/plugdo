@@ -1,0 +1,47 @@
+---
+import type { Case } from '../lib/microcms';
+
+interface Props {
+  item: Case;
+}
+const { item } = Astro.props;
+---
+
+<a href={`/cases/${item.slug}`} class="card group flex flex-col overflow-hidden">
+  <div class="aspect-[16/9] overflow-hidden bg-mist">
+    {
+      item.thumbnail ? (
+        <img
+          src={`${item.thumbnail.url}?w=640&fit=crop`}
+          alt={item.title}
+          width="640"
+          height="360"
+          loading="lazy"
+          class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+      ) : (
+        <div class="flex h-full w-full items-center justify-center text-navy/30">
+          <span class="font-display text-2xl">plugdo</span>
+        </div>
+      )
+    }
+  </div>
+  <div class="flex flex-1 flex-col p-6">
+    <div class="flex flex-wrap items-center gap-2 text-xs">
+      {
+        item.industry && (
+          <span class="rounded-full bg-mist px-2.5 py-1 font-bold text-navy">
+            {item.industry}
+          </span>
+        )
+      }
+      <span class="text-gray">{item.clientName}</span>
+    </div>
+    <h3 class="mt-3 text-base font-bold leading-snug text-navy group-hover:text-pink">
+      {item.title}
+    </h3>
+    <span class="mt-auto pt-4 text-sm font-bold text-pink">
+      事例を見る →
+    </span>
+  </div>
+</a>

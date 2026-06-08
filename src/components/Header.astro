@@ -1,0 +1,71 @@
+---
+const nav = [
+  { label: 'サービス', href: '/service' },
+  { label: '料金', href: '/price' },
+  { label: '導入事例', href: '/cases' },
+  { label: 'ブログ', href: '/blog' },
+  { label: '運営会社', href: '/about' },
+];
+
+const current = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? current === '/' : current.startsWith(href);
+---
+
+<header class="sticky top-0 z-50 border-b border-mist bg-paper/95 backdrop-blur">
+  <div class="container-pd flex h-16 items-center justify-between">
+    <a href="/" class="flex items-center gap-2" aria-label="plugdo トップ">
+      <img src="/favicon.svg" alt="" width="32" height="32" />
+      <span class="font-display text-xl text-navy">plugdo</span>
+    </a>
+
+    <!-- PCナビ -->
+    <nav class="hidden items-center gap-7 md:flex" aria-label="メインナビゲーション">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'text-sm font-bold transition-colors hover:text-pink',
+              isActive(item.href) ? 'text-pink' : 'text-navy',
+            ]}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a href="/contact" class="btn-pink !px-5 !py-2.5 text-sm">無料サイト診断</a>
+    </nav>
+
+    <!-- モバイルメニュー（JS不要・details/summary） -->
+    <details class="group relative md:hidden">
+      <summary
+        class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-md border border-mist"
+        aria-label="メニューを開く"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#103366" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </summary>
+      <nav
+        class="absolute right-0 top-12 w-56 rounded-lg border border-mist bg-paper p-3 shadow-lg"
+        aria-label="モバイルナビゲーション"
+      >
+        {
+          nav.map((item) => (
+            <a
+              href={item.href}
+              class="block rounded-md px-3 py-2.5 text-sm font-bold text-navy hover:bg-mist"
+            >
+              {item.label}
+            </a>
+          ))
+        }
+        <a href="/contact" class="btn-pink mt-2 w-full text-sm">無料サイト診断</a>
+      </nav>
+    </details>
+  </div>
+</header>

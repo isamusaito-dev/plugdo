@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTASection from '../../components/CTASection.astro';
+import { getCases, type Case } from '../../lib/microcms';
+import { sampleCases } from '../../lib/sampleData';
+
+export async function getStaticPaths() {
+  const res = await getCases();
+  const cases = res.contents.length ? res.contents : sampleCases;
+  return cases.map((item) => ({
+    params: { slug: item.slug },
+    props: { item },
+  }));
+}
+
+interface Props {
+  item: Case;
+}
+const { item } = Astro.props;
+
+const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+
+const sections = [
+  { label: 'Challenge', heading: '課題', html: item.challenge },
+  { label: 'Solution', heading: '施策', html: item.solution },
+  { label: 'Result', heading: '成果', html: item.result },
+];
+
+const caseLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: item.title,
+  datePublished: item.publishedAt,
+  dateModified: item.revisedAt || item.publishedAt,
+  ...(item.thumbnail ? { image: item.thumbnail.url } : {}),
+  author: { '@type': 'Organization', name: '株式会社ハンチス' },
+  publisher: {
+    '@type': 'Organization',
+    name: '株式会社ハンチス',
+    logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
+  },
+  about: item.clientName,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/cases/${item.slug}` },
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: '導入事例', item: `${SITE_URL}/cases` },
+    { '@type': 'ListItem', position: 3, name: item.title, item: `${SITE_URL}/cases/${item.slug}` },
+  ],
+};
+---
+
+<BaseLayout
+  title={item.title}
+  description={`【導入事例】${item.clientName}（${item.industry ?? ''}）の課題・施策・成果。${item.title}`}
+  ogType="article"
+  ogImage={item.thumbnail?.url}
+  jsonLd={[caseLd, breadcrumbLd]}
+>
+  <article>
+    <header class="hero-gradient">
+      <div class="container-pd py-14 md:py-16">
+        <nav class="mb-5 text-xs text-gray" aria-label="パンくず">
+          <a href="/" class="hover:text-pink">ホーム</a>
+          <span class="mx-1.5">/</span>
+          <a href="/cases" class="hover:text-pink">導入事例</a>
+        </nav>
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          {
+            item.industry && (
+              <span class="rounded-full bg-mist px-2.5 py-1 font-bold text-navy">
+                {item.industry}
+              </span>
+            )
+          }
+          <span class="text-gray">{item.clientName}</span>
+        </div>
+        <h1 class="mt-4 max-w-3xl text-2xl font-black leading-snug text-navy md:text-3xl">
+          {item.title}
+        </h1>
+      </div>
+    </header>
+
+    <div class="container-pd py-12 md:py-16">
+      <div class="mx-auto max-w-3xl space-y-12">
+        {
+          item.thumbnail && (
+            <img
+              src={`${item.thumbnail.url}?w=1200`}
+              alt={item.title}
+              width="1200"
+              height="675"
+              class="w-full rounded-lg"
+            />
+          )
+        }
+
+        {
+          sections.map((s) => (
+            <section>
+              <p class="section-label">- {s.label} -</p>
+              <h2 class="section-title">{s.heading}</h2>
+              <div class="prose-pd mt-5 max-w-none" set:html={s.html} />
+            </section>
+          ))
+        }
+
+        {
+          item.voice && (
+            <section class="card border-pink bg-pink/5 p-8">
+              <p class="section-label">- Voice -</p>
+              <h2 class="text-lg font-bold text-navy">クライアントの声</h2>
+              <p class="mt-4 leading-relaxed text-ink">{item.voice}</p>
+            </section>
+          )
+        }
+      </div>
+    </div>
+  </article>
+
+  <CTASection
+    heading="あなたのサイトでも、同じ成果を。"
+    text="まずは無料診断で、改善のポイントを具体的にお伝えします。"
+  />
+</BaseLayout>

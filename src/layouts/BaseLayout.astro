@@ -1,0 +1,132 @@
+---
+import '../styles/global.css';
+import Seo from '../components/Seo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  canonicalPath?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const { title, description, ogImage, ogType, canonicalPath, jsonLd, noindex } =
+  Astro.props;
+
+const GA_ID = import.meta.env.PUBLIC_GA_ID;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Google Fonts: Noto Sans JP / Paytone One / Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Paytone+One&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <Seo
+      title={title}
+      description={description}
+      ogImage={ogImage}
+      ogType={ogType}
+      canonicalPath={canonicalPath}
+      jsonLd={jsonLd}
+      noindex={noindex}
+    />
+
+    <!-- Google Analytics 4（測定IDが設定されている場合のみ） -->
+    {
+      GA_ID && (
+        <>
+          <script
+            is:inline
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          />
+          <script is:inline set:html={`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `} />
+        </>
+      )
+    }
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- スクロールアニメーション + 数字カウントアップ -->
+    <script is:inline>
+      (function () {
+        // body にクラスを付与してから opacity:0 を有効化（FOUC防止）
+        document.body.classList.add('js-animate-ready');
+
+        // ── フェードアップ ──────────────────────────────
+        var fadeObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var el = entry.target;
+            var delay = parseInt(el.dataset.animateDelay || '0', 10);
+            setTimeout(function () { el.classList.add('is-visible'); }, delay);
+            fadeObserver.unobserve(el);
+          });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('[data-animate]').forEach(function (el) {
+          fadeObserver.observe(el);
+        });
+
+        // ── 数字カウントアップ ──────────────────────────
+        var countObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var el = entry.target;
+            countObserver.unobserve(el);
+            var target = parseFloat(el.dataset.count);
+            var suffix = el.dataset.countSuffix || '';
+            var decimals = (String(target).split('.')[1] || '').length;
+            var duration = 1100;
+            var startTime = null;
+            function step(ts) {
+              if (!startTime) startTime = ts;
+              var progress = Math.min((ts - startTime) / duration, 1);
+              // ease-out cubic
+              var eased = 1 - Math.pow(1 - progress, 3);
+              var current = target * eased;
+              el.textContent = decimals > 0
+                ? current.toFixed(decimals) + suffix
+                : Math.round(current) + suffix;
+              if (progress < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+          });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('[data-count]').forEach(function (el) {
+          countObserver.observe(el);
+        });
+      })();
+    </script>
+  </body>
+</html>

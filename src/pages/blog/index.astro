@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import CTASection from '../../components/CTASection.astro';
+import { getBlogs, getBlogCategories } from '../../lib/microcms';
+import { sampleBlogs } from '../../lib/sampleData';
+
+const blogsRes = await getBlogs();
+const blogs = blogsRes.contents.length ? blogsRes.contents : sampleBlogs;
+
+let categories = await getBlogCategories();
+// サンプル時はサンプル記事からカテゴリを抽出
+if (!categories.length) {
+  const map = new Map<string, { id: string; name: string; slug: string }>();
+  for (const b of blogs) if (b.category) map.set(b.category.id, b.category);
+  categories = Array.from(map.values());
+}
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
+    { '@type': 'ListItem', position: 2, name: 'ブログ', item: 'https://plugdo.jp/blog' },
+  ],
+};
+---
+
+<BaseLayout
+  title="ブログ"
+  description="plugdoのブログ。ホームページの運用・改善、AI検索（AIO）対応、中小企業のWeb活用に役立つ情報を発信しています。"
+  jsonLd={breadcrumbLd}
+>
+  <section class="hero-gradient">
+    <div class="container-pd py-16 md:py-20">
+      <p class="section-label">- Blog -</p>
+      <h1 class="text-3xl font-black text-navy md:text-4xl">ブログ</h1>
+      <p class="mt-5 max-w-2xl text-base leading-relaxed text-ink">
+        ホームページの運用・改善、AI検索対応など、中小企業のWeb活用に役立つ情報をお届けします。
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container-pd py-16 md:py-20">
+      <!-- カテゴリフィルタ（JSでクライアント絞り込み） -->
+      {
+        categories.length > 0 && (
+          <div class="mb-10 flex flex-wrap gap-2" role="group" aria-label="カテゴリで絞り込み">
+            <button
+              class="filter-btn rounded-full border border-navy bg-navy px-4 py-1.5 text-sm font-bold text-paper"
+              data-cat="all"
+            >
+              すべて
+            </button>
+            {categories.map((c) => (
+              <button
+                class="filter-btn rounded-full border border-mist bg-paper px-4 py-1.5 text-sm font-bold text-navy hover:border-navy"
+                data-cat={c.slug}
+              >
+                {c.name}
+              </button>
+            ))}
+          </div>
+        )
+      }
+
+      <div id="blog-grid" class="grid gap-6 md:grid-cols-3">
+        {
+          blogs.map((item) => (
+            <div class="blog-item" data-cat={item.category?.slug ?? 'uncategorized'}>
+              <BlogCard item={item} />
+            </div>
+          ))
+        }
+      </div>
+
+      <p id="empty-msg" class="hidden py-16 text-center text-gray">
+        このカテゴリの記事はまだありません。
+      </p>
+    </div>
+  </section>
+
+  <CTASection />
+</BaseLayout>
+
+<script is:inline>
+  // カテゴリの簡易クライアントフィルタ（静的・ページネーション簡易版）
+  const buttons = document.querySelectorAll('.filter-btn');
+  const items = document.querySelectorAll('.blog-item');
+  const empty = document.getElementById('empty-msg');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.getAttribute('data-cat');
+      buttons.forEach((b) => {
+        b.classList.remove('bg-navy', 'text-paper', 'border-navy');
+        b.classList.add('bg-paper', 'text-navy', 'border-mist');
+      });
+      btn.classList.add('bg-navy', 'text-paper', 'border-navy');
+      btn.classList.remove('bg-paper', 'text-navy', 'border-mist');
+
+      let visible = 0;
+      items.forEach((item) => {
+        const show = cat === 'all' || item.getAttribute('data-cat') === cat;
+        item.classList.toggle('hidden', !show);
+        if (show) visible++;
+      });
+      empty?.classList.toggle('hidden', visible !== 0);
+    });
+  });
+</script>

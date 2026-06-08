@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans;
+    font-size: 16px;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-bold text-navy;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+  }
+}
+
+@layer components {
+  /* コンテンツ最大幅 */
+  .container-pd {
+    @apply mx-auto w-full max-w-content px-5 md:px-8;
+  }
+
+  /* セクション見出し（英字スモールラベル + 横ライン） */
+  .section-label {
+    @apply mb-3 flex items-center justify-center gap-3 font-grotesk text-xs font-semibold uppercase tracking-[0.2em] text-pink;
+  }
+  .section-label::before,
+  .section-label::after {
+    content: '';
+    @apply block h-px w-8 bg-pink/40;
+  }
+  /* ページヘッダー等の左揃え用 */
+  .section-label-left {
+    @apply mb-3 inline-flex items-center gap-2 font-grotesk text-xs font-semibold uppercase tracking-[0.2em] text-pink;
+  }
+  .section-label-left::before {
+    content: '';
+    @apply block h-px w-5 bg-pink/50;
+  }
+
+  .section-title {
+    @apply text-2xl font-black leading-tight text-navy md:text-[2rem];
+  }
+
+  /* ボタン */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-sm font-bold tracking-wide transition-all duration-200;
+  }
+
+  .btn-pink {
+    @apply btn bg-pink text-paper shadow-[0_4px_24px_rgba(228,49,114,0.35)] hover:bg-pinkAlt hover:shadow-[0_6px_28px_rgba(228,49,114,0.45)] hover:-translate-y-0.5;
+  }
+
+  .btn-navy {
+    @apply btn bg-navy text-paper shadow-[0_4px_16px_rgba(16,51,102,0.25)] hover:bg-slate hover:shadow-[0_6px_20px_rgba(16,51,102,0.35)] hover:-translate-y-0.5;
+  }
+
+  .btn-outline {
+    @apply btn border-2 border-navy/60 bg-transparent text-navy hover:border-navy hover:bg-navy hover:text-paper;
+  }
+
+  /* カード */
+  .card {
+    @apply rounded-xl border border-gray/10 bg-paper shadow-[0_2px_16px_rgba(16,51,102,0.06)] transition-all duration-200 hover:shadow-[0_8px_32px_rgba(16,51,102,0.12)] hover:-translate-y-0.5;
+  }
+
+  /* リッチエディタ本文（microCMS body） */
+  .prose-pd {
+    @apply leading-relaxed text-ink;
+  }
+  .prose-pd h2 {
+    @apply mb-4 mt-10 border-l-4 border-pink pl-3 text-xl md:text-2xl;
+  }
+  .prose-pd h3 {
+    @apply mb-3 mt-8 text-lg md:text-xl;
+  }
+  .prose-pd p {
+    @apply mb-5;
+  }
+  .prose-pd a {
+    @apply text-pink underline underline-offset-2 hover:text-pinkAlt;
+  }
+  .prose-pd ul {
+    @apply mb-5 list-disc space-y-2 pl-6;
+  }
+  .prose-pd ol {
+    @apply mb-5 list-decimal space-y-2 pl-6;
+  }
+  .prose-pd img {
+    @apply my-6 rounded-lg;
+  }
+  .prose-pd blockquote {
+    @apply my-6 border-l-4 border-mist pl-4 italic text-gray;
+  }
+}
+
+/* ヒーロー背景グラデ（#EAF3FB → #FFFFFF） */
+.hero-gradient {
+  background: linear-gradient(180deg, #eaf3fb 0%, #ffffff 100%);
+}
+
+/* セクション下部の斜め区切り */
+.slant-bottom {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), 0 100%);
+}
+
+/* ── スクロールアニメーション ──────────────────────────── */
+/* JS 実行前はデフォルト可視（no-JS フォールバック）         */
+[data-animate] {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* JS が body に .js-animate-ready を付与してから隠す */
+.js-animate-ready [data-animate] {
+  opacity: 0;
+  transform: translateY(28px);
+}
+.js-animate-ready [data-animate="fade-in"] {
+  transform: none;
+}
+.js-animate-ready [data-animate].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
