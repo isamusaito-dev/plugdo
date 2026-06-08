@@ -38,9 +38,9 @@ const breadcrumbLd = {
   <!-- 事例一覧 -->
   <section class="bg-mist">
     <div class="container-pd py-16 md:py-20">
-      <div class="grid gap-6 md:grid-cols-3">
+      <div class="grid gap-6 md:grid-cols-3 md:items-stretch">
         {cases.map((item, i) => (
-          <div data-animate data-animate-delay={String(i * 80)}>
+          <div class="h-full" data-animate data-animate-delay={String(i * 80)}>
             <CaseCard item={item} />
           </div>
         ))}
