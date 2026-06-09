@@ -7,6 +7,7 @@ const company = [
   { label: '設立日', value: '2024年1月16日' },
   { label: '代表取締役', value: '齋藤 勇' },
   { label: 'メール', value: 'info@hunches.co.jp', isEmail: true },
+  { label: 'コーポレートサイト', value: 'https://hunches.co.jp', isUrl: true },
   {
     label: '事業内容',
     value:
@@ -79,6 +80,10 @@ const breadcrumbLd = {
                 <dd class="text-sm leading-relaxed text-ink">
                   {row.isEmail ? (
                     <a href={`mailto:${row.value}`} class="text-pink underline underline-offset-2 hover:text-pinkAlt">
+                      {row.value}
+                    </a>
+                  ) : row.isUrl ? (
+                    <a href={row.value} target="_blank" rel="noopener noreferrer" class="text-pink underline underline-offset-2 hover:text-pinkAlt">
                       {row.value}
                     </a>
                   ) : (
