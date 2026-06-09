@@ -36,13 +36,21 @@ export type Blog = {
   revisedAt: string;
 };
 
+export type CaseMetric = {
+  label: string;   // 指標名（例：月間問い合わせ数）
+  before: string;  // 施策前の値（例：1〜2件）
+  after: string;   // 施策後の値（例：9件）
+};
+
 export type Case = {
   id: string;
   title: string;
   slug: string;
   clientName: string;
   industry?: string;
+  plan?: string;          // 利用プラン名（例：Growth）
   thumbnail?: MicroCMSImage;
+  metrics?: CaseMetric[]; // 成果の数値ハイライト（最大3つ）
   challenge: string;
   solution: string;
   result: string;

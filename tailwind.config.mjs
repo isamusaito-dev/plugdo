@@ -17,8 +17,8 @@ export default {
       },
       fontFamily: {
         sans: ['"Noto Sans JP"', 'system-ui', 'sans-serif'],
-        display: ['"Paytone One"', '"Noto Sans JP"', 'sans-serif'],
-        grotesk: ['"Space Grotesk"', '"Noto Sans JP"', 'sans-serif'],
+        display: ['Inter', '"Noto Sans JP"', 'sans-serif'],
+        grotesk: ['Inter', '"Noto Sans JP"', 'sans-serif'],
       },
       maxWidth: {
         content: '1150px',

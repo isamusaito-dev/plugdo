@@ -12,10 +12,21 @@ interface Props {
   canonicalPath?: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   noindex?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
 }
 
-const { title, description, ogImage, ogType, canonicalPath, jsonLd, noindex } =
-  Astro.props;
+const {
+  title,
+  description,
+  ogImage,
+  ogType,
+  canonicalPath,
+  jsonLd,
+  noindex,
+  publishedTime,
+  modifiedTime,
+} = Astro.props;
 
 const GA_ID = import.meta.env.PUBLIC_GA_ID;
 ---
@@ -28,7 +39,7 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Google Fonts: Noto Sans JP / Paytone One / Space Grotesk -->
+    <!-- Google Fonts: Noto Sans JP / Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       rel="preconnect"
@@ -36,7 +47,7 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID;
       crossorigin
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Paytone+One&family=Space+Grotesk:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
 
@@ -48,6 +59,8 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID;
       canonicalPath={canonicalPath}
       jsonLd={jsonLd}
       noindex={noindex}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
     />
 
     <!-- Google Analytics 4（測定IDが設定されている場合のみ） -->

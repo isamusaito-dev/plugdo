@@ -22,9 +22,16 @@ const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
 
 const sections = [
   { label: 'Challenge', heading: '課題', html: item.challenge },
-  { label: 'Solution', heading: '施策', html: item.solution },
-  { label: 'Result', heading: '成果', html: item.result },
+  { label: 'Solution',  heading: '施策', html: item.solution  },
+  { label: 'Result',    heading: '成果', html: item.result    },
 ];
+
+const planColor: Record<string, string> = {
+  Basic:   'bg-slate/10 text-slate',
+  Growth:  'bg-pink/10 text-pink',
+  Partner: 'bg-navy/10 text-navy',
+};
+const planBadgeClass = item.plan ? (planColor[item.plan] ?? 'bg-mist text-navy') : '';
 
 const caseLd = {
   '@context': 'https://schema.org',
@@ -33,12 +40,10 @@ const caseLd = {
   datePublished: item.publishedAt,
   dateModified: item.revisedAt || item.publishedAt,
   ...(item.thumbnail ? { image: item.thumbnail.url } : {}),
-  author: { '@type': 'Organization', name: '株式会社ハンチス' },
-  publisher: {
-    '@type': 'Organization',
-    name: '株式会社ハンチス',
-    logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
-  },
+  inLanguage: 'ja-JP',
+  author: { '@id': `${SITE_URL}/#organization` },
+  publisher: { '@id': `${SITE_URL}/#organization` },
+  isPartOf: { '@id': `${SITE_URL}/#website` },
   about: item.clientName,
   mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/cases/${item.slug}` },
 };
@@ -59,65 +64,135 @@ const breadcrumbLd = {
   description={`【導入事例】${item.clientName}（${item.industry ?? ''}）の課題・施策・成果。${item.title}`}
   ogType="article"
   ogImage={item.thumbnail?.url}
+  publishedTime={item.publishedAt}
+  modifiedTime={item.revisedAt || item.publishedAt}
   jsonLd={[caseLd, breadcrumbLd]}
 >
   <article>
-    <header class="hero-gradient">
+    <!-- ページヘッダー -->
+    <header class="hero-gradient border-b border-navy/6">
       <div class="container-pd py-14 md:py-16">
-        <nav class="mb-5 text-xs text-gray" aria-label="パンくず">
-          <a href="/" class="hover:text-pink">ホーム</a>
-          <span class="mx-1.5">/</span>
-          <a href="/cases" class="hover:text-pink">導入事例</a>
+        <nav class="mb-6 flex items-center gap-1.5 text-xs text-gray" aria-label="パンくず">
+          <a href="/" class="transition-colors hover:text-pink">ホーム</a>
+          <svg class="h-3 w-3 flex-shrink-0 opacity-40" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+          <a href="/cases" class="transition-colors hover:text-pink">導入事例</a>
+          <svg class="h-3 w-3 flex-shrink-0 opacity-40" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+          <span class="line-clamp-1 text-navy/60">{item.title}</span>
         </nav>
-        <div class="flex flex-wrap items-center gap-2 text-xs">
-          {
-            item.industry && (
-              <span class="rounded-full bg-mist px-2.5 py-1 font-bold text-navy">
-                {item.industry}
-              </span>
-            )
-          }
-          <span class="text-gray">{item.clientName}</span>
+
+        <div class="flex flex-wrap items-center gap-2">
+          {item.industry && (
+            <span class="rounded-full bg-mist px-3 py-1 text-xs font-bold text-navy">
+              {item.industry}
+            </span>
+          )}
+          {item.plan && (
+            <span class={`rounded-full px-3 py-1 text-xs font-bold ${planBadgeClass}`}>
+              {item.plan} プラン
+            </span>
+          )}
+          <span class="text-xs text-gray">{item.clientName}</span>
         </div>
-        <h1 class="mt-4 max-w-3xl text-2xl font-black leading-snug text-navy md:text-3xl">
+
+        <h1 class="mt-4 max-w-3xl text-2xl font-black leading-snug text-navy md:text-[1.875rem]">
           {item.title}
         </h1>
       </div>
     </header>
 
-    <div class="container-pd py-12 md:py-16">
-      <div class="mx-auto max-w-3xl space-y-12">
-        {
-          item.thumbnail && (
+    <!-- 施策前後の数値（Before → After カード） -->
+    {item.metrics && item.metrics.length > 0 && (
+      <div class="border-b border-navy/6 bg-white">
+        <div class="container-pd py-10 md:py-12">
+          <p class="mb-6 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-pink">Numbers</p>
+          <div class={`grid gap-4 ${item.metrics.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
+            {item.metrics.map((m) => (
+              <div class="rounded-2xl border border-gray/10 bg-paper p-6 shadow-sm">
+                <p class="mb-5 text-xs font-bold text-gray">{m.label}</p>
+                <div class="flex items-end gap-3">
+                  <!-- Before -->
+                  <div class="text-center">
+                    <p class="mb-1 text-[10px] font-semibold uppercase tracking-wider text-gray/50">Before</p>
+                    <p class="font-display text-2xl font-bold leading-none text-ink/30">{m.before}</p>
+                  </div>
+                  <!-- 矢印 -->
+                  <div class="mb-0.5 flex-1 flex items-center justify-center">
+                    <svg class="h-5 w-5 text-pink/40" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                    </svg>
+                  </div>
+                  <!-- After -->
+                  <div class="text-center">
+                    <p class="mb-1 text-[10px] font-semibold uppercase tracking-wider text-pink">After</p>
+                    <p class="font-display text-3xl font-bold leading-none text-pink">{m.after}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
+
+    <!-- 本文 -->
+    <div class="bg-mist">
+      <div class="container-pd py-14 md:py-20">
+        <div class="mx-auto max-w-3xl">
+
+          <!-- サムネイル -->
+          {item.thumbnail && (
             <img
               src={`${item.thumbnail.url}?w=1200`}
               alt={item.title}
               width="1200"
               height="675"
-              class="w-full rounded-lg"
+              class="mb-12 w-full rounded-2xl shadow-md"
             />
-          )
-        }
+          )}
 
-        {
-          sections.map((s) => (
-            <section>
-              <p class="section-label">- {s.label} -</p>
-              <h2 class="section-title">{s.heading}</h2>
-              <div class="prose-pd mt-5 max-w-none" set:html={s.html} />
-            </section>
-          ))
-        }
+          <!-- 課題・施策・成果 -->
+          <div class="space-y-6">
+            {sections.map((s, i) => (
+              <section
+                class="overflow-hidden rounded-2xl border border-gray/10 bg-paper shadow-sm"
+                data-animate
+                data-animate-delay={String(i * 80)}
+              >
+                <!-- セクションヘッダー -->
+                <div class="border-b border-gray/8 px-7 py-4 flex items-baseline gap-3">
+                  <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-pink">{s.label}</span>
+                  <h2 class="text-lg font-black text-navy">{s.heading}</h2>
+                </div>
+                <!-- 本文 -->
+                <div class="prose-pd px-7 py-6" set:html={s.html} />
+              </section>
+            ))}
+          </div>
 
-        {
-          item.voice && (
-            <section class="card border-pink bg-pink/5 p-8">
-              <p class="section-label">- Voice -</p>
-              <h2 class="text-lg font-bold text-navy">クライアントの声</h2>
-              <p class="mt-4 leading-relaxed text-ink">{item.voice}</p>
+          <!-- クライアントの声 -->
+          {item.voice && (
+            <section class="mt-8" data-animate>
+              <div class="relative overflow-hidden rounded-2xl border border-pink/20 bg-white px-8 py-9 shadow-sm">
+                <svg class="absolute -left-3 -top-3 h-20 w-20 text-pink/6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                </svg>
+                <p class="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-pink">Voice</p>
+                <p class="relative text-base leading-[1.9] text-ink">{item.voice}</p>
+              </div>
             </section>
-          )
-        }
+          )}
+
+          <!-- 戻るリンク -->
+          <div class="mt-12 flex justify-center">
+            <a href="/cases" class="btn-outline text-sm">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/>
+              </svg>
+              導入事例一覧へ戻る
+            </a>
+          </div>
+
+        </div>
       </div>
     </div>
   </article>

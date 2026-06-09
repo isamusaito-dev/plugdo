@@ -1,13 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import ServiceCard from '../components/ServiceCard.astro';
 import PriceTable from '../components/PriceTable.astro';
 import CaseCard from '../components/CaseCard.astro';
 import BlogCard from '../components/BlogCard.astro';
 import CTASection from '../components/CTASection.astro';
 import { getCases, getBlogs } from '../lib/microcms';
 import { sampleCases, sampleBlogs } from '../lib/sampleData';
+import { plans } from '../lib/plans';
+import { SITE_URL } from '../lib/site';
 
 // 事例・ブログを取得（未接続時はサンプルにフォールバック）
 const casesRes = await getCases({ limit: 3 });
@@ -30,7 +31,7 @@ const problems = [
     note: 1,
   },
   {
-    title: '問い合わせ・取引につながらない',
+    title: '問い合わせが増えない',
     text: '訪れても、行動に至らない。情報が古いだけで、ビジネスの機会を逃しています。',
     stat: '32.6',
     unit: '%',
@@ -47,22 +48,43 @@ const problems = [
   },
 ];
 
-// サービスカードはSVGスロット渡しに変更（以下は title/description/accent のみ）
+// サービス（毎月やること付き）
 const services = [
   {
     title: '継続的な改善',
-    description: '作って終わりにしない。月次でサイトを更新し、改善提案と実装を繰り返して、問い合わせにつながる状態へ育てます。',
+    description: '作って終わりにしない。毎月サイトを更新し、改善提案と実装を繰り返します。',
     accent: 'bg-navy/8',
+    iconStroke: '#103366',
+    items: [
+      'コンテンツ更新・追加（月2〜4本）',
+      '検索キーワードの調査と最適化',
+      'お問い合わせ導線の改善提案',
+      '競合サイト・検索トレンドの調査',
+    ],
   },
   {
     title: 'AI検索（AIO）対応',
-    description: 'ChatGPTやPerplexityなどのAI検索に正しく読まれ、引用される構造へ。これからの流入経路に先回りで対応します。',
+    description: 'ChatGPTやPerplexityなどのAI検索でも、あなたの会社の情報が出てくるよう、サイトの構造を整えます。',
     accent: 'bg-pink/10',
+    iconStroke: '#E43172',
+    items: [
+      '構造化データ（Schema.org）の実装',
+      'AI引用されやすいコンテンツ設計',
+      'FAQ・Q&Aセクションの整備',
+      'AI検索への引用状況チェック',
+    ],
   },
   {
-    title: '社内担当のように伴走',
-    description: 'Web担当者を雇わなくても大丈夫。社外のパートナーが社内担当のように、あなたのサイトに継続的に向き合います。',
+    title: '社内のWeb担当のように動きます',
+    description: 'Web担当者を雇わなくても大丈夫。社外のパートナーが、社内のWeb担当のように向き合います。',
     accent: 'bg-gold/15',
+    iconStroke: '#C8A951',
+    items: [
+      '毎月の改善レポート提出',
+      '翌月の改善計画・優先順位の提案',
+      '専任担当による質問・相談対応',
+      '毎月のオンラインMTG（30分）',
+    ],
   },
 ];
 
@@ -70,108 +92,136 @@ const services = [
 const serviceLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
+  '@id': `${SITE_URL}/#service`,
   serviceType: 'ホームページ運用・改善サービス',
-  name: 'plugdo',
-  provider: { '@type': 'Organization', name: '株式会社ハンチス' },
-  areaServed: 'JP',
+  name: 'plugdo（プラグドゥ）',
+  url: SITE_URL,
+  provider: { '@id': `${SITE_URL}/#organization` },
+  areaServed: { '@type': 'Country', name: 'Japan' },
+  audience: {
+    '@type': 'BusinessAudience',
+    name: 'Web担当者のいない中小企業・小規模事業者',
+  },
   description:
-    '作ったきりのホームページを、継続的な改善とAIO対応で問い合わせ・採用につなげる伴走型サービス。',
+    '作ったきりのホームページを、毎月の更新・改善とAI検索（AIO）対応で問い合わせ・採用につなげるWeb運用サービス。',
+  offers: plans.map((p) => ({
+    '@type': 'Offer',
+    name: p.name,
+    description: p.forWho,
+    price: p.price.replace(/[¥,]/g, ''),
+    priceCurrency: 'JPY',
+    url: `${SITE_URL}/price`,
+  })),
+};
+
+// よくある質問（FAQPage = AI検索に引用されやすいQ&A形式）
+const faqs = [
+  {
+    q: 'plugdoはどんなサービスですか？',
+    a: '作ったきりで止まってしまったホームページを、毎月の更新・改善とAI検索（AIO）対応で、問い合わせや採用につなげるWeb運用サービスです。Web担当者がいない中小企業・小規模事業者に代わって、社外のパートナーが「社内のWeb担当」のように毎月サイトを改善します。',
+  },
+  {
+    q: '料金はいくらですか？',
+    a: '月額制で、Basic（¥30,000〜）・Growth（¥60,000〜）・Partner（¥100,000〜）の3プランがあります（いずれも税別の最低月額）。サイトの規模や対応範囲により変動し、正確な金額は無料診断時にお伝えします。初期費用はかかりません。',
+  },
+  {
+    q: 'AIO（AI検索対応）とは何ですか？',
+    a: 'ChatGPTやPerplexity、GoogleのAI Overviewsなどの生成AI検索で「○○を相談したい」と調べたときに、あなたの会社の情報が正しく引用・紹介される状態をつくる取り組みです。構造化データ（JSON-LD）の整備、意味のあるHTML構造、FAQの整備などを行います。',
+  },
+  {
+    q: 'Web担当者がいなくても利用できますか？',
+    a: 'はい。むしろWeb担当者がいない会社のためのサービスです。更新・改善の提案から実装、レポートまでをplugdoが代行するため、専門知識がなくてもサイトを改善し続けられます。',
+  },
+  {
+    q: '契約期間や解約の条件はありますか？',
+    a: '最低利用期間は3ヶ月です。サイト改善は数ヶ月単位で効果が現れるため、一定期間の継続をお願いしています。4ヶ月目以降は当月末締めでいつでも解約でき、違約金はありません。',
+  },
+  {
+    q: 'まず何から始めればいいですか？',
+    a: '無料のサイト診断からお試しいただけます。30分のオンライン相談で、今のサイトのどこを直せば問い合わせが増えるのか、改善すべき箇所と優先順位をまとめたレポートをお渡しします。費用・契約は不要です。',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
 };
 ---
 
 <BaseLayout
-  title="plugdo（プラグドゥ）"
-  description="ホームページを、働かせる。作ったきりのサイトを、継続的な改善とAI検索対応で問い合わせと採用につなげる伴走型サービス。Web担当者がいない中小企業のためのplugdo。"
-  jsonLd={serviceLd}
+  title="ホームページを、働かせる。｜中小企業のWeb改善サービス plugdo"
+  description="ホームページを、働かせる。作ったきりのサイトを毎月の改善で問い合わせと採用につなげます。Web担当がいない中小企業・小規模事業者のためのWeb運用サービス plugdo（プラグドゥ）。"
+  jsonLd={[serviceLd, faqLd]}
 >
   <Hero />
 
   <!-- 課題提起 -->
   <section class="bg-mist">
-    <div class="container-pd py-16 md:py-20">
+    <div class="container-pd py-20 md:py-28">
       <div class="text-center" data-animate="fade-in">
         <p class="section-label">Problem</p>
         <h2 class="section-title">サイトはある。でも——</h2>
-        <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-gray">
+        <p class="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-gray">
           「ホームページがある会社は信頼できる」と答えた経営者は79.8%<sup class="text-pink">※1</sup>。
-          でも"作ったきり"では、その信頼はむしろ逆効果になります。
+          でも<strong class="text-navy">何年も更新されていないサイトは、逆に不信感につながります。</strong>
         </p>
       </div>
 
-      <div class="mt-12 grid gap-5 md:grid-cols-3">
+      <!-- 3つの数字 -->
+      <div class="mt-14 grid gap-6 md:grid-cols-3 md:items-stretch">
 
-        <!-- Card 0: 更新できていない -->
-        <div class="card flex flex-col overflow-hidden" data-animate data-animate-delay="0">
-          <div class="flex h-28 items-center justify-center bg-sky/60">
-            <div class="flex flex-col items-center gap-1.5 rounded-lg border-2 border-dashed border-navy/20 px-8 py-4 text-navy/30">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-              <span class="text-[10px] font-medium tracking-wide">イラスト（後で追加）</span>
-            </div>
+        <!-- 数字 0 -->
+        <div class="flex flex-col rounded-2xl border border-gray/10 bg-white p-8 shadow-sm" data-animate data-animate-delay="0">
+          <div class="mb-5 h-1 w-10 rounded-full bg-pink"></div>
+          <div class="font-display text-[3.5rem] font-black leading-none text-pink"
+               data-count={problems[0].stat} data-count-suffix={problems[0].unit}>
+            {problems[0].stat}{problems[0].unit}
           </div>
-          <div class="flex flex-1 flex-col p-6">
-            <h3 class="text-base font-bold text-navy">{problems[0].title}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-ink/80">{problems[0].text}</p>
-            <div class="mt-5 border-t border-mist pt-4">
-              <div class="flex items-baseline gap-1">
-                <span class="font-display text-4xl leading-none text-pink" data-count={problems[0].stat} data-count-suffix={problems[0].unit}>{problems[0].stat}{problems[0].unit}</span>
-                <sup class="ml-1 text-[10px] text-gray/50">※{problems[0].note}</sup>
-              </div>
-              <p class="mt-1.5 text-xs leading-snug text-ink">{problems[0].statLabel}</p>
-            </div>
-          </div>
+          <h3 class="mt-4 text-base font-bold text-navy">{problems[0].title}</h3>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-gray">
+            {problems[0].statLabel}<sup class="ml-0.5 text-[9px] text-gray/40">※{problems[0].note}</sup>
+          </p>
         </div>
 
-        <!-- Card 1: 問い合わせにつながらない -->
-        <div class="card flex flex-col overflow-hidden" data-animate data-animate-delay="120">
-          <div class="flex h-28 items-center justify-center bg-pink/5">
-            <div class="flex flex-col items-center gap-1.5 rounded-lg border-2 border-dashed border-pink/30 px-8 py-4 text-pink/30">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-              <span class="text-[10px] font-medium tracking-wide">イラスト（後で追加）</span>
-            </div>
+        <!-- 数字 1 -->
+        <div class="flex flex-col rounded-2xl border border-gray/10 bg-white p-8 shadow-sm" data-animate data-animate-delay="120">
+          <div class="mb-5 h-1 w-10 rounded-full bg-pink"></div>
+          <div class="font-display text-[3.5rem] font-black leading-none text-pink"
+               data-count={problems[1].stat} data-count-suffix={problems[1].unit}>
+            {problems[1].stat}{problems[1].unit}
           </div>
-          <div class="flex flex-1 flex-col p-6">
-            <h3 class="text-base font-bold text-navy">{problems[1].title}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-ink/80">{problems[1].text}</p>
-            <div class="mt-5 border-t border-mist pt-4">
-              <div class="flex items-baseline gap-1">
-                <span class="font-display text-4xl leading-none text-pink" data-count={problems[1].stat} data-count-suffix={problems[1].unit}>{problems[1].stat}{problems[1].unit}</span>
-                <sup class="ml-1 text-[10px] text-gray/50">※{problems[1].note}</sup>
-              </div>
-              <p class="mt-1.5 text-xs leading-snug text-ink">{problems[1].statLabel}</p>
-            </div>
-          </div>
+          <h3 class="mt-4 text-base font-bold text-navy">{problems[1].title}</h3>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-gray">
+            {problems[1].statLabel}<sup class="ml-0.5 text-[9px] text-gray/40">※{problems[1].note}</sup>
+          </p>
         </div>
 
-        <!-- Card 2: 直す人が社内にいない -->
-        <div class="card flex flex-col overflow-hidden" data-animate data-animate-delay="240">
-          <div class="flex h-28 items-center justify-center bg-gold/10">
-            <div class="flex flex-col items-center gap-1.5 rounded-lg border-2 border-dashed border-gold/40 px-8 py-4 text-gold/50">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-              <span class="text-[10px] font-medium tracking-wide">イラスト（後で追加）</span>
-            </div>
+        <!-- 数字 2 -->
+        <div class="flex flex-col rounded-2xl border border-gray/10 bg-white p-8 shadow-sm" data-animate data-animate-delay="240">
+          <div class="mb-5 h-1 w-10 rounded-full bg-pink"></div>
+          <div class="font-display text-[3.5rem] font-black leading-none text-pink"
+               data-count={problems[2].stat} data-count-suffix={problems[2].unit}>
+            {problems[2].stat}{problems[2].unit}
           </div>
-          <div class="flex flex-1 flex-col p-6">
-            <h3 class="text-base font-bold text-navy">{problems[2].title}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-ink/80">{problems[2].text}</p>
-            <div class="mt-5 border-t border-mist pt-4">
-              <div class="flex items-baseline gap-1">
-                <span class="font-display text-4xl leading-none text-pink" data-count={problems[2].stat} data-count-suffix={problems[2].unit}>{problems[2].stat}{problems[2].unit}</span>
-                <sup class="ml-1 text-[10px] text-gray/50">※{problems[2].note}</sup>
-              </div>
-              <p class="mt-1.5 text-xs leading-snug text-ink">{problems[2].statLabel}</p>
-            </div>
-          </div>
+          <h3 class="mt-4 text-base font-bold text-navy">{problems[2].title}</h3>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-gray">
+            {problems[2].statLabel}<sup class="ml-0.5 text-[9px] text-gray/40">※{problems[2].note}</sup>
+          </p>
         </div>
 
       </div>
 
-      <div class="mt-10 flex items-center justify-center gap-4">
-        <div class="h-px max-w-xs flex-1 bg-navy/10"></div>
-        <p class="text-sm font-bold text-navy">その「もったいない」を、plugdoが解決します。</p>
-        <div class="h-px max-w-xs flex-1 bg-navy/10"></div>
+      <!-- ブリッジ -->
+      <div class="mt-16 border-t border-navy/10 pt-10 text-center" data-animate="fade-in">
+        <p class="text-base font-bold text-navy md:text-lg">その「もったいない」を、plugdoが解決します。</p>
       </div>
 
-      {/* 出典（控えめな脚注） */}
+      <!-- 出典（控えめな脚注） -->
       <p class="mt-6 text-center text-[11px] leading-relaxed text-gray/40">
         ※1
         <a href={SRC_PLUST} target="_blank" rel="noopener" class="underline decoration-gray/20 underline-offset-2 hover:text-gray/70">
@@ -185,91 +235,397 @@ const serviceLd = {
     </div>
   </section>
 
-  <!-- サービス概要 -->
+  <!-- How it works: 3ステップ -->
   <section>
-    <div class="container-pd py-16 md:py-20">
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">How it works</p>
+        <h2 class="section-title">毎月のくり返しで、<br />サイトが育っていく。</h2>
+        <p class="mx-auto mt-5 max-w-md text-sm leading-relaxed text-gray">
+          3つのステップを毎月繰り返すことで、サイトが「問い合わせにつながる状態」になっていきます。
+        </p>
+      </div>
+
+      <div class="mt-14 grid gap-6 md:grid-cols-3 md:items-stretch">
+
+        <!-- Step 01: 診断する -->
+        <div class="flex h-full flex-col overflow-hidden rounded-2xl border border-gray/10 shadow-sm" data-animate data-animate-delay="0">
+          <div class="flex h-56 flex-shrink-0 items-center justify-center bg-gradient-to-br from-sky to-mist">
+            <svg viewBox="0 0 140 96" class="h-44 w-auto" fill="none" aria-hidden="true">
+              <!-- ブラウザ -->
+              <rect x="8" y="10" width="76" height="58" rx="8" fill="white" opacity="0.9"/>
+              <rect x="8" y="10" width="76" height="18" rx="8" fill="#EBEEF2"/>
+              <rect x="8" y="22" width="76" height="6" fill="#EBEEF2"/>
+              <circle cx="16" cy="19" r="2.5" fill="#103366" opacity="0.2"/>
+              <circle cx="23" cy="19" r="2.5" fill="#103366" opacity="0.2"/>
+              <rect x="32" y="13" width="38" height="10" rx="5" fill="white" opacity="0.7"/>
+              <!-- コンテンツライン -->
+              <rect x="16" y="36" width="48" height="5" rx="2.5" fill="#103366" opacity="0.08"/>
+              <rect x="16" y="46" width="36" height="5" rx="2.5" fill="#E43172" opacity="0.2"/>
+              <rect x="16" y="56" width="42" height="5" rx="2.5" fill="#103366" opacity="0.08"/>
+              <!-- ルーペ -->
+              <circle cx="98" cy="54" r="22" fill="white" opacity="0.7"/>
+              <circle cx="94" cy="50" r="13" fill="none" stroke="#103366" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="103" y1="59" x2="112" y2="68" stroke="#103366" stroke-width="3" stroke-linecap="round"/>
+              <!-- ハイライト -->
+              <rect x="16" y="46" width="22" height="5" rx="2.5" fill="#E43172" opacity="0.5"/>
+              <!-- 発見バッジ -->
+              <rect x="72" y="20" width="38" height="18" rx="9" fill="#103366"/>
+              <text x="91" y="32.5" text-anchor="middle" font-size="8" font-family="system-ui,sans-serif" fill="white" font-weight="700">5件発見</text>
+            </svg>
+          </div>
+          <div class="flex-1 bg-white p-7">
+            <p class="select-none font-grotesk text-2xl font-bold leading-none text-navy/10">01</p>
+            <h3 class="mt-3 text-xl font-bold text-navy">診断する</h3>
+            <p class="mt-3 text-sm leading-relaxed text-ink/70">今のサイトを分析し、課題を見つけます。何から手をつければいいかがわかります。</p>
+          </div>
+        </div>
+
+        <!-- Step 02: 改善する -->
+        <div class="flex h-full flex-col overflow-hidden rounded-2xl border border-gray/10 shadow-sm" data-animate data-animate-delay="120">
+          <div class="flex h-56 flex-shrink-0 items-center justify-center bg-gradient-to-br from-pink/8 to-white">
+            <svg viewBox="0 0 140 96" class="h-44 w-auto" fill="none" aria-hidden="true">
+              <!-- ブラウザ -->
+              <rect x="22" y="10" width="76" height="58" rx="8" fill="white" opacity="0.9"/>
+              <rect x="22" y="10" width="76" height="18" rx="8" fill="#EBEEF2"/>
+              <rect x="22" y="22" width="76" height="6" fill="#EBEEF2"/>
+              <circle cx="30" cy="19" r="2.5" fill="#103366" opacity="0.2"/>
+              <circle cx="37" cy="19" r="2.5" fill="#103366" opacity="0.2"/>
+              <!-- コンテンツライン (更新中) -->
+              <rect x="30" y="36" width="52" height="5" rx="2.5" fill="#103366" opacity="0.08"/>
+              <rect x="30" y="46" width="40" height="5" rx="2.5" fill="#E43172" opacity="0.15"/>
+              <rect x="30" y="56" width="46" height="5" rx="2.5" fill="#103366" opacity="0.08"/>
+              <!-- 更新中バッジ -->
+              <rect x="30" y="43" width="34" height="11" rx="5.5" fill="white" stroke="#E43172" stroke-width="1.2" stroke-opacity="0.5"/>
+              <text x="47" y="51.5" text-anchor="middle" font-size="6" font-family="system-ui,sans-serif" fill="#E43172" font-weight="700">更新中...</text>
+              <!-- チェックマーク群 -->
+              <circle cx="112" cy="30" r="12" fill="#E43172" opacity="0.1"/>
+              <path d="M106 30 L110 34 L118 24" stroke="#E43172" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="112" cy="56" r="10" fill="#103366" opacity="0.08"/>
+              <path d="M107 56 L110 59 L117 51" stroke="#103366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- 月次ラベル -->
+              <rect x="86" y="72" width="46" height="16" rx="8" fill="#E43172"/>
+              <text x="109" y="83.5" text-anchor="middle" font-size="7.5" font-family="system-ui,sans-serif" fill="white" font-weight="700">毎月実施</text>
+            </svg>
+          </div>
+          <div class="flex-1 bg-white p-7">
+            <p class="select-none font-grotesk text-2xl font-bold leading-none text-navy/10">02</p>
+            <h3 class="mt-3 text-xl font-bold text-navy">改善する</h3>
+            <p class="mt-3 text-sm leading-relaxed text-ink/70">コンテンツ更新・SEO・AI検索対応を毎月実施。作って終わりにせず、動かし続けます。</p>
+          </div>
+        </div>
+
+        <!-- Step 03: 計測する -->
+        <div class="flex h-full flex-col overflow-hidden rounded-2xl border border-gray/10 shadow-sm" data-animate data-animate-delay="240">
+          <div class="flex h-56 flex-shrink-0 items-center justify-center bg-gradient-to-br from-navy/5 to-mist">
+            <svg viewBox="0 0 140 96" class="h-44 w-auto" fill="none" aria-hidden="true">
+              <!-- レポートカード -->
+              <rect x="14" y="8" width="112" height="76" rx="10" fill="white" opacity="0.9"/>
+              <rect x="14" y="8" width="112" height="22" rx="10" fill="#EAF3FB"/>
+              <rect x="14" y="24" width="112" height="6" fill="#EAF3FB"/>
+              <text x="24" y="22" font-size="7.5" font-family="system-ui,sans-serif" fill="#103366" font-weight="700">月次レポート</text>
+              <!-- バーチャート (増加傾向) -->
+              <rect x="26" y="65" width="10" height="12" rx="2" fill="#EBEEF2"/>
+              <rect x="41" y="58" width="10" height="19" rx="2" fill="#EBEEF2"/>
+              <rect x="56" y="50" width="10" height="27" rx="2" fill="#103366" opacity="0.18"/>
+              <rect x="71" y="42" width="10" height="35" rx="2" fill="#103366" opacity="0.28"/>
+              <rect x="86" y="34" width="10" height="43" rx="2" fill="#E43172" opacity="0.7"/>
+              <!-- トレンドライン -->
+              <path d="M31 69 L46 61 L61 53 L76 45 L91 37" stroke="#E43172" stroke-width="1.5" stroke-dasharray="3,2" stroke-linecap="round"/>
+              <!-- 最新値バッジ -->
+              <rect x="80" y="22" width="38" height="15" rx="7.5" fill="#103366"/>
+              <text x="99" y="32.5" text-anchor="middle" font-size="8" font-family="system-ui,sans-serif" fill="white" font-weight="700">+8件/月</text>
+              <!-- ベースライン -->
+              <line x1="22" y1="77" x2="102" y2="77" stroke="#EBEEF2" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="flex-1 bg-white p-7">
+            <p class="select-none font-grotesk text-2xl font-bold leading-none text-navy/10">03</p>
+            <h3 class="mt-3 text-xl font-bold text-navy">計測する</h3>
+            <p class="mt-3 text-sm leading-relaxed text-ink/70">毎月レポートで成果を確認し、次の改善に活かします。このくり返しがサイトを育てます。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- サービス概要（毎月やることリスト付き） -->
+  <section class="bg-mist">
+    <div class="container-pd py-20 md:py-28">
       <div class="text-center">
         <p class="section-label">Service</p>
-        <h2 class="section-title">3つの価値で、サイトを動かす</h2>
+        <h2 class="section-title">毎月、こんなことをやります</h2>
+        <p class="mx-auto mt-4 max-w-lg text-sm text-gray">plugdoは、ホームページの更新と改善をまるごと担います。<br />毎月やることを3つに整理しました。</p>
       </div>
-      <div class="mt-10 grid gap-6 md:grid-cols-3">
-        <!-- 継続的な改善: 循環する矢印 -->
-        <ServiceCard title={services[0].title} description={services[0].description} accent={services[0].accent} data-animate data-animate-delay="0">
-          <svg slot="icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#103366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-            <path d="M3 3v5h5"/>
-          </svg>
-        </ServiceCard>
 
-        <!-- AI検索（AIO）対応: ニューラルネット風の脳/AI -->
-        <ServiceCard title={services[1].title} description={services[1].description} accent={services[1].accent} data-animate data-animate-delay="120">
-          <svg slot="icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E43172" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>
-            <path d="M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>
-          </svg>
-        </ServiceCard>
+      <div class="mt-10 space-y-4">
 
-        <!-- 社内担当のように伴走: 並走する2人 -->
-        <ServiceCard title={services[2].title} description={services[2].description} accent={services[2].accent} data-animate data-animate-delay="240">
-          <svg slot="icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C8A951" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="9" cy="7" r="2"/>
-            <path d="M6 21v-2a4 4 0 0 1 4-4h.5"/>
-            <circle cx="17" cy="7" r="2"/>
-            <path d="M14 21v-2a4 4 0 0 1 4-4h.5"/>
-            <path d="M12 11v2.5"/>
-            <path d="M12 16v2"/>
-          </svg>
-        </ServiceCard>
+        <!-- 01: 継続的な改善（フルワイド） -->
+        <div class="overflow-hidden rounded-2xl border border-gray/10 bg-white shadow-sm" data-animate data-animate-delay="0">
+          <div class="flex items-start gap-7 p-9">
+            <div class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-navy">
+              <span class="font-display text-xl font-black text-white">01</span>
+            </div>
+            <div class="flex-1">
+              <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-navy/35">更新・継続改善</p>
+              <h3 class="mt-1 text-2xl font-black text-navy">{services[0].title}</h3>
+              <p class="mt-3 max-w-xl text-sm leading-relaxed text-ink/70">{services[0].description}</p>
+              <div class="mt-6 grid grid-cols-2 gap-2.5 md:grid-cols-4">
+                {services[0].items.map((item) => (
+                  <div class="rounded-xl bg-mist px-4 py-3 text-xs font-medium text-ink/70">{item}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 + 03: 横並び -->
+        <div class="grid gap-4 md:grid-cols-2">
+
+          <!-- 02: AI検索（白背景） -->
+          <div class="overflow-hidden rounded-2xl border border-gray/10 bg-white p-8 shadow-sm" data-animate data-animate-delay="80">
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-pink">
+              <span class="font-display text-lg font-black text-white">02</span>
+            </div>
+            <p class="mt-5 text-[10px] font-bold uppercase tracking-[0.22em] text-pink/60">AI検索対応</p>
+            <h3 class="mt-1 text-xl font-black text-navy">{services[1].title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-ink/70">{services[1].description}</p>
+            <ul class="mt-5 space-y-2.5 border-t border-mist pt-5">
+              {services[1].items.map((item) => (
+                <li class="flex items-center gap-2.5 text-xs text-ink/60">
+                  <span class="h-px w-4 flex-shrink-0 bg-pink/40"></span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- 03: 社内担当（濃紺背景） -->
+          <div class="overflow-hidden rounded-2xl bg-navy p-8 shadow-sm" data-animate data-animate-delay="160">
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white/15">
+              <span class="font-display text-lg font-black text-white">03</span>
+            </div>
+            <p class="mt-5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/35">サポート</p>
+            <h3 class="mt-1 text-xl font-black text-white">{services[2].title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-white/60">{services[2].description}</p>
+            <ul class="mt-5 space-y-2.5 border-t border-white/10 pt-5">
+              {services[2].items.map((item) => (
+                <li class="flex items-center gap-2.5 text-xs text-white/50">
+                  <span class="h-px w-4 flex-shrink-0 bg-white/25"></span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+        </div>
       </div>
+
       <div class="mt-10 text-center">
         <a href="/service" class="btn-outline">サービスの詳細を見る</a>
       </div>
     </div>
   </section>
 
-  <!-- 導入事例 -->
-  <section class="bg-mist">
-    <div class="container-pd py-16 md:py-20">
-      <div class="flex items-end justify-between">
-        <div>
-          <p class="section-label-left">Works</p>
-          <h2 class="section-title">導入事例</h2>
-        </div>
-        <a href="/cases" class="hidden text-sm font-bold text-pink hover:text-pinkAlt md:inline">
-          すべて見る →
-        </a>
+  <!-- 無料診断でお渡しするもの -->
+  <section>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">Free Diagnosis</p>
+        <h2 class="section-title">まず、無料診断から<br />始めませんか。</h2>
+        <p class="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-gray">
+          「何を直せばいいか分からない」状態が一番もったいない。<br />
+          30分の相談で、改善すべき箇所と優先順位を書いたレポートをお届けします。
+        </p>
       </div>
-      <div class="mt-10 grid gap-6 md:grid-cols-3">
-        {cases.map((item, i) => (
-          <div data-animate data-animate-delay={i * 100}>
-            <CaseCard item={item} />
+
+      <div class="mt-12 mx-auto max-w-2xl" data-animate>
+        <!-- 診断レポートモックアップ -->
+        <div class="overflow-hidden rounded-2xl border border-gray/10 shadow-[0_4px_40px_rgba(16,51,102,0.10)]">
+          <!-- カードヘッダー -->
+          <div class="flex items-center gap-3 bg-navy px-6 py-4">
+            <div class="flex gap-1.5">
+              <div class="h-2.5 w-2.5 rounded-full bg-white/20"></div>
+              <div class="h-2.5 w-2.5 rounded-full bg-white/20"></div>
+              <div class="h-2.5 w-2.5 rounded-full bg-white/20"></div>
+            </div>
+            <span class="text-xs font-bold text-white/60">plugdo 診断レポート（サンプル）</span>
           </div>
-        ))}
+
+          <!-- レポート本文 -->
+          <div class="bg-white p-8">
+            <div class="mb-6 flex items-center justify-between gap-4">
+              <div>
+                <p class="text-xs text-gray">診断対象</p>
+                <p class="mt-0.5 font-bold text-navy">○○株式会社 コーポレートサイト</p>
+              </div>
+              <span class="flex-shrink-0 rounded-full bg-pink/10 px-3 py-1 text-sm font-bold text-pink">
+                5つの課題を発見
+              </span>
+            </div>
+
+            <div class="space-y-2.5">
+              {[
+                { p: 'P1', color: 'bg-pink/12 text-pink',    label: 'タイトルタグが未設定または重複',      detail: '検索上位表示の妨げになっています' },
+                { p: 'P1', color: 'bg-pink/12 text-pink',    label: 'コンテンツ更新が2年以上停止',        detail: '検索流入が減少傾向にあります' },
+                { p: 'P2', color: 'bg-navy/8 text-navy',     label: 'お問い合わせ動線が不明瞭',           detail: 'フォームへの誘導が見当たりません' },
+                { p: 'P2', color: 'bg-navy/8 text-navy',     label: 'モバイル表示が最適化されていない',    detail: '全訪問の60%以上がスマホ経由です' },
+                { p: 'P3', color: 'bg-gray/10 text-gray',    label: 'AI検索（ChatGPT等）への対応なし',    detail: 'AIに読まれる構造に整備が必要です' },
+              ].map((item) => (
+                <div class="flex items-start gap-3 rounded-xl bg-mist px-4 py-3">
+                  <span class={`mt-0.5 flex-shrink-0 rounded px-2 py-0.5 text-[10px] font-black ${item.color}`}>
+                    {item.p}
+                  </span>
+                  <div>
+                    <p class="text-sm font-bold text-navy">{item.label}</p>
+                    <p class="mt-0.5 text-xs text-gray">{item.detail}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div class="mt-5 flex items-center justify-between rounded-xl border border-navy/8 bg-navy/4 px-4 py-3">
+              <span class="text-sm text-navy/70">改善の優先順位・月次予算目安</span>
+              <span class="font-bold text-navy">¥3万〜¥6万 / 月</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="mt-3 text-center text-xs text-gray/50">※お客様のサイトに合わせた内容でお届けします</p>
+
+        <div class="mt-8 flex flex-col items-center gap-3">
+          <a href="/contact" class="btn-pink">無料で診断を受ける</a>
+          <p class="text-xs text-gray">費用・契約なし。30分のオンライン相談から。</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- 料金プラン -->
-  <section>
-    <div class="container-pd py-16 md:py-20">
-      <div class="text-center">
+  <section class="bg-mist">
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
         <p class="section-label">Price</p>
         <h2 class="section-title">料金プラン</h2>
-        <p class="mt-4 text-sm text-gray">事業のフェーズに合わせて選べる3プラン。</p>
+        <p class="mt-4 text-sm text-gray">会社の状況に合わせて選べる3プラン。まずは無料相談から。</p>
+        <!-- AIO 説明 -->
+        <p class="mx-auto mt-4 max-w-lg rounded-xl bg-navy/5 px-5 py-3 text-xs leading-relaxed text-navy/70">
+          <strong class="font-bold">AIOとは？</strong>
+          ChatGPTやPerplexityなどのAI検索で「○○を相談したい」と調べたとき、<strong class="text-navy">あなたの会社が出てくる状態</strong>にする取り組みです。
+        </p>
       </div>
-      <div class="mt-12">
-        <PriceTable variant="summary" />
+
+      <div class="mt-14 grid gap-6 md:grid-cols-3 md:items-stretch">
+
+        <!-- Basic -->
+        <div class="flex flex-col rounded-2xl border border-gray/10 bg-white p-8 shadow-sm" data-animate data-animate-delay="0">
+          <div class="flex items-start justify-between">
+            <div>
+              <h3 class="font-display text-xl font-bold text-navy">Basic</h3>
+              <p class="mt-0.5 text-sm text-gray">止めずに、続ける</p>
+            </div>
+            <span class="rounded-full bg-mist px-2.5 py-1 text-[10px] font-bold text-gray">AIOなし</span>
+          </div>
+          <div class="mt-5 flex items-end gap-1.5">
+            <span class="font-display text-4xl font-bold leading-none text-navy">¥30,000</span>
+            <span class="mb-0.5 text-sm text-gray">〜/月（税別）</span>
+          </div>
+          <p class="mt-4 rounded-xl bg-mist px-4 py-3 text-xs leading-relaxed text-ink/70">
+            「まず更新を止めないことが最優先」という方のための最小構成。上位プランへいつでも移行できます。
+          </p>
+          <ul class="mt-5 flex-1 space-y-2.5">
+            {[
+              'コンテンツ更新 月1回',
+              '月次アクセスレポート',
+              '軽微な修正・差し替え対応',
+              'メール相談 月3件まで',
+            ].map((f) => (
+              <li class="flex items-start gap-2 text-sm text-ink/80">
+                <svg class="mt-0.5 h-4 w-4 flex-shrink-0 text-navy/30" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                {f}
+              </li>
+            ))}
+          </ul>
+          <a href="/contact" class="btn-navy mt-8 w-full text-center text-sm">このプランを相談する</a>
+        </div>
+
+        <!-- Growth (おすすめ) -->
+        <div class="relative flex flex-col rounded-2xl border-2 border-pink bg-white p-8 shadow-[0_4px_32px_rgba(228,49,114,0.12)]" data-animate data-animate-delay="120">
+          <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-pink px-4 py-1 text-xs font-bold text-white">★ おすすめ</span>
+          <div class="flex items-start justify-between">
+            <div>
+              <h3 class="font-display text-xl font-bold text-navy">Growth</h3>
+              <p class="mt-0.5 text-sm text-gray">改善して増やす</p>
+            </div>
+            <span class="rounded-full bg-navy px-2.5 py-1 text-[10px] font-bold text-white">AIO対応</span>
+          </div>
+          <div class="mt-5 flex items-end gap-1.5">
+            <span class="font-display text-4xl font-bold leading-none text-navy">¥60,000</span>
+            <span class="mb-0.5 text-sm text-gray">〜/月（税別）</span>
+          </div>
+          <p class="mt-4 rounded-xl bg-pink/6 px-4 py-3 text-xs leading-relaxed text-navy/80">
+            「問い合わせを増やしたい。何を改善すればいいか教えてほしい」方に。
+          </p>
+          <ul class="mt-5 flex-1 space-y-2.5">
+            {[
+              'コンテンツ更新 月2回',
+              '月次改善提案レポート',
+              'AIO・構造化データ対応',
+              'ブログ記事制作 月1本',
+            ].map((f) => (
+              <li class="flex items-start gap-2 text-sm text-ink/80">
+                <svg class="mt-0.5 h-4 w-4 flex-shrink-0 text-pink" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                {f}
+              </li>
+            ))}
+          </ul>
+          <a href="/contact" class="btn-pink mt-8 w-full text-center text-sm">このプランを相談する</a>
+        </div>
+
+        <!-- Partner -->
+        <div class="flex flex-col rounded-2xl border border-gray/10 bg-white p-8 shadow-sm" data-animate data-animate-delay="240">
+          <div class="flex items-start justify-between">
+            <div>
+              <h3 class="font-display text-xl font-bold text-navy">Partner</h3>
+              <p class="mt-0.5 text-sm text-gray">戦略から一緒に</p>
+            </div>
+            <span class="rounded-full bg-navy px-2.5 py-1 text-[10px] font-bold text-white">AIO対応</span>
+          </div>
+          <div class="mt-5 flex items-end gap-1.5">
+            <span class="font-display text-4xl font-bold leading-none text-navy">¥100,000</span>
+            <span class="mb-0.5 text-sm text-gray">〜/月（税別）</span>
+          </div>
+          <p class="mt-4 rounded-xl bg-mist px-4 py-3 text-xs leading-relaxed text-ink/70">
+            「サイトをビジネスの核に育てたい。採用・問い合わせ両方で成果を出したい」方に。
+          </p>
+          <ul class="mt-5 flex-1 space-y-2.5">
+            {[
+              '更新対応 無制限（緊急対応含む）',
+              '月次MTG + Web戦略の立案',
+              'AIO本格対応・引用モニタリング',
+              'ブログ記事制作 月2〜3本',
+            ].map((f) => (
+              <li class="flex items-start gap-2 text-sm text-ink/80">
+                <svg class="mt-0.5 h-4 w-4 flex-shrink-0 text-navy/30" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                {f}
+              </li>
+            ))}
+          </ul>
+          <a href="/contact" class="btn-navy mt-8 w-full text-center text-sm">このプランを相談する</a>
+        </div>
+
       </div>
+
       <div class="mt-10 text-center">
-        <a href="/price" class="btn-outline">料金の詳細を見る</a>
+        <a href="/price" class="btn-outline">詳細な機能一覧を見る</a>
       </div>
     </div>
   </section>
 
   <!-- ブログ最新記事 -->
-  <section class="bg-mist">
-    <div class="container-pd py-16 md:py-20">
+  <section>
+    <div class="container-pd py-20 md:py-28">
       <div class="flex items-end justify-between">
         <div>
           <p class="section-label-left">Blog</p>
@@ -284,6 +640,27 @@ const serviceLd = {
           <div data-animate data-animate-delay={i * 100}>
             <BlogCard item={item} />
           </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- よくある質問（FAQ） -->
+  <section class="bg-mist">
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title">よくあるご質問</h2>
+      </div>
+      <div class="mx-auto mt-10 max-w-3xl space-y-4">
+        {faqs.map((f, i) => (
+          <details class="card group p-6 [&_summary]:cursor-pointer" data-animate data-animate-delay={i * 60}>
+            <summary class="flex list-none items-center justify-between gap-4 font-bold text-navy">
+              <span>{f.q}</span>
+              <span class="flex-shrink-0 text-pink transition-transform group-open:rotate-45" aria-hidden="true">＋</span>
+            </summary>
+            <p class="mt-4 text-sm leading-relaxed text-ink">{f.a}</p>
+          </details>
         ))}
       </div>
     </div>

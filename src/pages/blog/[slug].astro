@@ -55,18 +55,17 @@ const related = all
 // --- Article 構造化データ ---
 const articleLd = {
   '@context': 'https://schema.org',
-  '@type': 'Article',
+  '@type': 'BlogPosting',
   headline: post.title,
   description: post.description,
   datePublished: post.publishedAt,
   dateModified: post.revisedAt || post.publishedAt,
   ...(post.eyecatch ? { image: post.eyecatch.url } : {}),
-  author: { '@type': 'Organization', name: '株式会社ハンチス' },
-  publisher: {
-    '@type': 'Organization',
-    name: '株式会社ハンチス',
-    logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
-  },
+  ...(post.category ? { articleSection: post.category.name } : {}),
+  inLanguage: 'ja-JP',
+  author: { '@id': `${SITE_URL}/#organization` },
+  publisher: { '@id': `${SITE_URL}/#organization` },
+  isPartOf: { '@id': `${SITE_URL}/#website` },
   mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${post.slug}` },
 };
 
@@ -86,6 +85,8 @@ const breadcrumbLd = {
   description={post.description}
   ogType="article"
   ogImage={post.eyecatch?.url}
+  publishedTime={post.publishedAt}
+  modifiedTime={post.revisedAt || post.publishedAt}
   jsonLd={[articleLd, breadcrumbLd]}
 >
   <article>

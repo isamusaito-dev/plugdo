@@ -5,7 +5,7 @@ interface Props {
 }
 const {
   heading = 'まずは、無料のサイト診断から。',
-  text = '今のサイトのどこを直せば問い合わせにつながるのか。具体的な改善ポイントを無料でお伝えします。',
+  text = '今のサイトのどこを直せば問い合わせが増えるのか。具体的な改善ポイントを、無料でお伝えします。',
 } = Astro.props;
 ---
 
@@ -13,12 +13,6 @@ const {
   <!-- 背景装飾 -->
   <div class="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-white/5 blur-3xl"></div>
   <div class="pointer-events-none absolute -left-16 bottom-0 h-72 w-72 rounded-full bg-pink/10 blur-3xl"></div>
-  <!-- 斜めグリッド -->
-  <div
-    class="pointer-events-none absolute inset-0 opacity-[0.04]"
-    style="background-image: repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%); background-size: 24px 24px;"
-  ></div>
-
   <div class="container-pd relative py-20 text-center md:py-24">
     <p class="section-label text-pink/70">
       <span class="block h-px w-8 bg-pink/40"></span>
@@ -30,7 +24,7 @@ const {
       {text}
     </p>
     <div class="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-      <a href="/contact" class="btn-pink">無料でサイト診断を受ける</a>
+      <a href="/contact" class="btn-pink">無料で診断を受ける</a>
       <a
         href="/price"
         class="btn border-2 border-white/30 bg-transparent text-white hover:border-white hover:bg-white hover:text-navy"
@@ -38,6 +32,6 @@ const {
         料金を見る
       </a>
     </div>
-    <p class="mt-6 text-xs text-white/50">費用・契約なし。30分のオンラインヒアリングから。</p>
+    <p class="mt-6 text-xs text-white/50">費用・契約なし。30分のオンライン相談から。</p>
   </div>
 </section>
