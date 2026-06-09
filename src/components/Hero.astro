@@ -255,30 +255,30 @@
   <!-- サービス特徴バー -->
   <div class="bg-navy">
     <div class="container-pd">
-      <ul class="grid grid-cols-2 divide-x divide-white/8 md:grid-cols-4">
+      <ul class="grid grid-cols-2 divide-x divide-white/15 md:grid-cols-4">
         {[
           {
-            icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#E43172" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="3" width="15" height="13.5" rx="2.5"/><path d="M5.5 1.5v3M12.5 1.5v3M1.5 7.5h15"/><circle cx="5.5" cy="12" r="1" fill="#E43172" stroke="none"/><circle cx="9" cy="12" r="1" fill="#E43172" stroke="none"/><circle cx="12.5" cy="12" r="1" fill="#E43172" stroke="none"/></svg>',
+            icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="3" width="15" height="13.5" rx="2.5"/><path d="M5.5 1.5v3M12.5 1.5v3M1.5 7.5h15"/><circle cx="5.5" cy="12" r="1" fill="white" stroke="none"/><circle cx="9" cy="12" r="1" fill="white" stroke="none"/><circle cx="12.5" cy="12" r="1" fill="white" stroke="none"/></svg>',
             title: '毎月サイトを改善',
             desc: '更新・導線改善・SEO対策を継続',
           },
           {
-            icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#E43172" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="6" r="3.5"/><path d="M1.5 17c0-3.3 2.7-6 6-6"/><polyline points="11.5 13.5 13 15 16.5 11.5"/></svg>',
+            icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="6" r="3.5"/><path d="M1.5 17c0-3.3 2.7-6 6-6"/><polyline points="11.5 13.5 13 15 16.5 11.5"/></svg>',
             title: 'Web担当がいなくてもOK',
             desc: '社外のWeb担当として伴走',
           },
           {
-            icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#E43172" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 14 6 8.5 9 11 14.5 4"/><polyline points="11 4 14.5 4 14.5 7.5"/></svg>',
+            icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 14 6 8.5 9 11 14.5 4"/><polyline points="11 4 14.5 4 14.5 7.5"/></svg>',
             title: '問い合わせ・採用につなげる',
             desc: '見た目だけでなく成果導線まで改善',
           },
           {
-            icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#E43172" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="7.5" r="5"/><line x1="11.2" y1="11.2" x2="16" y2="16"/><path d="M5.5 7.5h4M7.5 5.5v4"/></svg>',
+            icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="7.5" r="5"/><line x1="11.2" y1="11.2" x2="16" y2="16"/><path d="M5.5 7.5h4M7.5 5.5v4"/></svg>',
             title: 'まずは無料診断',
             desc: '改善ポイントを30分で整理',
           },
         ].map((f, i) => (
-          <li class:list={['flex items-start gap-3 px-5 py-5 md:px-6', i < 2 && 'border-b border-white/8 md:border-b-0']}>
+          <li class:list={['flex items-start gap-3 px-5 py-5 md:px-6', i < 2 && 'border-b border-white/15 md:border-b-0']}>
             <span
               class="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-white/5 ring-1 ring-white/8"
               set:html={f.icon}
