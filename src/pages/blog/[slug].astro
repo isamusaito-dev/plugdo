@@ -99,7 +99,7 @@ const breadcrumbLd = {
   <article>
     <!-- 記事ヘッダー -->
     <header class="hero-gradient">
-      <div class="container-pd py-14 md:py-16">
+      <div class="container-pd pb-0 pt-14 md:pt-16">
         <nav class="mb-5 text-xs text-gray" aria-label="パンくず">
           <a href="/" class="hover:text-pink">ホーム</a>
           <span class="mx-1.5">/</span>
@@ -118,6 +118,18 @@ const breadcrumbLd = {
         <h1 class="mt-4 max-w-3xl text-2xl font-black leading-snug text-navy md:text-3xl">
           {post.title}
         </h1>
+        {post.eyecatch && (
+          <div class="mt-8 overflow-hidden rounded-2xl shadow-[0_4px_24px_rgba(16,51,102,0.10)]">
+            <img
+              src={post.eyecatch.url}
+              alt={post.title}
+              width={post.eyecatch.width}
+              height={post.eyecatch.height}
+              class="w-full"
+              loading="eager"
+            />
+          </div>
+        )}
       </div>
     </header>
 
@@ -125,17 +137,6 @@ const breadcrumbLd = {
       <div class="grid gap-12 lg:grid-cols-[1fr_260px]">
         <!-- 本文 -->
         <div>
-          {
-            post.eyecatch && (
-              <img
-                src={`${post.eyecatch.url}?w=1200`}
-                alt={post.title}
-                width="1200"
-                height="675"
-                class="mb-8 w-full rounded-lg"
-              />
-            )
-          }
           <div class="prose-pd max-w-none" set:html={bodyWithIds} />
         </div>
 
