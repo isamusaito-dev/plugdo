@@ -42,6 +42,13 @@ const bodyWithIds = post.body.replace(
   }
 );
 
+// --- h2 に連番を付与 ---
+let h2n = 0;
+const numberedHeadings = headings.map(h => ({
+  ...h,
+  num: h.level === 2 ? ++h2n : null,
+}));
+
 // --- 関連記事（同カテゴリ優先、最大3件） ---
 const related = all
   .filter((p) => p.id !== post.id)
@@ -134,16 +141,32 @@ const breadcrumbLd = {
 
         <!-- 目次（サイドバー・スティッキー） -->
         {
-          headings.length > 0 && (
+          numberedHeadings.length > 0 && (
             <aside class="lg:sticky lg:top-24 lg:self-start">
-              <div class="card p-6">
-                <h2 class="text-sm font-bold text-navy">目次</h2>
-                <nav class="mt-4" aria-label="目次">
-                  <ul class="space-y-2.5 text-sm">
-                    {headings.map((h) => (
-                      <li class:list={[h.level === 3 && 'pl-4']}>
-                        <a href={`#${h.id}`} class="text-ink transition-colors hover:text-pink">
-                          {h.text}
+              <div class="overflow-hidden rounded-2xl border border-gray/10 bg-white shadow-sm">
+                {/* ヘッダー */}
+                <div class="border-b border-gray/8 px-5 py-3.5">
+                  <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-pink">Contents</p>
+                  <p class="mt-0.5 text-sm font-bold text-navy">この記事でわかること</p>
+                </div>
+                {/* 目次リスト */}
+                <nav class="p-4" aria-label="目次">
+                  <ul class="space-y-0.5">
+                    {numberedHeadings.map((h) => (
+                      <li class:list={[h.level === 3 && 'ml-7 border-l-2 border-gray/10 pl-3']}>
+                        <a
+                          href={`#${h.id}`}
+                          class:list={[
+                            'flex items-start gap-2.5 rounded-lg py-1.5 leading-snug transition-colors hover:text-pink',
+                            h.level === 2 ? 'text-sm text-ink' : 'text-xs text-gray py-1',
+                          ]}
+                        >
+                          {h.level === 2 && (
+                            <span class="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-pink/10 text-[10px] font-black text-pink">
+                              {h.num}
+                            </span>
+                          )}
+                          <span>{h.text}</span>
                         </a>
                       </li>
                     ))}
