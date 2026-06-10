@@ -39,7 +39,7 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
         <div class:list={['p-7 pb-5', plan.highlight ? 'bg-navy/[0.02]' : '']}>
           <div class="flex items-start justify-between gap-2">
             <div>
-              <span class="font-display text-2xl text-navy">{plan.name}</span>
+              <span class="font-display text-2xl font-bold text-navy">{plan.name}</span>
               <p class="mt-0.5 text-xs text-gray">{plan.tagline}</p>
             </div>
             {plan.aio ? (
@@ -70,7 +70,6 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
             <span class="font-display text-[2rem] leading-none text-navy">{plan.price}</span>
             <span class="mb-1 text-xs text-gray">{plan.priceNote}</span>
           </div>
-          <p class="mt-1.5 text-xs text-gray">想定工数：{plan.hours}</p>
         </div>
 
         {/* 機能リスト */}
@@ -112,12 +111,66 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
 <!-- 全プラン共通 -->
 {
   variant === 'full' && (
-    <div class="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 rounded-xl border border-mist bg-paper px-8 py-4 text-xs text-gray">
-      <span class="font-bold text-navy">全プラン共通</span>
-      <span>Slack 相談・質問 無制限</span>
-      <span>初期費用なし</span>
-      <span>最低3ヶ月から</span>
-      <span>実装は各プランの枠内で対応</span>
+    <div class="mt-10">
+      <p class="mb-4 flex items-center justify-center gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-gray/50">
+        <span class="block h-px w-10 bg-mist" aria-hidden="true" />
+        全プラン共通
+        <span class="block h-px w-10 bg-mist" aria-hidden="true" />
+      </p>
+      <div class="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div class="flex items-start gap-3 rounded-xl border border-mist bg-paper p-4">
+          <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-navy/[0.07] text-navy">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 9a2 2 0 0 1-2 2H4.5L2 13.5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/>
+              <line x1="5.5" y1="7" x2="10.5" y2="7"/>
+              <line x1="5.5" y1="9.5" x2="8.5" y2="9.5"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-navy">Slack 相談・質問</p>
+            <p class="mt-0.5 text-[11px] leading-snug text-gray">無制限</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 rounded-xl border border-mist bg-paper p-4">
+          <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-navy/[0.07] text-navy">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="8" r="6"/>
+              <path d="M6 5.5h2.5a1.5 1.5 0 0 1 0 3H6v3.5"/>
+              <line x1="6" y1="9" x2="9.5" y2="9"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-navy">初期費用</p>
+            <p class="mt-0.5 text-[11px] leading-snug text-gray">なし</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 rounded-xl border border-mist bg-paper p-4">
+          <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-navy/[0.07] text-navy">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="12" height="11" rx="1.5"/>
+              <line x1="2" y1="7" x2="14" y2="7"/>
+              <line x1="5.5" y1="1" x2="5.5" y2="5"/>
+              <line x1="10.5" y1="1" x2="10.5" y2="5"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-navy">最低契約期間</p>
+            <p class="mt-0.5 text-[11px] leading-snug text-gray">3ヶ月から</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 rounded-xl border border-mist bg-paper p-4">
+          <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-navy/[0.07] text-navy">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 2a3 3 0 0 1 0 4.24L4.12 13.12 1.5 14l.88-2.62L9.26 4.5A3 3 0 0 1 11 2z"/>
+              <line x1="9" y1="4.24" x2="11.76" y2="7"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-navy">実装対応</p>
+            <p class="mt-0.5 text-[11px] leading-snug text-gray">各プランの枠内で</p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
