@@ -103,7 +103,7 @@ const serviceLd = {
   offers: plans.map((p) => ({
     '@type': 'Offer',
     name: p.name,
-    description: p.forWho,
+    description: `${p.commit}（${p.commitNote}）`,
     price: p.price.replace(/[¥,]/g, ''),
     priceCurrency: 'JPY',
     url: `${SITE_URL}/price`,

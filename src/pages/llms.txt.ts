@@ -16,7 +16,7 @@ export const GET: APIRoute = async () => {
   const planLines = plans
     .map(
       (p) =>
-        `- **${p.name}**（${p.price}${p.priceNote}）: ${p.tagline}。${p.forWho}`
+        `- **${p.name}**（${p.price}${p.priceNote}）: ${p.tagline}。コミット：${p.commit}（${p.commitNote}）`
     )
     .join('\n');
 

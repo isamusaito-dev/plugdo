@@ -7,11 +7,10 @@ interface Props {
 }
 const { variant = 'full' } = Astro.props;
 
-// 比較表のカテゴリ一覧
 const categories = [...new Set(compareRows.map((r) => r.category))];
 
 function cellVal(v: string | boolean): { label: string; positive: boolean } {
-  if (v === true) return { label: '✓', positive: true };
+  if (v === true)  return { label: '✓', positive: true };
   if (v === false) return { label: '—', positive: false };
   return { label: v as string, positive: true };
 }
@@ -27,82 +26,67 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
           plan.highlight ? 'border-pink shadow-[0_4px_32px_rgba(228,49,114,0.15)]' : '',
         ]}
       >
-        {/* おすすめバッジ */}
+        {/* 主力バッジ */}
         {plan.highlight && (
           <div class="bg-pink py-1.5 text-center text-xs font-bold tracking-widest text-paper">
-            ★ おすすめ
+            ★ 主力プラン
           </div>
         )}
 
-        {/* ヘッダー部分 */}
+        {/* ヘッダー */}
         <div class:list={['p-7 pb-5', plan.highlight ? 'bg-navy/[0.02]' : '']}>
-          <div class="flex items-start justify-between">
+          <div class="flex items-start justify-between gap-2">
             <div>
               <span class="font-display text-2xl text-navy">{plan.name}</span>
-              <span class="ml-2 rounded-full bg-mist px-2.5 py-0.5 text-xs font-bold text-navy/60">
-                {plan.tagline}
-              </span>
+              <p class="mt-0.5 text-xs text-gray">{plan.tagline}</p>
             </div>
             {plan.aio ? (
-              <span class="rounded-full bg-navy px-2.5 py-1 text-[10px] font-bold text-paper">
+              <span class="mt-0.5 flex-shrink-0 rounded-full bg-navy px-2.5 py-1 text-[10px] font-bold text-paper">
                 AIO対応
               </span>
             ) : (
-              <span class="rounded-full bg-mist px-2.5 py-1 text-[10px] font-bold text-gray">
+              <span class="mt-0.5 flex-shrink-0 rounded-full bg-mist px-2.5 py-1 text-[10px] font-bold text-gray">
                 AIO なし
               </span>
             )}
           </div>
 
+          {/* コミット */}
+          <div
+            class:list={[
+              'mt-5 rounded-xl px-4 py-3.5',
+              plan.highlight ? 'bg-pink/8' : 'bg-mist',
+            ]}
+          >
+            <p class="text-[10px] font-bold uppercase tracking-widest text-gray/70">コミット</p>
+            <p class="mt-1 text-[15px] font-bold leading-snug text-navy">{plan.commit}</p>
+            <p class="mt-0.5 text-xs text-gray">（{plan.commitNote}）</p>
+          </div>
+
           {/* 価格 */}
-          <div class="mt-4 flex items-end gap-1">
+          <div class="mt-5 flex items-end gap-1">
             <span class="font-display text-[2rem] leading-none text-navy">{plan.price}</span>
             <span class="mb-1 text-xs text-gray">{plan.priceNote}</span>
           </div>
-
-          {/* こんな方に */}
-          <p class:list={[
-            'mt-4 rounded-lg px-3.5 py-2.5 text-xs leading-relaxed',
-            plan.highlight ? 'bg-pink/8 text-navy' : 'bg-mist text-ink',
-          ]}>
-            <span class="mr-1 font-bold">こんな方に：</span>{plan.forWho}
-          </p>
+          <p class="mt-1.5 text-xs text-gray">想定工数：{plan.hours}</p>
         </div>
 
         {/* 機能リスト */}
         {variant === 'full' && (
-          <div class="flex flex-1 flex-col gap-5 border-t border-mist px-7 py-6">
-            {plan.groups.map((g) => (
-              <div>
-                <p class="mb-2.5 text-[10px] font-bold uppercase tracking-widest text-gray">
-                  {g.category}
-                </p>
-                <ul class="space-y-2">
-                  {g.items.map((item) => (
-                    <li class:list={[
-                      'flex items-start gap-2 text-sm',
-                      item.label === 'AIO対応なし' ? 'text-gray/60 line-through' : 'text-ink',
-                    ]}>
-                      <span
-                        class:list={[
-                          'mt-0.5 text-sm',
-                          item.label === 'AIO対応なし' ? 'text-gray/40' : 'text-pink',
-                        ]}
-                        aria-hidden="true"
-                      >
-                        {item.label === 'AIO対応なし' ? '✕' : '✓'}
-                      </span>
-                      <span>
-                        {item.label}
-                        {item.note && (
-                          <span class="ml-1 text-[11px] text-gray">（{item.note}）</span>
-                        )}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div class="flex flex-1 flex-col border-t border-mist px-7 py-6">
+            <ul class="space-y-2.5">
+              {plan.groups[0].items.map((item) => (
+                <li class="flex items-start gap-2 text-sm text-ink">
+                  <span class="mt-0.5 text-pink" aria-hidden="true">✓</span>
+                  <span>
+                    {item.label}
+                    {item.note && (
+                      <span class="ml-1 text-[11px] text-gray">（{item.note}）</span>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
 
@@ -123,6 +107,19 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
   }
 </div>
 
+<!-- 全プラン共通 -->
+{
+  variant === 'full' && (
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 rounded-xl border border-mist bg-paper px-8 py-4 text-xs text-gray">
+      <span class="font-bold text-navy">全プラン共通</span>
+      <span>Slack 相談・質問 無制限</span>
+      <span>初期費用なし</span>
+      <span>最低3ヶ月から</span>
+      <span>実装は各プランの枠内で対応</span>
+    </div>
+  )
+}
+
 <!-- ======= 比較テーブル（full のみ） ======= -->
 {
   variant === 'full' && (
@@ -131,12 +128,14 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
       <table class="w-full min-w-[640px] border-collapse text-sm">
         <thead>
           <tr class="border-b-2 border-navy/10">
-            <th class="pb-3 pr-4 text-left font-bold text-gray w-[40%]">機能</th>
+            <th class="w-[40%] pb-3 pr-4 text-left font-bold text-gray">機能</th>
             {plans.map((p) => (
-              <th class:list={[
-                'pb-3 text-center font-display text-base',
-                p.highlight ? 'text-pink' : 'text-navy',
-              ]}>
+              <th
+                class:list={[
+                  'pb-3 text-center font-display text-base',
+                  p.highlight ? 'text-pink' : 'text-navy',
+                ]}
+              >
                 {p.name}
               </th>
             ))}
@@ -156,9 +155,9 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
                   </td>
                 </tr>
                 {rows.map((row, ri) => (
-                  <tr class:list={['border-b border-mist/60', ri % 2 === 0 ? '' : 'bg-paper']}>
+                  <tr class:list={['border-b border-mist/60', ri % 2 !== 0 ? 'bg-paper' : '']}>
                     <td class="py-3 pr-4 text-ink">{row.label}</td>
-                    {(['basic', 'growth', 'partner'] as const).map((key) => {
+                    {(['keep', 'grow', 'partner'] as const).map((key) => {
                       const cv = cellVal(row[key]);
                       return (
                         <td class="py-3 text-center">
@@ -166,7 +165,7 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
                             class:list={[
                               'inline-block text-sm font-medium',
                               cv.positive ? 'text-navy' : 'text-gray/40',
-                              cv.label === '✓' ? 'text-pink font-bold text-base' : '',
+                              cv.label === '✓' ? 'text-base font-bold text-pink' : '',
                             ]}
                           >
                             {cv.label}
@@ -191,12 +190,15 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
             ))}
           </tr>
           <tr>
-            <td class="pb-2 pr-4"></td>
+            <td class="pb-2 pr-4" />
             {plans.map((p) => (
               <td class="pb-4 pt-3 text-center">
                 <a
                   href="/contact"
-                  class:list={['text-xs', p.highlight ? 'btn-pink !py-2 !px-5' : 'btn-navy !py-2 !px-5']}
+                  class:list={[
+                    'text-xs',
+                    p.highlight ? 'btn-pink !px-5 !py-2' : 'btn-navy !px-5 !py-2',
+                  ]}
                 >
                   相談する
                 </a>
