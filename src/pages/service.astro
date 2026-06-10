@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTASection from '../components/CTASection.astro';
+import { plans } from '../lib/plans';
 
 const steps = [
   {
@@ -15,8 +16,8 @@ const steps = [
   },
   {
     no: '03',
-    title: '実装',
-    text: 'コンテンツ制作・修正・AIO対応まで、改善を実際のサイトに反映します。',
+    title: '改善',
+    text: 'コンテンツ制作・修正・デザイン改善・AIO対応まで、実際のサイトに反映します。',
   },
   {
     no: '04',
@@ -25,19 +26,48 @@ const steps = [
   },
 ];
 
+const scope = [
+  { label: 'サイトの改善・デザイン', note: 'ハブそのものを整える',              badge: '標準' },
+  { label: 'LINE公式・LPO',          note: '入口と着地を最適化する',             badge: '標準' },
+  { label: '検索・AIO対応',          note: 'AIと検索から見つけてもらう',         badge: '標準' },
+  { label: 'SNS・広告',              note: '戦略から連携（日々の運用代行は持たず、設計まで伴走）', badge: '戦略連携' },
+  { label: '月次レポート',           note: '計測して、次の一手へ',               badge: '標準' },
+];
+
 const aioBenefits = [
   {
+    icon: '⚡',
     title: '速い',
     text: 'AIを活用することで、コンテンツ制作や改善のスピードが上がり、打ち手を素早く試せます。だから機会を逃しません。',
   },
   {
+    icon: '🔄',
     title: '継続的',
     text: '少ない工数で更新を継続できる体制をつくります。だからサイトが止まらず、検索でも評価され続けます。',
+  },
+  {
+    icon: '🔍',
+    title: 'AI検索で見つかる',
+    text: 'ChatGPTやPerplexityで「◯◯を相談したい」と調べたときに、あなたの会社が候補に出てくる状態をつくります。',
+  },
+];
+
+const reasons = [
+  {
+    title: 'デザインに強い。',
+    text: '12年以上のUI/UXデザイン経験。見た目を整えるだけでなく、成果につながる導線まで設計します。',
+  },
+  {
+    title: '作業者ではなく、設計者。',
+    text: '「言われた通りに直す」のではなく、「どこを直せば成果が出るか」から考えます。',
+  },
+  {
+    title: '社員のように伴走。',
+    text: 'Slackでいつでも相談OK。社外なのに、社内のWeb担当のように伴走します。',
   },
 ];
 
 const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
-
 
 const serviceLd = {
   '@context': 'https://schema.org',
@@ -49,7 +79,7 @@ const serviceLd = {
   provider: { '@id': `${SITE_URL}/#organization` },
   areaServed: { '@type': 'Country', name: 'Japan' },
   description:
-    '作った後の改善に特化したホームページ運用サービス。診断・提案・実装・計測を毎月くり返してサイトを成長させます。',
+    'ホームページを集客の受け皿（ハブ）として立て直し、LINE・SNS・広告などの入口をつなぐ。デザインに強い社外のWeb担当が、診断・改善・計測を毎月まわします。',
 };
 
 const breadcrumbLd = {
@@ -63,66 +93,255 @@ const breadcrumbLd = {
 ---
 
 <BaseLayout
-  title="サービス"
-  description="plugdoは「作った後」の改善に特化したホームページ運用サービス。診断・提案・実装・計測のサイクルと、Keep / Grow / Partnerの3プランで、中小企業のサイトを問い合わせと採用につなげます。"
+  title="サービス | plugdo（プラグドゥ）"
+  description="plugdoは、ホームページを軸にLINEや広告までつなぎ、問い合わせと採用を増やす運用サービス。デザインに強い社外のWeb担当が、診断・改善・計測を毎月まわします。Keep / Grow / Partnerの3プラン、無料Web診断から。"
   jsonLd={[serviceLd, breadcrumbLd]}
 >
-  <!-- ページヘッダー -->
+
+  <!-- 1. FV -->
   <section class="hero-gradient">
-    <div class="container-pd py-16 md:py-20">
+    <div class="container-pd py-20 md:py-28">
       <p class="section-label-left">- Service -</p>
-      <h1 class="text-3xl font-black text-navy md:text-4xl">作った後を、改善する。</h1>
-      <p class="mt-5 max-w-2xl text-base leading-relaxed text-ink">
-        多くのホームページは「作って終わり」になっています。plugdoは制作後の<strong class="font-bold text-navy">改善・運用</strong>に特化し、サイトを問い合わせと採用につながる状態へ育て続けます。
+      <h1 class="mt-3 text-4xl font-black text-navy md:text-5xl">作った後を、<br />働かせる。</h1>
+      <p class="mt-6 max-w-xl text-base leading-relaxed text-ink">
+        デザインに強い「社外のWeb担当」が、ホームページを軸に、LINEや広告までつなぎ、<strong class="font-bold text-navy">問い合わせと採用の導線</strong>をつくります。
       </p>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <a href="/contact" class="btn-primary">無料でWeb診断を受ける</a>
+        <a href="/price" class="btn-outline">料金を見る</a>
+      </div>
+      <p class="mt-4 text-xs text-gray">初期費用なし・まずは診断だけでもOK</p>
     </div>
   </section>
 
-  <!-- 改善の流れ -->
+  <!-- 2. Hub & Spoke モデル -->
+  <section class="relative overflow-hidden bg-navy">
+    <svg class="pointer-events-none absolute inset-0 h-full w-full opacity-[0.04]" aria-hidden="true">
+      <defs><pattern id="geo-hub" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1.4" fill="white"/></pattern></defs>
+      <rect width="100%" height="100%" fill="url(#geo-hub)"/>
+    </svg>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label" style="color:rgba(255,255,255,0.4)">- Model -</p>
+        <h2 class="section-title text-white">すべての入口を、<br />ひとつの資産に集める。</h2>
+        <p class="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-white/60">
+          SNSも広告もLINEも、やりっぱなしでは積み上がりません。plugdoは、ホームページを<strong class="text-white">"受け皿（ハブ）"</strong>として立て直し、各チャネルをそこへ着地させます。
+        </p>
+        <p class="mx-auto mt-3 max-w-lg text-sm font-bold text-white/80">
+          サイトはあなたの資産。SNSやLINEは、その入口。<br class="hidden md:block" />資産を中心に置くから、続けるほど効いてきます。
+        </p>
+      </div>
+
+      <!-- Hub & Spoke 図 -->
+      <div class="mt-14 flex flex-col items-center gap-6 md:flex-row md:items-stretch md:justify-center md:gap-0" data-animate>
+
+        <!-- 入口群 -->
+        <div class="flex flex-row gap-3 md:flex-col md:justify-center md:gap-4">
+          <!-- 標準 -->
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+              <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#06C755]/20 text-sm">💬</span>
+              <div>
+                <p class="text-xs font-bold text-white">LINE公式</p>
+                <p class="text-[10px] text-white/40">標準</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+              <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-white/10 text-sm">🔍</span>
+              <div>
+                <p class="text-xs font-bold text-white">検索・AIO</p>
+                <p class="text-[10px] text-white/40">標準</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+              <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-pink/20 text-sm">📣</span>
+              <div>
+                <p class="text-xs font-bold text-white">SNS・広告</p>
+                <p class="text-[10px] text-white/40">戦略連携</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 矢印（モバイル: 縦、デスクトップ: 横） -->
+        <div class="flex items-center justify-center md:px-4">
+          <svg class="hidden h-6 w-20 md:block" viewBox="0 0 80 24" fill="none" aria-hidden="true">
+            <path d="M0 12h68M60 4l12 8-12 8" stroke="#E43172" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg class="block h-10 w-6 md:hidden" viewBox="0 0 24 40" fill="none" aria-hidden="true">
+            <path d="M12 0v28M4 22l8 12 8-12" stroke="#E43172" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <!-- ハブ（中央） -->
+        <div class="flex items-center justify-center">
+          <div class="relative flex h-44 w-44 flex-col items-center justify-center rounded-full border-2 border-pink bg-white/5 text-center backdrop-blur-sm md:h-52 md:w-52">
+            <div class="absolute -inset-3 rounded-full border border-pink/20"></div>
+            <div class="absolute -inset-6 rounded-full border border-pink/10"></div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-pink/80">Hub</p>
+            <p class="mt-1 text-base font-black leading-tight text-white">ホームページ</p>
+            <p class="mt-1 text-[11px] text-white/50">あなたの資産・受け皿</p>
+          </div>
+        </div>
+
+        <!-- 矢印 -->
+        <div class="flex items-center justify-center md:px-4">
+          <svg class="hidden h-6 w-20 md:block" viewBox="0 0 80 24" fill="none" aria-hidden="true">
+            <path d="M0 12h68M60 4l12 8-12 8" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg class="block h-10 w-6 md:hidden" viewBox="0 0 24 40" fill="none" aria-hidden="true">
+            <path d="M12 0v28M4 22l8 12 8-12" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <!-- 成果 -->
+        <div class="flex flex-col justify-center gap-4">
+          <div class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-sm">
+            <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-pink/20 text-base">📩</span>
+            <p class="text-sm font-bold text-white">問い合わせ</p>
+          </div>
+          <div class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-sm">
+            <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-pink/20 text-base">🤝</span>
+            <p class="text-sm font-bold text-white">採用</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 対応範囲（Scope） -->
   <section>
-    <div class="container-pd py-16 md:py-20">
-      <div class="text-center">
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- Scope -</p>
+        <h2 class="section-title">どこまで、やるか。</h2>
+        <p class="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-gray">
+          「サイトの改善」だけでは終わりません。ただし、なんでも運用代行はしません。やるのは、<strong class="text-navy">成果につながる導線づくり</strong>に絞った、この範囲です。
+        </p>
+      </div>
+
+      <div class="mx-auto mt-12 max-w-2xl space-y-3" data-animate>
+        {scope.map((item) => (
+          <div class="flex items-start gap-4 rounded-2xl border border-gray/10 bg-white p-5 shadow-sm">
+            <span class={`mt-0.5 flex-shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+              item.badge === '標準' ? 'bg-navy/8 text-navy' : 'bg-pink/10 text-pink'
+            }`}>
+              {item.badge}
+            </span>
+            <div>
+              <p class="font-bold text-navy">{item.label}</p>
+              <p class="mt-0.5 text-sm text-gray">{item.note}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 改善の流れ -->
+  <section class="relative overflow-hidden bg-mist">
+    <svg class="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true"><defs><pattern id="geo-flow" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1.2" fill="#103366" opacity="0.05"/></pattern></defs><rect width="100%" height="100%" fill="url(#geo-flow)"/></svg>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
         <p class="section-label">- Flow -</p>
         <h2 class="section-title">改善の流れ</h2>
-        <p class="mt-4 text-sm text-gray">診断から計測まで、毎月まわす4ステップ。</p>
+        <p class="mx-auto mt-4 max-w-md text-sm leading-relaxed text-gray">診断から計測まで、毎月まわす4ステップ。<br />続けるほど、サイトは良くなります。</p>
       </div>
-      <div class="mt-12 grid gap-6 md:grid-cols-4">
-        {
-          steps.map((s) => (
-            <div class="card p-6">
-              <span class="font-display text-3xl text-pink">{s.no}</span>
-              <h3 class="mt-3 text-lg font-bold text-navy">{s.title}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-ink">{s.text}</p>
-            </div>
-          ))
-        }
+      <div class="mt-12 grid gap-5 md:grid-cols-4">
+        {steps.map((s, i) => (
+          <div class="relative flex flex-col rounded-2xl border border-gray/10 bg-white p-7 shadow-sm" data-animate data-animate-delay={String(i * 80)}>
+            {i < steps.length - 1 && (
+              <div class="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 md:block">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M4 10h10M10 5l5 5-5 5" stroke="#E43172" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            )}
+            <span class="font-display text-3xl font-black text-pink/30">{s.no}</span>
+            <h3 class="mt-3 text-lg font-bold text-navy">{s.title}</h3>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-ink/70">{s.text}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- AI活用の便益 -->
-  <section class="bg-mist">
-    <div class="container-pd py-16 md:py-20">
-      <div class="text-center">
+  <!-- 5. 選ばれる理由 -->
+  <section>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- Why plugdo -</p>
+        <h2 class="section-title">選ばれる理由</h2>
+      </div>
+      <div class="mt-12 grid gap-5 md:grid-cols-3">
+        {reasons.map((r, i) => (
+          <div class="rounded-2xl border border-gray/10 bg-white p-8 shadow-sm" data-animate data-animate-delay={String(i * 80)}>
+            <div class="mb-5 h-1 w-8 rounded-full bg-pink"></div>
+            <h3 class="text-lg font-bold text-navy">{r.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-ink/70">{r.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. AIで何が変わるか -->
+  <section class="relative overflow-hidden bg-mist">
+    <svg class="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true"><defs><pattern id="geo-ai" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1.2" fill="#103366" opacity="0.05"/></pattern></defs><rect width="100%" height="100%" fill="url(#geo-ai)"/></svg>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
         <p class="section-label">- Why AI -</p>
-        <h2 class="section-title">AIを活用することで、何が変わるか</h2>
-        <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-gray">
+        <h2 class="section-title">AIを活用することで、<br />何が変わるか</h2>
+        <p class="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-gray">
           「AIを使っています」では意味がありません。大切なのは、それによって<strong class="text-navy">あなたのサイトに何が起きるか</strong>です。
         </p>
       </div>
-      <div class="mx-auto mt-10 grid max-w-3xl gap-6 md:grid-cols-2">
-        {
-          aioBenefits.map((b) => (
-            <div class="card p-7">
-              <h3 class="text-xl font-bold text-navy">{b.title}</h3>
-              <p class="mt-3 text-sm leading-relaxed text-ink">{b.text}</p>
-            </div>
-          ))
-        }
+      <div class="mt-12 grid gap-5 md:grid-cols-3">
+        {aioBenefits.map((b, i) => (
+          <div class="rounded-2xl border border-gray/10 bg-white p-8 shadow-sm" data-animate data-animate-delay={String(i * 80)}>
+            <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-navy/5 text-2xl">{b.icon}</div>
+            <h3 class="text-lg font-bold text-navy">{b.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-ink/70">{b.text}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
+  <!-- 7. 料金サマリー -->
+  <section>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- Price -</p>
+        <h2 class="section-title">料金プラン</h2>
+        <p class="mx-auto mt-4 max-w-md text-sm text-gray">成果へのコミットの度合いで選べる、3プラン。<br />どのプランも初期費用なし・最低3ヶ月から。</p>
+      </div>
 
+      <div class="mt-12 grid gap-5 md:grid-cols-3" data-animate>
+        {plans.map((plan, i) => (
+          <div class={`relative flex flex-col rounded-2xl border p-8 shadow-sm ${plan.highlight ? 'border-pink bg-navy text-white' : 'border-gray/10 bg-white'}`} data-animate data-animate-delay={String(i * 80)}>
+            {plan.highlight && (
+              <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-pink px-4 py-1 text-xs font-bold text-white">★ おすすめ</span>
+            )}
+            <p class={`text-[10px] font-bold uppercase tracking-widest ${plan.highlight ? 'text-white/40' : 'text-navy/30'}`}>{plan.tagline}</p>
+            <p class={`mt-1 text-2xl font-black ${plan.highlight ? 'text-white' : 'text-navy'}`}>{plan.name}</p>
+            <p class={`mt-4 text-3xl font-black ${plan.highlight ? 'text-white' : 'text-navy'}`}>
+              {plan.price}<span class={`text-sm font-normal ${plan.highlight ? 'text-white/60' : 'text-gray'}`}>{plan.priceNote}</span>
+            </p>
+            <div class={`my-5 border-t ${plan.highlight ? 'border-white/10' : 'border-mist'}`}></div>
+            <p class={`flex-1 text-sm leading-relaxed ${plan.highlight ? 'text-white/70' : 'text-ink/70'}`}>{plan.commit}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-10 text-center">
+        <a href="/price" class="btn-outline">料金プランの詳細を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 最終CTA -->
   <CTASection />
+
 </BaseLayout>
