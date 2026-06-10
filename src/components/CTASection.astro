@@ -4,8 +4,8 @@ interface Props {
   text?: string;
 }
 const {
-  heading = 'まずは、無料のサイト診断から。',
-  text = '今のサイトのどこを直せば問い合わせが増えるのか。具体的な改善ポイントを、無料でお伝えします。',
+  heading = 'そのホームページ、働かせてみませんか。',
+  text = 'まずは無料のWeb診断から。現状の課題と、伸ばせるポイントをお返しします。初期費用なし・最低3ヶ月から。',
 } = Astro.props;
 ---
 
@@ -24,7 +24,7 @@ const {
       {text}
     </p>
     <div class="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-      <a href="/contact" class="btn-pink">無料で診断を受ける</a>
+      <a href="/contact" class="btn-pink">無料でWeb診断を受ける</a>
       <a
         href="/price"
         class="btn border-2 border-white/30 bg-transparent text-white hover:border-white hover:bg-white hover:text-navy"
@@ -32,6 +32,6 @@ const {
         料金を見る
       </a>
     </div>
-    <p class="mt-6 text-xs text-white/50">費用・契約なし。30分のオンライン相談から。</p>
+    <p class="mt-6 text-xs text-white/50">初期費用なし・まずは診断だけでもOK</p>
   </div>
 </section>
