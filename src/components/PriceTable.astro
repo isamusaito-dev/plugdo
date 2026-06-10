@@ -26,11 +26,13 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
           plan.highlight ? 'border-pink shadow-[0_4px_32px_rgba(228,49,114,0.15)]' : '',
         ]}
       >
-        {/* 主力バッジ */}
-        {plan.highlight && (
+        {/* 主力バッジ（非主力はプレースホルダーで高さを統一） */}
+        {plan.highlight ? (
           <div class="bg-pink py-1.5 text-center text-xs font-bold tracking-widest text-paper">
             ★ 主力プラン
           </div>
+        ) : (
+          <div class="py-1.5 text-xs" aria-hidden="true">&nbsp;</div>
         )}
 
         {/* ヘッダー */}
@@ -55,7 +57,7 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
           <div
             class:list={[
               'mt-5 rounded-xl px-4 py-3.5',
-              plan.highlight ? 'bg-pink/8' : 'bg-mist',
+              plan.highlight ? 'bg-pink/[0.18] ring-1 ring-pink/20' : 'bg-mist',
             ]}
           >
             <p class="text-[10px] font-bold uppercase tracking-widest text-gray/70">コミット</p>
