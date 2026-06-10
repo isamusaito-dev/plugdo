@@ -22,7 +22,7 @@ export const plans: Plan[] = [
     name: 'Keep',
     tagline: 'まずは、止めないこと',
     commit: 'サイトを健康に保つ',
-    commitNote: '成果は問わない',
+    commitNote: 'まず更新を止めないことが目標',
     price: '¥30,000',
     priceNote: '〜 / 月（税別）',
     hours: '3〜4h / 月',
@@ -79,7 +79,7 @@ export const plans: Plan[] = [
         items: [
           { label: 'サイト全体のデザイン主導' },
           { label: '採用・AIO 本格対応' },
-          { label: '戦略づくり', note: '問い合わせ・採用の数値目標を共同設定' },
+          { label: '戦略づくり', note: '問い合わせ・採用の数値目標を一緒に設定' },
           { label: '優先対応' },
           { label: '隔週 オンラインMTG' },
           { label: 'Slack 相談・質問 無制限' },
