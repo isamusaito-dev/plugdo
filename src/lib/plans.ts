@@ -20,7 +20,7 @@ export const plans: Plan[] = [
   {
     id: 'keep',
     name: 'Keep',
-    tagline: 'まずは、止めないこと',
+    tagline: '放置状態から抜け出す',
     commit: 'サイトを健康に保つ',
     commitNote: 'まず更新を止めないことが目標',
     price: '¥30,000',
