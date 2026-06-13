@@ -7,31 +7,46 @@ const steps = [
   {
     no: '01',
     title: '診断',
-    text: '現状のサイトを分析し、問い合わせや採用につながらない原因を可視化します。',
+    text: '今のサイトの状態を確認し、課題を洗い出します。',
   },
   {
     no: '02',
     title: '提案',
-    text: '優先度をつけた改善プランを提示。何を、なぜ直すのかを明確にお伝えします。',
+    text: '優先順位をつけて、今月直すべき箇所を提案します。',
   },
   {
     no: '03',
-    title: '改善',
-    text: 'コンテンツ制作・修正・デザイン改善・AIO対応まで、実際のサイトに反映します。',
+    title: '実装',
+    text: '文章・画像・デザイン・導線などを実際に改善します。',
   },
   {
     no: '04',
     title: '計測',
-    text: '効果をレポートで確認し、次の改善へ。このサイクルを毎月まわします。',
+    text: '結果を確認し、次月の改善につなげます。',
   },
 ];
 
-const scope = [
-  { label: 'サイトの改善・デザイン', note: 'ハブそのものを整える',              badge: '標準' },
-  { label: 'LINE公式・LPO',          note: '入口と着地を最適化する',             badge: '標準' },
-  { label: '検索・AIO対応',          note: 'AIと検索から見つけてもらう',         badge: '標準' },
-  { label: 'SNS・広告',              note: '戦略から連携（日々の運用代行は持たず、設計まで伴走）', badge: '戦略連携' },
-  { label: '月次レポート',           note: '計測して、次の一手へ',               badge: '標準' },
+const workItems = [
+  { no: '01', title: 'サイト更新・修正',   text: 'テキスト変更、画像差し替え、情報更新、軽微な修正に対応します。' },
+  { no: '02', title: '導線改善',           text: '問い合わせ・予約・採用応募につながるCTAやページ構成を見直します。' },
+  { no: '03', title: 'コンテンツ改善',     text: 'サービス紹介、実績、FAQ、ブログなど、伝わる情報に整えます。' },
+  { no: '04', title: 'デザイン改善',       text: '見づらい箇所や古く見える箇所を、部分的に改善します。' },
+  { no: '05', title: 'SEO・AIO対応',       text: '検索やAI検索に読まれやすい構造・文章・FAQを整備します。' },
+  { no: '06', title: '月次レポート',       text: 'アクセス数や問い合わせ状況を見て、次に直すべき箇所を提案します。' },
+];
+
+const rangeYes = [
+  'ホームページの更新', 'テキスト修正', '画像差し替え', 'CTA改善',
+  '問い合わせ導線改善', '採用ページ改善', 'ブログ/FAQ追加',
+  'SEO基本対応', 'AIO基本対応', '月次レポート', '改善提案', 'Slack相談',
+];
+const rangeMaybe = [
+  'LINE公式への導線設計', 'SNSからサイトへの導線設計',
+  '広告LPの改善相談', 'フォーム改善', 'GA4/Search Consoleの確認',
+];
+const rangeNo = [
+  'SNSの毎日投稿代行', '広告運用代行', 'LINE配信代行',
+  '大規模システム開発', '完全新規サイト制作',
 ];
 
 const aioBenefits = [
@@ -210,29 +225,23 @@ const breadcrumbLd = {
     </div>
   </section>
 
-  <!-- 3. 対応範囲（Scope） -->
+  <!-- 3. 提供内容（6カード） -->
   <section>
     <div class="container-pd py-20 md:py-28">
       <div class="text-center" data-animate="fade-in">
-        <p class="section-label">- Scope -</p>
-        <h2 class="section-title">どこまで、やるか。</h2>
+        <p class="section-label">- What We Do -</p>
+        <h2 class="section-title">提供内容</h2>
         <p class="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-gray">
-          「サイトの改善」だけでは終わりません。ただし、なんでも運用代行はしません。やるのは、<strong class="text-navy">成果につながる導線づくり</strong>に絞った、この範囲です。
+          ホームページ改善に必要な作業を、まるごと担います。
         </p>
       </div>
 
-      <div class="mx-auto mt-12 max-w-2xl space-y-3" data-animate>
-        {scope.map((item) => (
-          <div class="flex items-start gap-4 rounded-2xl border border-gray/10 bg-white p-5 shadow-sm">
-            <span class={`mt-0.5 flex-shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
-              item.badge === '標準' ? 'bg-navy/8 text-navy' : 'bg-pink/10 text-pink'
-            }`}>
-              {item.badge}
-            </span>
-            <div>
-              <p class="font-bold text-navy">{item.label}</p>
-              <p class="mt-0.5 text-sm text-gray">{item.note}</p>
-            </div>
+      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-animate>
+        {workItems.map((item, i) => (
+          <div class="flex flex-col rounded-2xl border border-gray/10 bg-white p-7 shadow-sm" data-animate-delay={String(i * 60)}>
+            <span class="font-display text-3xl font-black text-pink/25">{item.no}</span>
+            <h3 class="mt-3 text-base font-bold text-navy">{item.title}</h3>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-ink/70">{item.text}</p>
           </div>
         ))}
       </div>
@@ -245,8 +254,8 @@ const breadcrumbLd = {
     <div class="container-pd py-20 md:py-28">
       <div class="text-center" data-animate="fade-in">
         <p class="section-label">- Flow -</p>
-        <h2 class="section-title">改善の流れ</h2>
-        <p class="mx-auto mt-4 max-w-md text-sm leading-relaxed text-gray">診断から計測まで、毎月まわす4ステップ。<br />続けるほど、サイトは良くなります。</p>
+        <h2 class="section-title">毎月、4つの流れで<br />改善します</h2>
+        <p class="mx-auto mt-4 max-w-md text-sm leading-relaxed text-gray">契約後に何が起きるのか、わかりやすくお伝えします。</p>
       </div>
       <div class="mt-12 grid gap-5 md:grid-cols-4">
         {steps.map((s, i) => (
@@ -263,6 +272,71 @@ const breadcrumbLd = {
             <p class="mt-2 flex-1 text-sm leading-relaxed text-ink/70">{s.text}</p>
           </div>
         ))}
+      </div>
+      <p class="mt-8 text-center text-xs text-gray">このサイクルを毎月まわします。続けるほど、サイトは良くなります。</p>
+    </div>
+  </section>
+
+  <!-- 4.5 対応範囲 -->
+  <section>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- Scope -</p>
+        <h2 class="section-title">対応範囲</h2>
+        <p class="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-gray">
+          ホームページ改善が中心です。やらないことを明確にすることで、<strong class="text-navy">やること</strong>に集中できます。
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3" data-animate>
+        <!-- 対応すること -->
+        <div class="rounded-2xl border border-navy/10 bg-navy/[0.03] p-7">
+          <div class="mb-5 flex items-center gap-2">
+            <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-navy text-[11px] text-white">✓</span>
+            <h3 class="font-bold text-navy">対応すること</h3>
+          </div>
+          <ul class="space-y-2.5">
+            {rangeYes.map((item) => (
+              <li class="flex items-start gap-2 text-sm text-ink/80">
+                <span class="mt-0.5 flex-shrink-0 text-navy">・</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- 必要に応じて -->
+        <div class="rounded-2xl border border-pink/15 bg-pink/[0.03] p-7">
+          <div class="mb-5 flex items-center gap-2">
+            <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-pink/15 text-[11px] text-pink">△</span>
+            <h3 class="font-bold text-navy">必要に応じて対応</h3>
+          </div>
+          <ul class="space-y-2.5">
+            {rangeMaybe.map((item) => (
+              <li class="flex items-start gap-2 text-sm text-ink/80">
+                <span class="mt-0.5 flex-shrink-0 text-pink/60">・</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+          <p class="mt-5 text-xs leading-relaxed text-gray">LINEやSNS・広告は入口の設計まで。日々の運用代行は対象外です。</p>
+        </div>
+
+        <!-- 対応しないこと -->
+        <div class="rounded-2xl border border-gray/10 bg-gray/[0.03] p-7">
+          <div class="mb-5 flex items-center gap-2">
+            <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-gray/20 text-[11px] text-gray">✕</span>
+            <h3 class="font-bold text-navy">基本対応しないこと</h3>
+          </div>
+          <ul class="space-y-2.5">
+            {rangeNo.map((item) => (
+              <li class="flex items-start gap-2 text-sm text-ink/50">
+                <span class="mt-0.5 flex-shrink-0 text-gray/50">・</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   </section>
