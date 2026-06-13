@@ -75,7 +75,7 @@ export async function getBlogs(
 ): Promise<MicroCMSListResponse<Blog>> {
   if (!client) return emptyList<Blog>();
   return client.getList<Blog>({
-    endpoint: 'blog',
+    endpoint: 'blogs',
     queries: { orders: '-publishedAt', limit: 100, ...queries },
   });
 }
@@ -83,7 +83,7 @@ export async function getBlogs(
 export async function getBlogBySlug(slug: string): Promise<Blog | null> {
   if (!client) return null;
   const res = await client.getList<Blog>({
-    endpoint: 'blog',
+    endpoint: 'blogs',
     queries: { filters: `slug[equals]${slug}`, limit: 1 },
   });
   return res.contents[0] ?? null;
@@ -92,7 +92,7 @@ export async function getBlogBySlug(slug: string): Promise<Blog | null> {
 export async function getBlogCategories(): Promise<BlogCategory[]> {
   if (!client) return [];
   const res = await client.getList<BlogCategory>({
-    endpoint: 'blog-category',
+    endpoint: 'categories',
     queries: { limit: 100 },
   });
   return res.contents;
