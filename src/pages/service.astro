@@ -49,23 +49,6 @@ const rangeNo = [
   '大規模システム開発', '完全新規サイト制作',
 ];
 
-const aioBenefits = [
-  {
-    icon: '⚡',
-    title: '速い',
-    text: 'AIを活用することで、コンテンツ制作や改善のスピードが上がり、打ち手を素早く試せます。だから機会を逃しません。',
-  },
-  {
-    icon: '🔄',
-    title: '継続的',
-    text: '少ない工数で更新を継続できる体制をつくります。だからサイトが止まらず、検索でも評価され続けます。',
-  },
-  {
-    icon: '🔍',
-    title: 'AI検索で見つかる',
-    text: 'ChatGPTやPerplexityで「◯◯を相談したい」と調べたときに、あなたの会社が候補に出てくる状態をつくります。',
-  },
-];
 
 const reasons = [
   {
@@ -354,29 +337,6 @@ const breadcrumbLd = {
             <div class="mb-5 h-1 w-8 rounded-full bg-pink"></div>
             <h3 class="text-lg font-bold text-navy">{r.title}</h3>
             <p class="mt-3 text-sm leading-relaxed text-ink/70">{r.text}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- 6. AIで何が変わるか -->
-  <section class="relative overflow-hidden bg-mist">
-    <svg class="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true"><defs><pattern id="geo-ai" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1.2" fill="#103366" opacity="0.05"/></pattern></defs><rect width="100%" height="100%" fill="url(#geo-ai)"/></svg>
-    <div class="container-pd py-20 md:py-28">
-      <div class="text-center" data-animate="fade-in">
-        <p class="section-label">- Why AI -</p>
-        <h2 class="section-title">AIを活用することで、<br />何が変わるか</h2>
-        <p class="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-gray">
-          「AIを使っています」では意味がありません。大切なのは、それによって<strong class="text-navy">あなたのサイトに何が起きるか</strong>です。
-        </p>
-      </div>
-      <div class="mt-12 grid gap-5 md:grid-cols-3">
-        {aioBenefits.map((b, i) => (
-          <div class="rounded-2xl border border-gray/10 bg-white p-8 shadow-sm" data-animate data-animate-delay={String(i * 80)}>
-            <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-navy/5 text-2xl">{b.icon}</div>
-            <h3 class="text-lg font-bold text-navy">{b.title}</h3>
-            <p class="mt-3 text-sm leading-relaxed text-ink/70">{b.text}</p>
           </div>
         ))}
       </div>
