@@ -97,7 +97,7 @@ const breadcrumbLd = {
   jsonLd={[articleLd, breadcrumbLd]}
 >
   <article>
-    <!-- 記事ヘッダー -->
+    <!-- 記事ヘッダー（パンくず・カテゴリ・日付のみ） -->
     <header class="hero-gradient">
       <div class="container-pd pb-0 pt-14 md:pt-16">
         <nav class="mb-5 text-xs text-gray" aria-label="パンくず">
@@ -115,35 +115,35 @@ const breadcrumbLd = {
           }
           <time datetime={post.publishedAt} class="text-gray">{date}</time>
         </div>
-        <h1 class="mt-4 max-w-3xl text-2xl font-black leading-snug text-navy md:text-3xl">
-          {post.title}
-        </h1>
-        {post.eyecatch && (
-          <div class="mt-8 overflow-hidden rounded-2xl shadow-[0_4px_24px_rgba(16,51,102,0.10)]">
-            <img
-              src={post.eyecatch.url}
-              alt={post.title}
-              width={post.eyecatch.width}
-              height={post.eyecatch.height}
-              class="w-full"
-              loading="eager"
-            />
-          </div>
-        )}
       </div>
     </header>
 
     <div class="container-pd py-12 md:py-16">
       <div class="grid gap-12 lg:grid-cols-[1fr_260px]">
-        <!-- 本文 -->
+        <!-- 左カラム：アイキャッチ → 本文 -->
         <div>
+          {post.eyecatch && (
+            <div class="mb-10 overflow-hidden rounded-2xl shadow-[0_4px_24px_rgba(16,51,102,0.10)]">
+              <img
+                src={post.eyecatch.url}
+                alt={post.title}
+                width={post.eyecatch.width}
+                height={post.eyecatch.height}
+                class="w-full"
+                loading="eager"
+              />
+            </div>
+          )}
           <div class="prose-pd max-w-none" set:html={bodyWithIds} />
         </div>
 
-        <!-- 目次（サイドバー・スティッキー） -->
-        {
-          numberedHeadings.length > 0 && (
-            <aside class="lg:sticky lg:top-24 lg:self-start">
+        <!-- 右カラム：見出し → 目次（スティッキー） -->
+        <aside class="lg:sticky lg:top-24 lg:self-start">
+          <h1 class="mb-6 text-xl font-black leading-snug text-navy">
+            {post.title}
+          </h1>
+          {
+            numberedHeadings.length > 0 && (
               <div class="overflow-hidden rounded-2xl border border-gray/10 bg-white shadow-sm">
                 {/* ヘッダー */}
                 <div class="border-b border-gray/8 px-5 py-3.5">
@@ -174,9 +174,9 @@ const breadcrumbLd = {
                   </ul>
                 </nav>
               </div>
-            </aside>
-          )
-        }
+            )
+          }
+        </aside>
       </div>
     </div>
 
