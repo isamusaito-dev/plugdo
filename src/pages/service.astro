@@ -7,37 +7,98 @@ const steps = [
   {
     no: '01',
     title: '診断',
-    text: '現状のサイトを分析し、問い合わせや採用につながらない原因を可視化します。',
+    text: '今のサイトの状態を確認し、課題を洗い出します。',
   },
   {
     no: '02',
     title: '提案',
-    text: '優先度をつけた改善プランを提示。何を、なぜ直すのかを明確にお伝えします。',
+    text: '優先順位をつけて、今月直すべき箇所を提案します。',
   },
   {
     no: '03',
     title: '実装',
-    text: 'コンテンツ制作・修正・AIO対応まで、改善を実際のサイトに反映します。',
+    text: '文章・画像・デザイン・導線などを実際に改善します。',
   },
   {
     no: '04',
     title: '計測',
-    text: '効果をレポートで確認し、次の改善へ。このサイクルを毎月まわします。',
+    text: '結果を確認し、次月の改善につなげます。',
   },
 ];
 
-const aioBenefits = [
+const workItems = [
+  { no: '01', title: 'サイト更新・修正',   text: 'テキスト変更、画像差し替え、情報更新、軽微な修正に対応します。' },
+  { no: '02', title: '導線改善',           text: '問い合わせ・予約・採用応募につながるCTAやページ構成を見直します。' },
+  { no: '03', title: 'コンテンツ改善',     text: 'サービス紹介、実績、FAQ、ブログなど、伝わる情報に整えます。' },
+  { no: '04', title: 'デザイン改善',       text: '見づらい箇所や古く見える箇所を、部分的に改善します。' },
+  { no: '05', title: 'SEO・AIO対応',       text: '検索やAI検索に読まれやすい構造・文章・FAQを整備します。' },
+  { no: '06', title: '月次レポート',       text: 'アクセス数や問い合わせ状況を見て、次に直すべき箇所を提案します。' },
+];
+
+const rangeYes = [
+  'ホームページの更新', 'テキスト修正', '画像差し替え', 'CTA改善',
+  '問い合わせ導線改善', '採用ページ改善', 'ブログ/FAQ追加',
+  'SEO基本対応', 'AIO基本対応', '月次レポート', '改善提案', 'Slack相談',
+];
+const rangeMaybe = [
+  'LINE公式への導線設計', 'SNSからサイトへの導線設計',
+  '広告LPの改善相談', 'フォーム改善', 'GA4/Search Consoleの確認',
+];
+const rangeNo = [
+  'SNSの毎日投稿代行', '広告運用代行', 'LINE配信代行',
+  '大規模システム開発', '完全新規サイト制作',
+];
+
+
+const reasons = [
   {
-    title: '速い',
-    text: 'AIを活用することで、コンテンツ制作や改善のスピードが上がり、打ち手を素早く試せます。だから機会を逃しません。',
+    title: 'デザインに強い。',
+    text: '12年以上のUI/UXデザイン経験。見た目を整えるだけでなく、成果につながる導線まで設計します。',
   },
   {
-    title: '継続的',
-    text: '少ない工数で更新を継続できる体制をつくります。だからサイトが止まらず、検索でも評価され続けます。',
+    title: '作業者ではなく、設計者。',
+    text: '「言われた通りに直す」のではなく、「どこを直せば成果が出るか」から考えます。',
+  },
+  {
+    title: '社員のように伴走。',
+    text: 'Slackでいつでも相談OK。社外なのに、社内のWeb担当のように伴走します。',
   },
 ];
 
 const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+
+const faqs = [
+  {
+    q: '社内にWeb担当がいなくても使えますか？',
+    a: 'はい、むしろそういった企業のためのサービスです。サイトを拝見して課題を洗い出し、毎月何を直すかこちらから提案します。お客様が指示を出す必要はありません。',
+  },
+  {
+    q: 'どこまで対応してもらえますか？',
+    a: 'ホームページの更新・テキスト修正・CTA改善・デザイン改善・SEO/AIO対応・月次レポートが標準対応です。LINE公式への導線設計やフォーム改善は必要に応じて対応します。SNS運用代行・広告運用代行・完全新規サイト制作は対象外です。',
+  },
+  {
+    q: '毎月どんな流れで進みますか？',
+    a: '「診断→提案→実装→計測」の4ステップを毎月まわします。アクセス状況や問い合わせ数を確認しながら、優先度の高い箇所から実際に改善します。',
+  },
+  {
+    q: '成果が出るまでどのくらいかかりますか？',
+    a: 'サイトの現状によりますが、CTAや導線改善は1〜2ヶ月で効果が出やすいです。SEO・AIO（AI検索対応）は3〜6ヶ月程度が目安です。',
+  },
+  {
+    q: 'Slackではどんなことを相談できますか？',
+    a: 'サイトのこと全般を相談できます。文章の書き方、画像選び、競合サイトの見方など、Webに関して「誰かに聞きたいけど聞けない」ことをお気軽にどうぞ。',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
 
 const serviceLd = {
   '@context': 'https://schema.org',
@@ -49,7 +110,7 @@ const serviceLd = {
   provider: { '@id': `${SITE_URL}/#organization` },
   areaServed: { '@type': 'Country', name: 'Japan' },
   description:
-    '作った後の改善に特化したホームページ運用サービス。診断・提案・実装・計測を毎月くり返してサイトを成長させます。',
+    'ホームページを集客の受け皿（ハブ）として立て直し、LINE・SNS・広告などの入口をつなぐ。デザインに強い社外のWeb担当が、診断・改善・計測を毎月まわします。',
 };
 
 const breadcrumbLd = {
@@ -63,112 +124,315 @@ const breadcrumbLd = {
 ---
 
 <BaseLayout
-  title="サービス"
-  description="plugdoは「作った後」の改善に特化したホームページ運用サービス。診断・提案・実装・計測のサイクルと、Basic / Growth / Partnerの3プランで、中小企業のサイトを問い合わせと採用につなげます。"
-  jsonLd={[serviceLd, breadcrumbLd]}
+  title="サービス | plugdo（プラグドゥ）"
+  description="plugdoは、ホームページを軸にLINEや広告までつなぎ、問い合わせと採用を増やす運用サービス。デザインに強い社外のWeb担当が、診断・改善・計測を毎月まわします。Keep / Grow / Partnerの3プラン、無料Web診断から。"
+  jsonLd={[serviceLd, faqLd, breadcrumbLd]}
 >
-  <!-- ページヘッダー -->
+
+  <!-- 1. FV -->
   <section class="hero-gradient">
-    <div class="container-pd py-16 md:py-20">
-      <p class="section-label">- Service -</p>
-      <h1 class="text-3xl font-black text-navy md:text-4xl">作った後を、改善する。</h1>
-      <p class="mt-5 max-w-2xl text-base leading-relaxed text-ink">
-        多くのホームページは「作って終わり」になっています。plugdoは制作後の<strong class="font-bold text-navy">改善・運用</strong>に特化し、サイトを問い合わせと採用につながる状態へ育て続けます。
+    <div class="container-pd py-20 md:py-28">
+      <p class="section-label-left">- Service -</p>
+      <h1 class="mt-3 text-4xl font-black text-navy md:text-5xl">作った後を、働かせる。</h1>
+      <p class="mt-6 max-w-xl text-base leading-relaxed text-ink">
+        社内にWeb担当がいない中小企業向けに、放置されたホームページを毎月改善し、<strong class="font-bold text-navy">問い合わせ・採用につなげる</strong>サービスです。
       </p>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <a href="/contact" class="btn-pink">無料でWeb診断を受ける</a>
+        <a href="/price" class="btn-outline">料金を見る</a>
+      </div>
+      <p class="mt-4 text-xs text-gray">初期費用なし・まずは診断だけでもOK</p>
     </div>
   </section>
 
-  <!-- 改善の流れ -->
-  <section>
-    <div class="container-pd py-16 md:py-20">
-      <div class="text-center">
-        <p class="section-label">- Flow -</p>
-        <h2 class="section-title">改善の流れ</h2>
-        <p class="mt-4 text-sm text-gray">診断から計測まで、毎月まわす4ステップ。</p>
-      </div>
-      <div class="mt-12 grid gap-6 md:grid-cols-4">
-        {
-          steps.map((s) => (
-            <div class="card p-6">
-              <span class="font-display text-3xl text-pink">{s.no}</span>
-              <h3 class="mt-3 text-lg font-bold text-navy">{s.title}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-ink">{s.text}</p>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- AI活用の便益 -->
-  <section class="bg-mist">
-    <div class="container-pd py-16 md:py-20">
-      <div class="text-center">
-        <p class="section-label">- Why AI -</p>
-        <h2 class="section-title">AIを使うから、何が良いのか</h2>
-        <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-gray">
-          「AIを使っています」では意味がありません。大切なのは、それによって<strong class="text-navy">あなたのサイトに何が起きるか</strong>です。
+  <!-- 2. Hub & Spoke モデル -->
+  <section class="relative overflow-hidden bg-navy">
+    <svg class="pointer-events-none absolute inset-0 h-full w-full opacity-[0.04]" aria-hidden="true">
+      <defs><pattern id="geo-hub" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1.4" fill="white"/></pattern></defs>
+      <rect width="100%" height="100%" fill="url(#geo-hub)"/>
+    </svg>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label" style="color:rgba(255,255,255,0.4)">- Model -</p>
+        <h2 class="section-title text-white">ホームページを、集客の受け皿にする。</h2>
+        <p class="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-white/60">
+          SNSも広告もLINEも、やりっぱなしでは積み上がりません。plugdoは、ホームページを<strong class="text-white">"受け皿（ハブ）"</strong>として立て直し、各チャネルをそこへ着地させます。
+        </p>
+        <p class="mx-auto mt-3 max-w-lg text-sm font-bold text-white/80">
+          サイトはあなたの資産。SNSやLINEは、その入口。<br class="hidden md:block" />資産を中心に置くから、続けるほど効いてきます。
         </p>
       </div>
-      <div class="mx-auto mt-10 grid max-w-3xl gap-6 md:grid-cols-2">
-        {
-          aioBenefits.map((b) => (
-            <div class="card p-7">
-              <h3 class="text-xl font-bold text-navy">{b.title}</h3>
-              <p class="mt-3 text-sm leading-relaxed text-ink">{b.text}</p>
+
+      <!-- Hub & Spoke 図 -->
+      <div class="mt-14 flex flex-col items-center gap-6 md:flex-row md:items-stretch md:justify-center md:gap-0" data-animate>
+
+        <!-- 入口群 -->
+        <div class="flex flex-row gap-3 md:flex-col md:justify-center md:gap-4">
+          <!-- 標準 -->
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+              <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#06C755]/20 text-sm">💬</span>
+              <div>
+                <p class="text-xs font-bold text-white">LINE公式</p>
+                <p class="text-[10px] text-white/40">標準</p>
+              </div>
             </div>
-          ))
-        }
+            <div class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+              <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-white/10 text-sm">🔍</span>
+              <div>
+                <p class="text-xs font-bold text-white">検索・AIO</p>
+                <p class="text-[10px] text-white/40">標準</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+              <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-pink/20 text-sm">📣</span>
+              <div>
+                <p class="text-xs font-bold text-white">SNS・広告</p>
+                <p class="text-[10px] text-white/40">戦略連携</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 矢印（モバイル: 縦、デスクトップ: 横） -->
+        <div class="flex items-center justify-center md:px-4">
+          <svg class="hidden h-6 w-20 md:block" viewBox="0 0 80 24" fill="none" aria-hidden="true">
+            <path d="M0 12h68M60 4l12 8-12 8" stroke="#E43172" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg class="block h-10 w-6 md:hidden" viewBox="0 0 24 40" fill="none" aria-hidden="true">
+            <path d="M12 0v28M4 22l8 12 8-12" stroke="#E43172" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <!-- ハブ（中央） -->
+        <div class="flex items-center justify-center">
+          <div class="relative flex h-44 w-44 flex-col items-center justify-center rounded-full border-2 border-pink bg-white/5 text-center backdrop-blur-sm md:h-52 md:w-52">
+            <div class="absolute -inset-3 rounded-full border border-pink/20"></div>
+            <div class="absolute -inset-6 rounded-full border border-pink/10"></div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-pink/80">Hub</p>
+            <p class="mt-1 text-base font-black leading-tight text-white">ホームページ</p>
+            <p class="mt-1 text-[11px] text-white/50">あなたの資産・受け皿</p>
+          </div>
+        </div>
+
+        <!-- 矢印 -->
+        <div class="flex items-center justify-center md:px-4">
+          <svg class="hidden h-6 w-20 md:block" viewBox="0 0 80 24" fill="none" aria-hidden="true">
+            <path d="M0 12h68M60 4l12 8-12 8" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg class="block h-10 w-6 md:hidden" viewBox="0 0 24 40" fill="none" aria-hidden="true">
+            <path d="M12 0v28M4 22l8 12 8-12" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <!-- 成果 -->
+        <div class="flex flex-col justify-center gap-4">
+          <div class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-sm">
+            <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-pink/20 text-base">📩</span>
+            <p class="text-sm font-bold text-white">問い合わせ</p>
+          </div>
+          <div class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-sm">
+            <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-pink/20 text-base">🤝</span>
+            <p class="text-sm font-bold text-white">採用</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- プラン別の提供内容 -->
+  <!-- 3. 提供内容（6カード） -->
   <section>
-    <div class="container-pd py-16 md:py-20">
-      <div class="text-center">
-        <p class="section-label">- Plans -</p>
-        <h2 class="section-title">プランごとの提供内容</h2>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- What We Do -</p>
+        <h2 class="section-title">提供内容</h2>
+        <p class="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-gray">
+          ホームページ改善に必要な作業を、まるごと担います。
+        </p>
       </div>
-      <div class="mt-12 space-y-6">
-        {
-          plans.map((plan) => (
-            <div class="card flex flex-col gap-6 p-7 md:flex-row md:items-start">
-              <div class="md:w-64 md:flex-shrink-0">
-                <h3 class="font-display text-2xl text-navy">{plan.name}</h3>
-                <p class="mt-1 text-sm text-gray">{plan.target}</p>
-                <p class="mt-3">
-                  <span class="font-display text-2xl text-navy">{plan.price}</span>
-                  <span class="text-sm text-gray">{plan.priceNote}</span>
-                </p>
-                <p class="mt-3 rounded-lg bg-mist px-3 py-2 text-xs leading-relaxed text-ink">
-                  {plan.forWho}
-                </p>
-              </div>
-              <div class="flex-1 space-y-4">
-                {plan.groups.map((g) => (
-                  <div>
-                    <p class="mb-2 text-[10px] font-bold uppercase tracking-widest text-gray">{g.category}</p>
-                    <ul class="grid gap-2 sm:grid-cols-2">
-                      {g.items.filter(item => item.label !== 'AIO対応なし').map((f) => (
-                        <li class="flex items-start gap-2 text-sm text-ink">
-                          <span class="mt-0.5 text-pink" aria-hidden="true">✓</span>
-                          <span>{f.label}{f.note && <span class="text-xs text-gray">（{f.note}）</span>}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))
-        }
-      </div>
-      <div class="mt-10 text-center">
-        <a href="/price" class="btn-outline">料金プランを比較する</a>
+
+      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-animate>
+        {workItems.map((item, i) => (
+          <div class="flex flex-col rounded-2xl border border-gray/10 bg-white p-7 shadow-sm" data-animate-delay={String(i * 60)}>
+            <span class="font-display text-3xl font-black text-pink/25">{item.no}</span>
+            <h3 class="mt-3 text-base font-bold text-navy">{item.title}</h3>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-ink/70">{item.text}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
+  <!-- 4. 改善の流れ -->
+  <section class="relative overflow-hidden bg-mist">
+    <svg class="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true"><defs><pattern id="geo-flow" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1.2" fill="#103366" opacity="0.05"/></pattern></defs><rect width="100%" height="100%" fill="url(#geo-flow)"/></svg>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- Flow -</p>
+        <h2 class="section-title">毎月、4つの流れで<br />改善します</h2>
+        <p class="mx-auto mt-4 max-w-md text-sm leading-relaxed text-gray">契約後に何が起きるのか、わかりやすくお伝えします。</p>
+      </div>
+      <div class="mt-12 grid gap-5 md:grid-cols-4">
+        {steps.map((s, i) => (
+          <div class="relative flex flex-col rounded-2xl border border-gray/10 bg-white p-7 shadow-sm" data-animate data-animate-delay={String(i * 80)}>
+            {i < steps.length - 1 && (
+              <div class="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 md:block">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M4 10h10M10 5l5 5-5 5" stroke="#E43172" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            )}
+            <span class="font-display text-3xl font-black text-pink/30">{s.no}</span>
+            <h3 class="mt-3 text-lg font-bold text-navy">{s.title}</h3>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-ink/70">{s.text}</p>
+          </div>
+        ))}
+      </div>
+      <p class="mt-8 text-center text-xs text-gray">このサイクルを毎月まわします。続けるほど、サイトは良くなります。</p>
+    </div>
+  </section>
+
+  <!-- 4.5 対応範囲 -->
+  <section>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- Scope -</p>
+        <h2 class="section-title">対応範囲</h2>
+        <p class="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-gray">
+          ホームページ改善が中心です。やらないことを明確にすることで、<strong class="text-navy">やること</strong>に集中できます。
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3" data-animate>
+        <!-- 対応すること -->
+        <div class="rounded-2xl border border-navy/10 bg-navy/[0.03] p-7">
+          <div class="mb-5 flex items-center gap-2">
+            <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-navy text-[11px] text-white">✓</span>
+            <h3 class="font-bold text-navy">対応すること</h3>
+          </div>
+          <ul class="space-y-2.5">
+            {rangeYes.map((item) => (
+              <li class="flex items-start gap-2 text-sm text-ink/80">
+                <span class="mt-0.5 flex-shrink-0 text-navy">・</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- 必要に応じて -->
+        <div class="rounded-2xl border border-pink/15 bg-pink/[0.03] p-7">
+          <div class="mb-5 flex items-center gap-2">
+            <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-pink/15 text-[11px] text-pink">△</span>
+            <h3 class="font-bold text-navy">必要に応じて対応</h3>
+          </div>
+          <ul class="space-y-2.5">
+            {rangeMaybe.map((item) => (
+              <li class="flex items-start gap-2 text-sm text-ink/80">
+                <span class="mt-0.5 flex-shrink-0 text-pink/60">・</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+          <p class="mt-5 text-xs leading-relaxed text-gray">LINEやSNS・広告は入口の設計まで。日々の運用代行は対象外です。</p>
+        </div>
+
+        <!-- 対応しないこと -->
+        <div class="rounded-2xl border border-gray/10 bg-gray/[0.03] p-7">
+          <div class="mb-5 flex items-center gap-2">
+            <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-gray/20 text-[11px] text-gray">✕</span>
+            <h3 class="font-bold text-navy">基本対応しないこと</h3>
+          </div>
+          <ul class="space-y-2.5">
+            {rangeNo.map((item) => (
+              <li class="flex items-start gap-2 text-sm text-ink/50">
+                <span class="mt-0.5 flex-shrink-0 text-gray/50">・</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 選ばれる理由 -->
+  <section>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- Why plugdo -</p>
+        <h2 class="section-title">選ばれる理由</h2>
+      </div>
+      <div class="mt-12 grid gap-5 md:grid-cols-3">
+        {reasons.map((r, i) => (
+          <div class="rounded-2xl border border-gray/10 bg-white p-8 shadow-sm" data-animate data-animate-delay={String(i * 80)}>
+            <div class="mb-5 h-1 w-8 rounded-full bg-pink"></div>
+            <h3 class="text-lg font-bold text-navy">{r.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-ink/70">{r.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. よくある質問 -->
+  <section class="relative overflow-hidden bg-mist">
+    <svg class="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true"><defs><pattern id="geo-faq" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1.2" fill="#103366" opacity="0.05"/></pattern></defs><rect width="100%" height="100%" fill="url(#geo-faq)"/></svg>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- FAQ -</p>
+        <h2 class="section-title">よくある質問</h2>
+      </div>
+      <div class="mx-auto mt-12 max-w-2xl space-y-3" data-animate>
+        {faqs.map((faq, i) => (
+          <details class="group rounded-2xl border border-gray/10 bg-white shadow-sm" data-animate-delay={String(i * 60)}>
+            <summary class="flex cursor-pointer list-none items-start justify-between gap-4 px-7 py-5">
+              <span class="font-bold text-navy">{faq.q}</span>
+              <svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-pink transition-transform group-open:rotate-45" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+              </svg>
+            </summary>
+            <div class="px-7 pb-6 text-sm leading-relaxed text-ink/70">{faq.a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 料金サマリー -->
+  <section>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- Price -</p>
+        <h2 class="section-title">料金プラン</h2>
+        <p class="mx-auto mt-4 max-w-md text-sm text-gray">成果へのコミットの度合いで選べる、3プラン。<br />どのプランも初期費用なし・最低3ヶ月から。</p>
+      </div>
+
+      <div class="mt-12 grid gap-5 md:grid-cols-3" data-animate>
+        {plans.map((plan, i) => (
+          <div class={`relative flex flex-col rounded-2xl border p-8 shadow-sm ${plan.highlight ? 'border-pink bg-navy text-white' : 'border-gray/10 bg-white'}`} data-animate data-animate-delay={String(i * 80)}>
+            {plan.highlight && (
+              <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-pink px-4 py-1 text-xs font-bold text-white">★ おすすめ</span>
+            )}
+            <p class={`text-[10px] font-bold uppercase tracking-widest ${plan.highlight ? 'text-white/40' : 'text-navy/30'}`}>{plan.tagline}</p>
+            <p class={`mt-1 text-2xl font-black ${plan.highlight ? 'text-white' : 'text-navy'}`}>{plan.name}</p>
+            <p class={`mt-4 text-3xl font-black ${plan.highlight ? 'text-white' : 'text-navy'}`}>
+              {plan.price}<span class={`text-sm font-normal ${plan.highlight ? 'text-white/60' : 'text-gray'}`}>{plan.priceNote}</span>
+            </p>
+            <div class={`my-5 border-t ${plan.highlight ? 'border-white/10' : 'border-mist'}`}></div>
+            <p class={`flex-1 text-sm leading-relaxed ${plan.highlight ? 'text-white/70' : 'text-ink/70'}`}>{plan.commit}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-10 text-center">
+        <a href="/price" class="btn-outline">料金プランの詳細を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 最終CTA -->
   <CTASection />
+
 </BaseLayout>

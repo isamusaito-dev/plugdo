@@ -42,6 +42,13 @@ const bodyWithIds = post.body.replace(
   }
 );
 
+// --- h2 に連番を付与 ---
+let h2n = 0;
+const numberedHeadings = headings.map(h => ({
+  ...h,
+  num: h.level === 2 ? ++h2n : null,
+}));
+
 // --- 関連記事（同カテゴリ優先、最大3件） ---
 const related = all
   .filter((p) => p.id !== post.id)
@@ -90,9 +97,9 @@ const breadcrumbLd = {
   jsonLd={[articleLd, breadcrumbLd]}
 >
   <article>
-    <!-- 記事ヘッダー -->
+    <!-- 記事ヘッダー（パンくず・カテゴリ・日付のみ） -->
     <header class="hero-gradient">
-      <div class="container-pd py-14 md:py-16">
+      <div class="container-pd pb-0 pt-14 md:pt-16">
         <nav class="mb-5 text-xs text-gray" aria-label="パンくず">
           <a href="/" class="hover:text-pink">ホーム</a>
           <span class="mx-1.5">/</span>
@@ -108,51 +115,68 @@ const breadcrumbLd = {
           }
           <time datetime={post.publishedAt} class="text-gray">{date}</time>
         </div>
-        <h1 class="mt-4 max-w-3xl text-2xl font-black leading-snug text-navy md:text-3xl">
-          {post.title}
-        </h1>
       </div>
     </header>
 
     <div class="container-pd py-12 md:py-16">
       <div class="grid gap-12 lg:grid-cols-[1fr_260px]">
-        <!-- 本文 -->
+        <!-- 左カラム：アイキャッチ → 本文 -->
         <div>
-          {
-            post.eyecatch && (
+          {post.eyecatch && (
+            <div class="mb-10 overflow-hidden rounded-2xl shadow-[0_4px_24px_rgba(16,51,102,0.10)]">
               <img
-                src={`${post.eyecatch.url}?w=1200`}
+                src={post.eyecatch.url}
                 alt={post.title}
-                width="1200"
-                height="675"
-                class="mb-8 w-full rounded-lg"
+                width={post.eyecatch.width}
+                height={post.eyecatch.height}
+                class="w-full"
+                loading="eager"
               />
-            )
-          }
+            </div>
+          )}
           <div class="prose-pd max-w-none" set:html={bodyWithIds} />
         </div>
 
-        <!-- 目次（サイドバー・スティッキー） -->
-        {
-          headings.length > 0 && (
-            <aside class="lg:sticky lg:top-24 lg:self-start">
-              <div class="card p-6">
-                <h2 class="text-sm font-bold text-navy">目次</h2>
-                <nav class="mt-4" aria-label="目次">
-                  <ul class="space-y-2.5 text-sm">
-                    {headings.map((h) => (
-                      <li class:list={[h.level === 3 && 'pl-4']}>
-                        <a href={`#${h.id}`} class="text-ink transition-colors hover:text-pink">
-                          {h.text}
+        <!-- 右カラム：見出し → 目次（スティッキー） -->
+        <aside class="lg:sticky lg:top-24 lg:self-start">
+          <h1 class="mb-6 text-xl font-black leading-snug text-navy">
+            {post.title}
+          </h1>
+          {
+            numberedHeadings.length > 0 && (
+              <div class="overflow-hidden rounded-2xl border border-gray/10 bg-white shadow-sm">
+                {/* ヘッダー */}
+                <div class="border-b border-gray/8 px-5 py-3.5">
+                  <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-pink">Contents</p>
+                  <p class="mt-0.5 text-sm font-bold text-navy">この記事でわかること</p>
+                </div>
+                {/* 目次リスト */}
+                <nav class="p-4" aria-label="目次">
+                  <ul class="space-y-0.5">
+                    {numberedHeadings.map((h) => (
+                      <li class:list={[h.level === 3 && 'ml-7 border-l-2 border-gray/10 pl-3']}>
+                        <a
+                          href={`#${h.id}`}
+                          class:list={[
+                            'flex items-start gap-2.5 rounded-lg py-1.5 leading-snug transition-colors hover:text-pink',
+                            h.level === 2 ? 'text-sm text-ink' : 'text-xs text-gray py-1',
+                          ]}
+                        >
+                          {h.level === 2 && (
+                            <span class="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-pink/10 text-[10px] font-black text-pink">
+                              {h.num}
+                            </span>
+                          )}
+                          <span>{h.text}</span>
                         </a>
                       </li>
                     ))}
                   </ul>
                 </nav>
               </div>
-            </aside>
-          )
-        }
+            )
+          }
+        </aside>
       </div>
     </div>
 

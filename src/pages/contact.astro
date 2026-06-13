@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const FORMSPREE_ENDPOINT = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT;
+const FORMSPREE_ENDPOINT = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT || 'https://formspree.io/f/mwvjwbll';
 const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
 
 const breadcrumbLd = {
@@ -21,10 +21,10 @@ const breadcrumbLd = {
 >
   <section class="hero-gradient">
     <div class="container-pd py-16 md:py-20">
-      <p class="section-label">- Contact -</p>
+      <p class="section-label-left">- Contact -</p>
       <h1 class="text-3xl font-black text-navy md:text-4xl">お問い合わせ</h1>
       <p class="mt-5 max-w-2xl text-base leading-relaxed text-ink">
-        無料サイト診断のお申し込み、サービスへのご質問など、お気軽にご連絡ください。通常2営業日以内にご返信します。
+        無料サイト診断のお申し込み、サービスへのご質問など、お気軽にご連絡ください。通常2営業日以内にご返信いたします。
       </p>
     </div>
   </section>

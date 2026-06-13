@@ -36,7 +36,9 @@ const planBadgeClass = item.plan ? (planColor[item.plan] ?? 'bg-mist text-navy')
 const caseLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
+  articleSection: '導入事例',
   headline: item.title,
+  description: `【導入事例】${item.clientName}${item.industry ? `（${item.industry}）` : ''}の課題・施策・成果。${item.title}`,
   datePublished: item.publishedAt,
   dateModified: item.revisedAt || item.publishedAt,
   ...(item.thumbnail ? { image: item.thumbnail.url } : {}),
@@ -44,8 +46,21 @@ const caseLd = {
   author: { '@id': `${SITE_URL}/#organization` },
   publisher: { '@id': `${SITE_URL}/#organization` },
   isPartOf: { '@id': `${SITE_URL}/#website` },
-  about: item.clientName,
+  about: {
+    '@type': 'LocalBusiness',
+    name: item.clientName,
+    ...(item.industry ? { description: item.industry } : {}),
+  },
+  mentions: { '@id': `${SITE_URL}/#service` },
   mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/cases/${item.slug}` },
+  ...(item.voice ? {
+    review: {
+      '@type': 'Review',
+      reviewBody: item.voice,
+      author: { '@type': 'Person', name: item.clientName },
+      itemReviewed: { '@id': `${SITE_URL}/#service` },
+    },
+  } : {}),
 };
 
 const breadcrumbLd = {

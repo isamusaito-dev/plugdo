@@ -6,7 +6,7 @@ import CTASection from '../components/CTASection.astro';
 const faqs = [
   {
     q: '契約期間はありますか？',
-    a: '最低利用期間は3ヶ月とさせていただいております。サイトの改善は数ヶ月単位で効果が現れるため、一定期間の継続をお願いしています。',
+    a: '最低利用期間は3ヶ月です。サイトの改善は数ヶ月単位で効果が現れるため、一定期間の継続をお願いしています。',
   },
   {
     q: '解約はいつでもできますか？',
@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     q: 'プランの途中変更はできますか？',
-    a: 'はい。事業の状況に合わせて、翌月から上位・下位プランへ変更いただけます。まずはBasicから始めて、必要に応じてGrowth・Partnerへ広げる方が多いです。',
+    a: 'はい。事業の状況に合わせて、翌月から上位・下位プランへ変更いただけます。まずはKeepから始めて、必要に応じてGrow・Partnerへ広げる方が多いです。',
   },
   {
     q: '料金以外に初期費用はかかりますか？',
@@ -48,15 +48,15 @@ const breadcrumbLd = {
 
 <BaseLayout
   title="料金プラン"
-  description="plugdoの料金プラン。Basic（¥30,000〜）/ Growth（¥60,000〜）/ Partner（¥100,000〜）の3プラン。更新・運用から戦略立案・AI検索対応まで、会社の状況に合わせて選べます。"
+  description="plugdoの料金プラン。Keep（¥30,000〜）/ Grow（¥80,000〜）/ Partner（¥150,000〜）の3プラン。プランの差は作業量ではなく、何にコミットするかで決まります。"
   jsonLd={[faqLd, breadcrumbLd]}
 >
   <section class="hero-gradient">
     <div class="container-pd py-16 md:py-20">
-      <p class="section-label">- Price -</p>
+      <p class="section-label-left">- Price -</p>
       <h1 class="text-3xl font-black text-navy md:text-4xl">料金プラン</h1>
       <p class="mt-5 max-w-2xl text-base leading-relaxed text-ink">
-        必要なところから、無理なく始められる3プラン。すべて月額制で、いつでもプラン変更できます。
+        プランの差は「作業量」ではなく、<strong class="font-bold text-navy">何にコミットするか</strong>で決まります。上に行くほど成果への責任が増す3段階。共通の役割は「デザインに強い、社外のWeb担当」です。
       </p>
     </div>
   </section>
