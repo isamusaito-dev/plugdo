@@ -64,6 +64,16 @@ export const organizationLd = {
   areaServed: { '@type': 'Country', name: 'Japan' },
   knowsAbout: COMPANY.knowsAbout,
   slogan: SITE_TAGLINE,
+  priceRange: '¥30,000〜¥150,000/月',
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'plugdo 料金プラン',
+    itemListElement: [
+      { '@type': 'Offer', name: 'Keep', price: '30000', priceCurrency: 'JPY', description: '放置状態から抜け出す。サイトを健康に保つ。' },
+      { '@type': 'Offer', name: 'Grow', price: '80000', priceCurrency: 'JPY', description: '改善して、増やす。問い合わせを増やす。' },
+      { '@type': 'Offer', name: 'Partner', price: '150000', priceCurrency: 'JPY', description: '成果まで、一緒に。事業の成果を一緒に追う。' },
+    ],
+  },
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',

@@ -67,6 +67,39 @@ const reasons = [
 
 const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
 
+const faqs = [
+  {
+    q: '社内にWeb担当がいなくても使えますか？',
+    a: 'はい、むしろそういった企業のためのサービスです。サイトを拝見して課題を洗い出し、毎月何を直すかこちらから提案します。お客様が指示を出す必要はありません。',
+  },
+  {
+    q: 'どこまで対応してもらえますか？',
+    a: 'ホームページの更新・テキスト修正・CTA改善・デザイン改善・SEO/AIO対応・月次レポートが標準対応です。LINE公式への導線設計やフォーム改善は必要に応じて対応します。SNS運用代行・広告運用代行・完全新規サイト制作は対象外です。',
+  },
+  {
+    q: '毎月どんな流れで進みますか？',
+    a: '「診断→提案→実装→計測」の4ステップを毎月まわします。アクセス状況や問い合わせ数を確認しながら、優先度の高い箇所から実際に改善します。',
+  },
+  {
+    q: '成果が出るまでどのくらいかかりますか？',
+    a: 'サイトの現状によりますが、CTAや導線改善は1〜2ヶ月で効果が出やすいです。SEO・AIO（AI検索対応）は3〜6ヶ月程度が目安です。',
+  },
+  {
+    q: 'Slackではどんなことを相談できますか？',
+    a: 'サイトのこと全般を相談できます。文章の書き方、画像選び、競合サイトの見方など、Webに関して「誰かに聞きたいけど聞けない」ことをお気軽にどうぞ。',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
 const serviceLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -93,7 +126,7 @@ const breadcrumbLd = {
 <BaseLayout
   title="サービス | plugdo（プラグドゥ）"
   description="plugdoは、ホームページを軸にLINEや広告までつなぎ、問い合わせと採用を増やす運用サービス。デザインに強い社外のWeb担当が、診断・改善・計測を毎月まわします。Keep / Grow / Partnerの3プラン、無料Web診断から。"
-  jsonLd={[serviceLd, breadcrumbLd]}
+  jsonLd={[serviceLd, faqLd, breadcrumbLd]}
 >
 
   <!-- 1. FV -->
@@ -343,7 +376,31 @@ const breadcrumbLd = {
     </div>
   </section>
 
-  <!-- 7. 料金サマリー -->
+  <!-- 7. よくある質問 -->
+  <section class="relative overflow-hidden bg-mist">
+    <svg class="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true"><defs><pattern id="geo-faq" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1.2" fill="#103366" opacity="0.05"/></pattern></defs><rect width="100%" height="100%" fill="url(#geo-faq)"/></svg>
+    <div class="container-pd py-20 md:py-28">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- FAQ -</p>
+        <h2 class="section-title">よくある質問</h2>
+      </div>
+      <div class="mx-auto mt-12 max-w-2xl space-y-3" data-animate>
+        {faqs.map((faq, i) => (
+          <details class="group rounded-2xl border border-gray/10 bg-white shadow-sm" data-animate-delay={String(i * 60)}>
+            <summary class="flex cursor-pointer list-none items-start justify-between gap-4 px-7 py-5">
+              <span class="font-bold text-navy">{faq.q}</span>
+              <svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-pink transition-transform group-open:rotate-45" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+              </svg>
+            </summary>
+            <div class="px-7 pb-6 text-sm leading-relaxed text-ink/70">{faq.a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 料金サマリー -->
   <section>
     <div class="container-pd py-20 md:py-28">
       <div class="text-center" data-animate="fade-in">
