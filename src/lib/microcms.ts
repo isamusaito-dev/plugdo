@@ -74,47 +74,67 @@ export async function getBlogs(
   queries: ListQueries = {}
 ): Promise<MicroCMSListResponse<Blog>> {
   if (!client) return emptyList<Blog>();
-  return client.getList<Blog>({
-    endpoint: 'blogs',
-    queries: { orders: '-publishedAt', limit: 100, ...queries },
-  });
+  try {
+    return await client.getList<Blog>({
+      endpoint: 'blogs',
+      queries: { orders: '-publishedAt', limit: 100, ...queries },
+    });
+  } catch {
+    return emptyList<Blog>();
+  }
 }
 
 export async function getBlogBySlug(slug: string): Promise<Blog | null> {
   if (!client) return null;
-  const res = await client.getList<Blog>({
-    endpoint: 'blogs',
-    queries: { filters: `slug[equals]${slug}`, limit: 1 },
-  });
-  return res.contents[0] ?? null;
+  try {
+    const res = await client.getList<Blog>({
+      endpoint: 'blogs',
+      queries: { filters: `slug[equals]${slug}`, limit: 1 },
+    });
+    return res.contents[0] ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export async function getBlogCategories(): Promise<BlogCategory[]> {
   if (!client) return [];
-  const res = await client.getList<BlogCategory>({
-    endpoint: 'categories',
-    queries: { limit: 100 },
-  });
-  return res.contents;
+  try {
+    const res = await client.getList<BlogCategory>({
+      endpoint: 'categories',
+      queries: { limit: 100 },
+    });
+    return res.contents;
+  } catch {
+    return [];
+  }
 }
 
 export async function getCases(
   queries: ListQueries = {}
 ): Promise<MicroCMSListResponse<Case>> {
   if (!client) return emptyList<Case>();
-  return client.getList<Case>({
-    endpoint: 'case',
-    queries: { orders: '-publishedAt', limit: 100, ...queries },
-  });
+  try {
+    return await client.getList<Case>({
+      endpoint: 'case',
+      queries: { orders: '-publishedAt', limit: 100, ...queries },
+    });
+  } catch {
+    return emptyList<Case>();
+  }
 }
 
 export async function getCaseBySlug(slug: string): Promise<Case | null> {
   if (!client) return null;
-  const res = await client.getList<Case>({
-    endpoint: 'case',
-    queries: { filters: `slug[equals]${slug}`, limit: 1 },
-  });
-  return res.contents[0] ?? null;
+  try {
+    const res = await client.getList<Case>({
+      endpoint: 'case',
+      queries: { filters: `slug[equals]${slug}`, limit: 1 },
+    });
+    return res.contents[0] ?? null;
+  } catch {
+    return null;
+  }
 }
 
 function emptyList<T>(): MicroCMSListResponse<T> {
