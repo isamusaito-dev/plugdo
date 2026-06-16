@@ -63,6 +63,63 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID;
       modifiedTime={modifiedTime}
     />
 
+    <!-- ページローダー -->
+    <style>
+      #page-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.45s ease, visibility 0.45s ease;
+      }
+      #page-loader.is-done {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .loader-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      .loader-logo-img {
+        height: 3rem;
+        width: auto;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: loader-logo-in 0.45s cubic-bezier(0.34, 1.4, 0.64, 1) 0.1s forwards;
+      }
+      .loader-track {
+        width: 130px;
+        height: 2px;
+        background: #EBEEF2;
+        border-radius: 2px;
+        overflow: hidden;
+        opacity: 0;
+        animation: loader-track-in 0.2s ease 0.4s forwards;
+      }
+      .loader-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #E43172, #103366);
+        border-radius: 2px;
+        animation: loader-bar-fill 0.85s cubic-bezier(0.4, 0, 0.2, 1) 0.55s forwards;
+      }
+      @keyframes loader-logo-in {
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes loader-track-in {
+        to { opacity: 1; }
+      }
+      @keyframes loader-bar-fill {
+        to { width: 100%; }
+      }
+    </style>
+
     <!-- Google Analytics 4（測定IDが設定されている場合のみ） -->
     {
       GA_ID && (
@@ -83,11 +140,43 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID;
     }
   </head>
   <body class="flex min-h-screen flex-col">
+    <!-- ローダーオーバーレイ -->
+    <div id="page-loader" aria-hidden="true">
+      <div class="loader-inner">
+        <img src="/logo.svg" alt="plugdo" class="loader-logo-img" />
+        <div class="loader-track">
+          <div class="loader-bar"></div>
+        </div>
+      </div>
+    </div>
+
     <Header />
     <main class="flex-1">
       <slot />
     </main>
     <Footer />
+
+    <!-- ページローダー dismiss -->
+    <script is:inline>
+      (function () {
+        var loader = document.getElementById('page-loader');
+        if (!loader) return;
+        var MIN_MS = 1400;
+        var start  = Date.now();
+        function dismiss() {
+          var wait = Math.max(0, MIN_MS - (Date.now() - start));
+          setTimeout(function () {
+            loader.classList.add('is-done');
+            setTimeout(function () { loader.remove(); }, 500);
+          }, wait);
+        }
+        if (document.readyState === 'complete') {
+          dismiss();
+        } else {
+          window.addEventListener('load', dismiss);
+        }
+      })();
+    </script>
 
     <!-- スクロールアニメーション + 数字カウントアップ -->
     <script is:inline>
