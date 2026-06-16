@@ -75,10 +75,12 @@ export async function getBlogs(
 ): Promise<MicroCMSListResponse<Blog>> {
   if (!client) return emptyList<Blog>();
   try {
-    return await client.getList<Blog>({
+    const res = await client.getList<Blog>({
       endpoint: 'blogs',
       queries: { orders: '-publishedAt', limit: 100, ...queries },
     });
+    const contents = res.contents.filter((p) => p.slug);
+    return { ...res, contents, totalCount: contents.length };
   } catch {
     return emptyList<Blog>();
   }
@@ -115,10 +117,12 @@ export async function getCases(
 ): Promise<MicroCMSListResponse<Case>> {
   if (!client) return emptyList<Case>();
   try {
-    return await client.getList<Case>({
+    const res = await client.getList<Case>({
       endpoint: 'case',
       queries: { orders: '-publishedAt', limit: 100, ...queries },
     });
+    const contents = res.contents.filter((c) => c.slug);
+    return { ...res, contents, totalCount: contents.length };
   } catch {
     return emptyList<Case>();
   }
