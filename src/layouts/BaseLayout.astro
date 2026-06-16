@@ -161,11 +161,17 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID;
       (function () {
         var loader = document.getElementById('page-loader');
         if (!loader) return;
+        // 初回訪問以外はローダーを即非表示
+        if (sessionStorage.getItem('plugdo_visited')) {
+          loader.remove();
+          return;
+        }
         var MIN_MS = 1400;
         var start  = Date.now();
         function dismiss() {
           var wait = Math.max(0, MIN_MS - (Date.now() - start));
           setTimeout(function () {
+            sessionStorage.setItem('plugdo_visited', '1');
             loader.classList.add('is-done');
             setTimeout(function () { loader.remove(); }, 500);
           }, wait);
