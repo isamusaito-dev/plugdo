@@ -6,7 +6,8 @@ import { sampleCases } from '../../lib/sampleData';
 
 export async function getStaticPaths() {
   const res = await getCases();
-  const cases = res.contents.length ? res.contents : sampleCases;
+  const valid = res.contents.filter((c) => c.slug);
+  const cases = valid.length ? valid : sampleCases;
   return cases.map((item) => ({
     params: { slug: item.slug },
     props: { item },

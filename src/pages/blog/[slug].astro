@@ -7,7 +7,8 @@ import { sampleBlogs } from '../../lib/sampleData';
 
 export async function getStaticPaths() {
   const res = await getBlogs();
-  const blogs = res.contents.length ? res.contents : sampleBlogs;
+  const valid = res.contents.filter((p) => p.slug);
+  const blogs = valid.length ? valid : sampleBlogs;
   return blogs.map((post) => ({
     params: { slug: post.slug },
     props: { post, all: blogs },
