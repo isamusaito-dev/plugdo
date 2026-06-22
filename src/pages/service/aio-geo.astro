@@ -1,0 +1,216 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTASection from '../../components/CTASection.astro';
+
+const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+
+const faqs = [
+  {
+    q: 'AIOとGEOの違いは何ですか？',
+    a: 'AIO（AI検索最適化）は、ChatGPTやPerplexity、Google AI Overviewsなどの生成AI検索に自社情報が正しく引用・紹介される状態をつくる施策です。GEO（Generative Engine Optimization）はその英語圏での呼称で、ほぼ同義で使われます。',
+  },
+  {
+    q: 'AIO対応をするとGoogle検索順位も上がりますか？',
+    a: 'AIO対応（構造化データ・FAQの整備・明確なHTML構造）はGoogleの通常の検索にも好影響を与えます。ただし順位上昇を直接保証するものではなく、AIが正しく情報を読み取れる状態にすることが本来の目的です。',
+  },
+  {
+    q: 'どのくらいの期間で効果が出ますか？',
+    a: '構造化データの反映はGoogleのクロール・インデックスのタイミングに依存するため、通常は施策後2〜8週間で変化が見られます。AI検索での引用は検索エンジンのインデックス状況にも左右されるため、3〜6ヶ月の継続的な取り組みを推奨しています。',
+  },
+  {
+    q: 'Plugdoに依頼するとどのようなことをしてもらえますか？',
+    a: '構造化データ（JSON-LD）の実装・最適化、サービス情報の整理、FAQの作成・整備、HTMLの意味的構造改善、canonicalやsitemap整備などを行います。月次対応として、AI検索の変化に合わせた継続的な改善も行います。',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'サービス', item: `${SITE_URL}/service/` },
+    { '@type': 'ListItem', position: 3, name: 'AIO・GEO対応', item: `${SITE_URL}/service/aio-geo/` },
+  ],
+};
+
+const whatWeDo = [
+  {
+    title: '構造化データ（JSON-LD）の実装',
+    text: 'Organization・Service・FAQPage・BreadcrumbList・Person などのschema.orgを実装し、AIがサービスの全体像を理解できる状態に整備します。',
+  },
+  {
+    title: 'FAQの作成・整備',
+    text: '「どんなサービスですか？」「料金は？」「解約できますか？」などの実際の質問に答えるFAQを、可視テキストとJSON-LDの両方で整備します。',
+  },
+  {
+    title: 'HTMLの意味的構造改善',
+    text: '見出し（h1〜h3）の階層整理、サービス情報のテキスト化、適切なalt属性の設定など、AIが読み取りやすいHTML構造に整えます。',
+  },
+  {
+    title: 'サービス情報の一貫化',
+    text: 'ページ本文・JSON-LD・meta descriptionで同じサービス定義を使い、AIが「この会社は何をしているのか」を一貫して理解できるよう統一します。',
+  },
+  {
+    title: 'canonical・sitemap・robots.txt 整備',
+    text: '正規URLの指定、サイトマップへの正確なページ収録、AIクローラの許可設定を行い、インデックスの健全性を維持します。',
+  },
+  {
+    title: '月次での継続改善',
+    text: 'AI検索の変化は速い。毎月の状況確認と改善提案を継続し、引用されやすい状態を維持・強化します。',
+  },
+];
+
+const keyPoints = [
+  {
+    q: '「引用される」のは順位ではなく、情報の正確さと構造',
+    a: 'AI検索は検索順位ではなく、サイトに書かれている情報の正確さ・一貫性・読み取りやすさで引用を判断します。1位でも構造化されていなければ引用されず、5位でも整備されていれば引用されます。',
+  },
+  {
+    q: 'スピードより正確さ',
+    a: '「すぐにAI検索対応」を謳うサービスは多いですが、間違ったschemaや矛盾した情報を大量に出力するとむしろ逆効果です。Plugdoは実態に合った情報を丁寧に整備することを重視します。',
+  },
+  {
+    q: 'SEOとAIOは対立しない、両立する',
+    a: '構造化データの整備、意味的なHTML構造、FAQの充実はGoogleの通常検索にも好影響を与えます。AIO対応はSEOと対立するものではなく、両方の基盤を同時に整える取り組みです。',
+  },
+];
+---
+
+<BaseLayout
+  title="AIO・GEO対応｜AI検索に引用されるサイト改善｜Plugdo"
+  description="PlugdoのAIO・GEO対応。ChatGPT、Perplexity、Google AI OverviewsなどのAI検索で自社情報が正しく理解・引用されるよう、構造化データ、FAQ、HTML構造、サービス情報を整備します。"
+  jsonLd={[faqLd, breadcrumbLd]}
+>
+  <!-- ヒーロー -->
+  <section class="hero-gradient">
+    <div class="container-pd py-20 md:py-28">
+      <nav class="mb-6 flex items-center gap-1.5 text-xs text-gray" aria-label="パンくず">
+        <a href="/" class="hover:text-pink">ホーム</a>
+        <span>/</span>
+        <a href="/service/" class="hover:text-pink">サービス</a>
+        <span>/</span>
+        <span class="text-ink/60">AIO・GEO対応</span>
+      </nav>
+      <p class="section-label-left">- AIO / GEO -</p>
+      <h1 class="mt-3 text-4xl font-black text-navy md:text-5xl">AI検索に、<br />正しく引用されるサイトへ。</h1>
+      <p class="mt-6 max-w-xl text-base leading-relaxed text-ink">
+        ChatGPT・Perplexity・Google AI Overviewsなどの生成AI検索で、<strong class="font-bold text-navy">「御社の情報が引用される状態」</strong>をつくります。構造化データ・FAQの整備・HTML構造の見直しを月次で対応します。
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <a href="/contact/" class="btn-pink">無料でWeb診断を受ける</a>
+        <a href="/service/" class="btn-outline">サービス全体を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 課題 -->
+  <section class="bg-mist">
+    <div class="container-pd py-16 md:py-20">
+      <div data-animate="fade-in">
+        <p class="section-label">Problem</p>
+        <h2 class="section-title">「AI検索で自社が出てこない」<br class="hidden md:block" />その理由は、サイトの構造にあります。</h2>
+      </div>
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        {[
+          {
+            no: '01',
+            title: 'AIが情報を読み取れない',
+            text: '構造化データ（JSON-LD）が未整備だと、AIはサービス内容・会社概要・価格などを正確に理解できません。結果として引用の候補から外れてしまいます。',
+          },
+          {
+            no: '02',
+            title: 'FAQが存在しない or 不完全',
+            text: '「〇〇を相談したい」という問いに答えるFAQが無いサイトは、生成AIの回答候補になりにくい。質問形式の情報整備がAIO施策の核です。',
+          },
+          {
+            no: '03',
+            title: 'HTMLの意味的構造が不明確',
+            text: 'h1/h2の階層が崩れている、サービス情報が画像に埋め込まれているなどの状態では、AIがテキストを正確に読み取れません。',
+          },
+        ].map((item) => (
+          <div class="card" data-animate>
+            <p class="text-xs font-bold text-pink">{item.no}</p>
+            <h3 class="mt-2 text-base font-black text-navy">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-ink/70">{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Plugdoで対応すること -->
+  <section>
+    <div class="container-pd py-16 md:py-20">
+      <div data-animate="fade-in">
+        <p class="section-label">What we do</p>
+        <h2 class="section-title">Plugdoが整備する、6つの対応。</h2>
+      </div>
+      <div class="mt-12 grid gap-4 md:grid-cols-2">
+        {whatWeDo.map((item) => (
+          <div class="flex gap-4 rounded-2xl border border-navy/8 bg-white p-6" data-animate>
+            <div class="mt-1 h-5 w-5 flex-shrink-0 rounded-full bg-pink/10 flex items-center justify-center">
+              <div class="h-2 w-2 rounded-full bg-pink"></div>
+            </div>
+            <div>
+              <h3 class="font-bold text-navy">{item.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink/70">{item.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- AIO対応で重要なポイント -->
+  <section class="bg-navy">
+    <div class="container-pd py-16 md:py-20">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label" style="color:rgba(255,255,255,0.4)">Key point</p>
+        <h2 class="section-title text-white">AIO/GEO対応で大切なこと。</h2>
+      </div>
+      <div class="mx-auto mt-12 max-w-2xl space-y-4">
+        {keyPoints.map((item) => (
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-6" data-animate>
+            <h3 class="font-bold text-white">{item.q}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-white/60">{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="bg-mist">
+    <div class="container-pd py-16 md:py-20">
+      <div data-animate="fade-in">
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title">よくあるご質問</h2>
+      </div>
+      <div class="mx-auto mt-10 max-w-2xl space-y-3">
+        {faqs.map((item, i) => (
+          <details class="group rounded-2xl border border-gray/10 bg-white shadow-sm" data-animate data-animate-delay={String(i * 60)}>
+            <summary class="flex cursor-pointer list-none items-start justify-between gap-4 px-7 py-5">
+              <span class="font-bold text-navy">{item.q}</span>
+              <svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-pink transition-transform group-open:rotate-45" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+              </svg>
+            </summary>
+            <div class="px-7 pb-6 text-sm leading-relaxed text-ink/70">{item.a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection />
+</BaseLayout>

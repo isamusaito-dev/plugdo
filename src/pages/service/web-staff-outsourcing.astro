@@ -1,0 +1,215 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTASection from '../../components/CTASection.astro';
+
+const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+
+const faqs = [
+  {
+    q: 'Web担当者を採用するのと何が違いますか？',
+    a: '正社員を採用する場合、求人・採用・育成のコスト（数十万〜数百万円）に加え、人件費・社会保険・教育コストが発生します。Plugdoは月額3万円〜で即日スタートでき、12年以上のUI/UXデザイン経験をそのまま活用できます。',
+  },
+  {
+    q: 'フリーランスや制作会社に頼むのと何が違いますか？',
+    a: 'フリーランスへのスポット発注は案件ごとにブリーフィングが必要で、サイト全体の文脈を理解して動いてもらうのが難しいことがあります。Plugdoは月次で継続的に関わるため、サイトの歴史や目標を共有しながら優先順位を一緒に判断できます。',
+  },
+  {
+    q: '指示が苦手でも使えますか？',
+    a: 'はい。Plugdoはこちらからサイトを拝見して課題を見つけ、「今月はここを直しましょう」と提案します。お客様から詳細な指示を出す必要はありません。Slackで気軽に疑問を投げていただければ、方針から一緒に考えます。',
+  },
+  {
+    q: '対応できないことはありますか？',
+    a: 'SNSの毎日投稿代行、広告運用代行、大規模システム開発、完全新規サイト制作は対応外です。ホームページの更新・改善・SEO/AIO対応・採用サイト改善・月次レポートが主な提供範囲です。',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'サービス', item: `${SITE_URL}/service/` },
+    { '@type': 'ListItem', position: 3, name: 'Web担当外注', item: `${SITE_URL}/service/web-staff-outsourcing/` },
+  ],
+};
+
+const compareRows = [
+  { label: '初期コスト', hire: '数十〜数百万円', spot: '0〜数万円/回', plugdo: 'なし' },
+  { label: '月額目安', hire: '25万円〜（社保込）', spot: '都度発生', plugdo: '3万円〜' },
+  { label: 'スタートまで', hire: '2〜6ヶ月', spot: '1〜4週間', plugdo: '即日〜1週間' },
+  { label: '継続改善', hire: '○（ただし育成が必要）', spot: '△（都度ブリーフ）', plugdo: '◎（月次で伴走）' },
+  { label: 'デザイン力', hire: '採用次第', spot: '発注次第', plugdo: '◎（12年のUX経験）' },
+  { label: '社内知識の蓄積', hire: '○', spot: '△', plugdo: '○（担当制で引き継ぎ不要）' },
+];
+
+const whatWeDo = [
+  { title: 'サイト更新・修正対応', text: 'テキスト修正、画像差し替え、情報更新などをSlackで依頼いただければ対応します。' },
+  { title: '毎月の課題提案', text: 'アクセスデータを確認しながら「今月はここを直しましょう」と提案します。指示を出す必要はありません。' },
+  { title: '導線・デザイン改善', text: '問い合わせや採用応募につながる動線・CTA・ページ構成を、12年のUI/UXデザイン経験をもとに改善します。' },
+  { title: 'SEO/AIO対応', text: '検索やAI検索に正しく理解されるよう、FAQ・構造化データ・コンテンツを継続的に整備します。' },
+  { title: '月次レポート', text: '毎月のアクセス状況と改善成果をレポートでまとめ、次月の優先課題をセットでお伝えします。' },
+  { title: 'Slackでいつでも相談', text: '「この文章でいいか」「このデザインどう思うか」気軽に投げていただければ答えます。' },
+];
+---
+
+<BaseLayout
+  title="Web担当を外注するなら｜中小企業向け社外Web担当サービス｜Plugdo"
+  description="Web担当者を採用する余裕がない中小企業向けに、ホームページ更新・導線改善・SEO/AIO対応を月額制で支援する社外Web担当サービスPlugdoの活用方法を解説します。"
+  jsonLd={[faqLd, breadcrumbLd]}
+>
+  <!-- ヒーロー -->
+  <section class="hero-gradient">
+    <div class="container-pd py-20 md:py-28">
+      <nav class="mb-6 flex items-center gap-1.5 text-xs text-gray" aria-label="パンくず">
+        <a href="/" class="hover:text-pink">ホーム</a>
+        <span>/</span>
+        <a href="/service/" class="hover:text-pink">サービス</a>
+        <span>/</span>
+        <span class="text-ink/60">Web担当外注</span>
+      </nav>
+      <p class="section-label-left">- Web担当 外注 -</p>
+      <h1 class="mt-3 text-4xl font-black text-navy md:text-5xl">Web担当者がいなくても、<br />サイトを改善し続けられます。</h1>
+      <p class="mt-6 max-w-xl text-base leading-relaxed text-ink">
+        Plugdoは、Web担当者を採用する余裕がない中小企業向けに、ホームページの更新・改善・SEO/AIO対応を月額制で代行する<strong class="font-bold text-navy">社外Web担当サービス</strong>です。月額3万円〜、初期費用なし。
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <a href="/contact/" class="btn-pink">無料でWeb診断を受ける</a>
+        <a href="/price/" class="btn-outline">料金プランを見る</a>
+      </div>
+      <p class="mt-4 text-xs text-gray">初期費用なし／まずは診断だけでもOK</p>
+    </div>
+  </section>
+
+  <!-- 課題 -->
+  <section class="bg-mist">
+    <div class="container-pd py-16 md:py-20">
+      <div data-animate="fade-in">
+        <p class="section-label">Problem</p>
+        <h2 class="section-title">「Web担当がいない」は<br class="hidden md:block" />中小企業の共通課題です。</h2>
+        <p class="mx-auto mt-5 max-w-2xl text-center text-sm leading-relaxed text-ink/70">
+          従業員10〜29人の企業では約48%が「Web・IT担当者がいない」という調査があります（出典：Kubell、2025年12月）。<br />Webが重要とわかっていても、動かせる人材がいないのが現実です。
+        </p>
+      </div>
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        {[
+          {
+            no: '01',
+            title: '採用しても育てられない',
+            text: 'Web担当者を採用しても、社内に教える人がいなければ孤立してしまいます。結局「サイトを触れる人」を維持するのが難しい。',
+          },
+          {
+            no: '02',
+            title: '頼む先が決まらない',
+            text: '制作会社は作るのは得意でも運用は別料金。フリーランスはスポット対応になりがち。継続してサイトを見てくれる人がいない。',
+          },
+          {
+            no: '03',
+            title: 'サイトが止まったまま',
+            text: '更新しようにも時間も知識もない。気づけば最終更新が1年前、問い合わせは一向に増えない、という状態になってしまいます。',
+          },
+        ].map((item) => (
+          <div class="card" data-animate>
+            <p class="text-xs font-bold text-pink">{item.no}</p>
+            <h3 class="mt-2 text-base font-black text-navy">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-ink/70">{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 比較表 -->
+  <section>
+    <div class="container-pd py-16 md:py-20">
+      <div data-animate="fade-in">
+        <p class="section-label">Compare</p>
+        <h2 class="section-title">3つの選択肢を比べると。</h2>
+      </div>
+      <div class="mt-12 overflow-x-auto" data-animate>
+        <table class="w-full min-w-[600px] text-sm">
+          <thead>
+            <tr class="border-b border-navy/10">
+              <th class="py-4 pr-6 text-left font-bold text-navy"></th>
+              <th class="py-4 px-4 text-center font-bold text-ink/50">正社員採用</th>
+              <th class="py-4 px-4 text-center font-bold text-ink/50">スポット外注</th>
+              <th class="py-4 px-4 text-center font-bold text-navy">Plugdo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {compareRows.map((row) => (
+              <tr class="border-b border-navy/6">
+                <td class="py-4 pr-6 font-bold text-navy">{row.label}</td>
+                <td class="py-4 px-4 text-center text-ink/60">{row.hire}</td>
+                <td class="py-4 px-4 text-center text-ink/60">{row.spot}</td>
+                <td class="py-4 px-4 text-center font-bold text-pink">{row.plugdo}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- できること -->
+  <section class="bg-mist">
+    <div class="container-pd py-16 md:py-20">
+      <div data-animate="fade-in">
+        <p class="section-label">What we do</p>
+        <h2 class="section-title">社内のWeb担当のように、動きます。</h2>
+      </div>
+      <div class="mt-12 grid gap-4 md:grid-cols-2">
+        {whatWeDo.map((item) => (
+          <div class="flex gap-4 rounded-2xl border border-navy/8 bg-white p-6" data-animate>
+            <div class="mt-1 h-5 w-5 flex-shrink-0 rounded-full bg-pink/10 flex items-center justify-center">
+              <div class="h-2 w-2 rounded-full bg-pink"></div>
+            </div>
+            <div>
+              <h3 class="font-bold text-navy">{item.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink/70">{item.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="mt-8 text-center" data-animate>
+        <a href="/service/" class="text-sm font-bold text-pink underline underline-offset-4 hover:opacity-75">
+          サービス全体を詳しく見る →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <div class="container-pd py-16 md:py-20">
+      <div data-animate="fade-in">
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title">よくあるご質問</h2>
+      </div>
+      <div class="mx-auto mt-10 max-w-2xl space-y-3">
+        {faqs.map((item, i) => (
+          <details class="group rounded-2xl border border-gray/10 bg-white shadow-sm" data-animate data-animate-delay={String(i * 60)}>
+            <summary class="flex cursor-pointer list-none items-start justify-between gap-4 px-7 py-5">
+              <span class="font-bold text-navy">{item.q}</span>
+              <svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-pink transition-transform group-open:rotate-45" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+              </svg>
+            </summary>
+            <div class="px-7 pb-6 text-sm leading-relaxed text-ink/70">{item.a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection />
+</BaseLayout>
