@@ -105,8 +105,8 @@ const serviceLd = {
   '@type': 'Service',
   '@id': `${SITE_URL}/#service`,
   serviceType: 'ホームページ運用・改善サービス',
-  name: 'plugdo（プラグドゥ）',
-  url: `${SITE_URL}/service`,
+  name: 'Plugdo（プラグド）',
+  url: `${SITE_URL}/service/`,
   provider: { '@id': `${SITE_URL}/#organization` },
   areaServed: { '@type': 'Country', name: 'Japan' },
   description:
@@ -118,13 +118,13 @@ const breadcrumbLd = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
-    { '@type': 'ListItem', position: 2, name: 'サービス', item: 'https://plugdo.jp/service' },
+    { '@type': 'ListItem', position: 2, name: 'サービス', item: 'https://plugdo.jp/service/' },
   ],
 };
 ---
 
 <BaseLayout
-  title="サービス | plugdo（プラグドゥ）"
+  title="サービス"
   description="plugdoは、ホームページを軸にLINEや広告までつなぎ、問い合わせと採用を増やす運用サービス。デザインに強い社外のWeb担当が、診断・改善・計測を毎月まわします。Keep / Grow / Partnerの3プラン、無料Web診断から。"
   jsonLd={[serviceLd, faqLd, breadcrumbLd]}
 >

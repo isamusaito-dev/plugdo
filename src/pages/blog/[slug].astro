@@ -71,7 +71,7 @@ const articleLd = {
   ...(post.eyecatch ? { image: post.eyecatch.url } : {}),
   ...(post.category ? { articleSection: post.category.name } : {}),
   inLanguage: 'ja-JP',
-  author: { '@id': `${SITE_URL}/#organization` },
+  author: { '@id': `${SITE_URL}/#founder` },
   publisher: { '@id': `${SITE_URL}/#organization` },
   isPartOf: { '@id': `${SITE_URL}/#website` },
   mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${post.slug}` },
@@ -82,7 +82,7 @@ const breadcrumbLd = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
-    { '@type': 'ListItem', position: 2, name: 'ブログ', item: `${SITE_URL}/blog` },
+    { '@type': 'ListItem', position: 2, name: 'ブログ', item: `${SITE_URL}/blog/` },
     { '@type': 'ListItem', position: 3, name: post.title, item: `${SITE_URL}/blog/${post.slug}` },
   ],
 };
