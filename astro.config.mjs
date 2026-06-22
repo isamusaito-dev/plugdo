@@ -8,5 +8,11 @@ const SITE_URL = process.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
 export default defineConfig({
   site: SITE_URL,
   output: 'static',
-  integrations: [tailwind(), sitemap()],
+  trailingSlash: 'always',
+  integrations: [
+    tailwind(),
+    sitemap({
+      filter: (page) => !page.includes('/cases/'),
+    }),
+  ],
 });

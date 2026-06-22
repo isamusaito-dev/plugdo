@@ -11,6 +11,7 @@ import {
   COMPANY,
   organizationLd,
   websiteLd,
+  personLd,
 } from '../lib/site';
 
 interface Props {
@@ -41,7 +42,7 @@ const {
   modifiedTime,
 } = Astro.props;
 
-const fullTitle = title === SITE_NAME ? title : `${title} | ${SITE_NAME}`;
+const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
 
 const canonicalURL = new URL(
   canonicalPath ?? Astro.url.pathname,
@@ -58,10 +59,11 @@ const robotsContent = noindex
   ? 'noindex, nofollow'
   : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
 
-// Organization / WebSite は全ページ共通。ページ固有分を後ろに連結。
+// Organization / WebSite / Person は全ページ共通。ページ固有分を後ろに連結。
 const jsonLdArray = [
   organizationLd,
   websiteLd,
+  personLd,
   ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []),
 ];
 ---

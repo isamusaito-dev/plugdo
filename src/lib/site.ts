@@ -4,13 +4,13 @@
 export const SITE_URL =
   import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
 
-export const SITE_NAME = 'plugdo（プラグドゥ）';
+export const SITE_NAME = 'Plugdo';
 export const SITE_SHORT_NAME = 'plugdo';
 
 /** トップで使う一文の説明（meta description 等のベース） */
 export const SITE_TAGLINE = 'ホームページを、働かせる。';
 export const SITE_DESCRIPTION =
-  '作ったきりのホームページを、毎月の更新・改善とAI検索（AIO）対応で、問い合わせと採用につなげるWeb運用サービス。Web担当者がいない中小企業・小規模事業者のためのplugdo（プラグドゥ）。';
+  '作ったきりのホームページを、毎月の更新・改善とAI検索（AIO）対応で、問い合わせと採用につなげる月額制Web運用サービス。Web担当者がいない中小企業・小規模事業者のためのWebパートナー。';
 
 /** 運営会社情報（about ページと一致させること） */
 export const COMPANY = {
@@ -56,9 +56,15 @@ export const organizationLd = {
   founder: { '@type': 'Person', name: COMPANY.founder },
   description:
     'webサイトの企画・制作・運営、webサイト/マーケティング/ブランドのコンサルティングを行う企業。Web運用サービス plugdo を運営。',
+  sameAs: [
+    'https://www.instagram.com/hunches_0116/',
+    'https://www.tiktok.com/@hunches_',
+    'https://toukibo.ai-con.lawyer/search-service/result/5030001158268',
+  ],
+  brand: { '@type': 'Brand', name: 'Plugdo' },
   logo: {
     '@type': 'ImageObject',
-    url: absUrl('/favicon.svg'),
+    url: absUrl('/ogp-default.png'),
   },
   image: absUrl(OG_IMAGE_DEFAULT),
   areaServed: { '@type': 'Country', name: 'Japan' },
@@ -80,6 +86,24 @@ export const organizationLd = {
     email: COMPANY.email,
     availableLanguage: ['Japanese'],
   },
+};
+
+/** 全ページ共通：サービス提供者（Person） */
+export const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${SITE_URL}/#founder`,
+  name: '齋藤 勇',
+  jobTitle: '代表取締役 / UI・UXデザイナー',
+  worksFor: { '@id': `${SITE_URL}/#organization` },
+  knowsAbout: [
+    'UI/UXデザイン',
+    'ユーザーリサーチ',
+    'デザインシステム構築',
+    'フロントエンド実装',
+    'Web運用・改善',
+    'SEO/AIO対策',
+  ],
 };
 
 /** 全ページ共通：WebSite（サイト識別） */

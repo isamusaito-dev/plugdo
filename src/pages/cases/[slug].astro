@@ -69,7 +69,7 @@ const breadcrumbLd = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
-    { '@type': 'ListItem', position: 2, name: '導入事例', item: `${SITE_URL}/cases` },
+    { '@type': 'ListItem', position: 2, name: '導入事例', item: `${SITE_URL}/cases/` },
     { '@type': 'ListItem', position: 3, name: item.title, item: `${SITE_URL}/cases/${item.slug}` },
   ],
 };
@@ -83,6 +83,7 @@ const breadcrumbLd = {
   publishedTime={item.publishedAt}
   modifiedTime={item.revisedAt || item.publishedAt}
   jsonLd={[caseLd, breadcrumbLd]}
+  noindex={true}
 >
   <article>
     <!-- ページヘッダー -->

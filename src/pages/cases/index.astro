@@ -13,7 +13,7 @@ const breadcrumbLd = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
-    { '@type': 'ListItem', position: 2, name: '導入事例', item: 'https://plugdo.jp/cases' },
+    { '@type': 'ListItem', position: 2, name: '導入事例', item: 'https://plugdo.jp/cases/' },
   ],
 };
 ---
@@ -22,6 +22,7 @@ const breadcrumbLd = {
   title="導入事例"
   description="plugdoの導入事例。更新の止まったサイトを問い合わせ源に変えた中小企業の事例を、課題・施策・成果（数字）とともにご紹介します。"
   jsonLd={breadcrumbLd}
+  noindex={true}
 >
   <!-- ページヘッダー -->
   <section class="hero-gradient border-b border-navy/6">

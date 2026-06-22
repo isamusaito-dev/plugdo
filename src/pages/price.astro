@@ -41,14 +41,14 @@ const breadcrumbLd = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
-    { '@type': 'ListItem', position: 2, name: '料金', item: 'https://plugdo.jp/price' },
+    { '@type': 'ListItem', position: 2, name: '料金', item: 'https://plugdo.jp/price/' },
   ],
 };
 ---
 
 <BaseLayout
-  title="料金プラン"
-  description="plugdoの料金プラン。Keep（¥30,000〜）/ Grow（¥80,000〜）/ Partner（¥150,000〜）の3プラン。プランの差は作業量ではなく、何にコミットするかで決まります。"
+  title="料金プラン｜月額3万円〜の社外Web担当サービス｜Plugdo"
+  description="Plugdoの料金プラン。Keep月額3万円〜、Grow月額8万円〜、Partner月額15万円〜。ホームページ改善、SEO/AIO対応、月次改善レポートを月額制で提供します。"
   jsonLd={[faqLd, breadcrumbLd]}
 >
   <section class="hero-gradient">
@@ -70,8 +70,109 @@ const breadcrumbLd = {
     </div>
   </section>
 
-  <!-- FAQ -->
+  <!-- 月次対応例 -->
   <section class="bg-mist">
+    <div class="container-pd py-16 md:py-20">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- Monthly Flow -</p>
+        <h2 class="section-title">月次対応フロー</h2>
+        <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-gray">
+          各プランの月次業務フローを明示します。対応内容・頻度・報告サイクルをご確認ください。
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        <!-- Keep -->
+        <div class="rounded-2xl border border-navy/8 bg-white p-7" data-animate>
+          <div class="mb-1 flex items-center justify-between">
+            <h3 class="text-lg font-black text-navy">Keep</h3>
+            <span class="rounded-full bg-navy/8 px-3 py-1 text-xs font-bold text-navy/60">¥30,000〜/月</span>
+          </div>
+          <p class="mb-5 text-xs text-navy/50">月次レポートで状況を共有</p>
+          <ol class="space-y-0">
+            {[
+              { phase: '月初', label: 'ヒアリング', text: '更新・修正のご依頼をSlackで受け付け、優先順位を整理します。' },
+              { phase: '月中', label: '更新＋巡回チェック', text: 'テキスト修正・画像差し替えを実施。あわせてリンク切れ・表示崩れ・スマホ表示を毎月巡回チェックし、見つけた不具合は黙って直します。' },
+              { phase: '月末', label: 'レポート', text: '簡易アクセスレポートを送付。前月比の変化に加え、気づいた改善ポイントがあれば一言添えます。' },
+            ].map((item, i, arr) => (
+              <li class="flex gap-3">
+                <div class="relative flex flex-col items-center">
+                  <div class:list={['absolute top-3 bottom-0 left-1/2 w-px -translate-x-1/2', i < arr.length - 1 ? 'bg-navy/15' : 'bg-transparent']}></div>
+                  <span class="relative z-10 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border border-navy/40 bg-white text-[11px] font-bold text-navy">{i + 1}</span>
+                </div>
+                <div class="pb-5">
+                  <p class="text-[11px] font-bold text-navy/70">{item.phase}</p>
+                  <p class="mt-0.5 text-sm font-bold text-navy">{item.label}</p>
+                  <p class="mt-1 text-xs leading-relaxed text-ink/60">{item.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <!-- Grow -->
+        <div class="rounded-2xl border-2 border-pink bg-white p-7 shadow-[0_4px_32px_rgba(228,49,114,0.10)]" data-animate>
+          <div class="mb-1 flex items-center justify-between">
+            <h3 class="text-lg font-black text-navy">Grow</h3>
+            <span class="rounded-full bg-pink/10 px-3 py-1 text-xs font-bold text-pink">¥80,000〜/月</span>
+          </div>
+          <p class="mb-5 text-xs text-pink/70">月1回のオンラインMTG</p>
+          <ol class="space-y-0">
+            {[
+              { phase: '月初', label: '改善提案レポート', text: 'アクセスデータを分析し「今月直すべき箇所」を優先度つきでまとめて送付します。' },
+              { phase: '月中前半', label: '改善実装', text: '提案のうち優先度の高いものを、デザイン・導線・コンテンツに実装します。' },
+              { phase: '月中後半', label: 'AIO対応（整備）', text: '構造化データ・FAQ・メタ・見出し構造を整え、AI検索に正しく読まれ引用されやすい状態を維持します。' },
+              { phase: '月末', label: 'MTG・翌月計画', text: '月1回のオンラインMTGで成果を確認し、翌月の改善計画を共有します。' },
+            ].map((item, i, arr) => (
+              <li class="flex gap-3">
+                <div class="relative flex flex-col items-center">
+                  <div class:list={['absolute top-3 bottom-0 left-1/2 w-px -translate-x-1/2', i < arr.length - 1 ? 'bg-pink/20' : 'bg-transparent']}></div>
+                  <span class="relative z-10 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border border-pink/50 bg-white text-[11px] font-bold text-pink">{i + 1}</span>
+                </div>
+                <div class="pb-5">
+                  <p class="text-[11px] font-bold text-pink/80">{item.phase}</p>
+                  <p class="mt-0.5 text-sm font-bold text-navy">{item.label}</p>
+                  <p class="mt-1 text-xs leading-relaxed text-ink/60">{item.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <!-- Partner -->
+        <div class="rounded-2xl border border-navy/8 bg-white p-7" data-animate>
+          <div class="mb-1 flex items-center justify-between">
+            <h3 class="text-lg font-black text-navy">Partner</h3>
+            <span class="rounded-full bg-navy/8 px-3 py-1 text-xs font-bold text-navy/60">¥150,000〜/月</span>
+          </div>
+          <p class="mb-5 text-xs text-navy/50">隔週オンラインMTG（月2回）で並走</p>
+          <ol class="space-y-0">
+            {[
+              { phase: '月初', label: '戦略レビュー', text: '問い合わせ・採用などの共同目標に対する進捗を確認し、今月コミットする優先アクションを決めます。' },
+              { phase: '月中前半', label: '改善実装（全体最適）', text: 'サイト全体のデザイン・導線、採用ページまで含めて改善。AIOは情報設計から競合比較・GEO狙いの記事設計まで踏み込みます。' },
+              { phase: '月中後半', label: '軌道修正', text: '数値の進捗を見て打ち手を調整。必要なら追加実装まで当月内で対応します。' },
+              { phase: '月末', label: 'レポート・翌月計画', text: '成果を数値で報告し、翌月の数値目標とアクションプランを合意します。' },
+            ].map((item, i, arr) => (
+              <li class="flex gap-3">
+                <div class="relative flex flex-col items-center">
+                  <div class:list={['absolute top-3 bottom-0 left-1/2 w-px -translate-x-1/2', i < arr.length - 1 ? 'bg-navy/15' : 'bg-transparent']}></div>
+                  <span class="relative z-10 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border border-navy/40 bg-white text-[11px] font-bold text-navy">{i + 1}</span>
+                </div>
+                <div class="pb-5">
+                  <p class="text-[11px] font-bold text-navy/70">{item.phase}</p>
+                  <p class="mt-0.5 text-sm font-bold text-navy">{item.label}</p>
+                  <p class="mt-1 text-xs leading-relaxed text-ink/60">{item.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="bg-white">
     <div class="container-pd py-16 md:py-20">
       <div class="text-center">
         <p class="section-label">- FAQ -</p>

@@ -105,8 +105,8 @@ const serviceLd = {
   '@type': 'Service',
   '@id': `${SITE_URL}/#service`,
   serviceType: 'ホームページ運用・改善サービス',
-  name: 'plugdo（プラグドゥ）',
-  url: `${SITE_URL}/service`,
+  name: 'Plugdo（プラグド）',
+  url: `${SITE_URL}/service/`,
   provider: { '@id': `${SITE_URL}/#organization` },
   areaServed: { '@type': 'Country', name: 'Japan' },
   description:
@@ -118,14 +118,14 @@ const breadcrumbLd = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
-    { '@type': 'ListItem', position: 2, name: 'サービス', item: 'https://plugdo.jp/service' },
+    { '@type': 'ListItem', position: 2, name: 'サービス', item: 'https://plugdo.jp/service/' },
   ],
 };
 ---
 
 <BaseLayout
-  title="サービス | plugdo（プラグドゥ）"
-  description="plugdoは、ホームページを軸にLINEや広告までつなぎ、問い合わせと採用を増やす運用サービス。デザインに強い社外のWeb担当が、診断・改善・計測を毎月まわします。Keep / Grow / Partnerの3プラン、無料Web診断から。"
+  title="サービス内容｜ホームページ改善・SEO/AIO対応の社外Web担当｜Plugdo"
+  description="Plugdoのサービス内容。ホームページの更新、導線改善、コンテンツ改善、SEO/AIO対応、月次レポートまで、社内Web担当者がいない中小企業のWeb改善を月額制で支援します。"
   jsonLd={[serviceLd, faqLd, breadcrumbLd]}
 >
 
@@ -428,6 +428,32 @@ const breadcrumbLd = {
 
       <div class="mt-10 text-center">
         <a href="/price" class="btn-outline">料金プランの詳細を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 関連ページ -->
+  <section class="bg-mist">
+    <div class="container-pd py-12 md:py-16">
+      <div class="flex flex-col gap-4 md:flex-row md:gap-6">
+        <div class="flex-1 rounded-2xl border border-navy/8 bg-white p-6">
+          <p class="text-xs font-bold uppercase tracking-widest text-pink">AIO / GEO</p>
+          <h3 class="mt-2 font-bold text-navy">AI検索に引用されるサイトへ</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink/70">ChatGPT・Perplexity・Google AI OverviewsでのAIO/GEO対応。構造化データとFAQを整備します。</p>
+          <a href="/service/aio-geo/" class="mt-4 inline-flex items-center gap-1 text-sm font-bold text-pink hover:opacity-75">
+            AIO・GEO対応について詳しく見る
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2"><path d="M2 7h10M7 2l5 5-5 5"/></svg>
+          </a>
+        </div>
+        <div class="flex-1 rounded-2xl border border-navy/8 bg-white p-6">
+          <p class="text-xs font-bold uppercase tracking-widest text-navy/50">Web担当 外注</p>
+          <h3 class="mt-2 font-bold text-navy">Web担当者がいない会社向けの選択肢</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink/70">採用・スポット外注・Plugdoの比較から、月次の対応内容まで解説します。</p>
+          <a href="/service/web-staff-outsourcing/" class="mt-4 inline-flex items-center gap-1 text-sm font-bold text-navy hover:opacity-75">
+            Web担当外注の詳細を見る
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2"><path d="M2 7h10M7 2l5 5-5 5"/></svg>
+          </a>
+        </div>
       </div>
     </div>
   </section>
