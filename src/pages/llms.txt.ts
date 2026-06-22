@@ -43,7 +43,7 @@ export const GET: APIRoute = async () => {
 
 - 社内にWeb担当者がいなくても使える「社外のWeb担当」サービス。
 - 毎月「診断→提案→実装→計測」の4ステップでホームページを継続改善する。
-- ホームページを集客の受け皿（ハブ）として整え、LINE・SNS・広告からの流入を成果につなげる。
+- ホームページを集客の起点（ハブ）として整え、LINE・SNS・広告からの流入を成果につなげる。
 - 対象: Web担当者がいない、サイトを作ったまま更新が止まっている中小企業・小規模事業者。
 - 提供エリア: 日本全国（オンライン対応）。
 - 運営: ${COMPANY.legalName}（${COMPANY.alternateName}、${COMPANY.foundingDate.slice(0, 4)}年設立、代表 ${COMPANY.founder}）。
