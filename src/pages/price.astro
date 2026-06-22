@@ -70,8 +70,106 @@ const breadcrumbLd = {
     </div>
   </section>
 
-  <!-- FAQ -->
+  <!-- 月次対応例 -->
   <section class="bg-mist">
+    <div class="container-pd py-16 md:py-20">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- Monthly -</p>
+        <h2 class="section-title">月に何をするか。</h2>
+        <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-gray">
+          「任せっきりで何をされているかわからない」にならないよう、毎月の動きを明示します。
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        <!-- Keep -->
+        <div class="rounded-2xl border border-navy/8 bg-white p-7" data-animate>
+          <div class="mb-5 flex items-center justify-between">
+            <h3 class="text-lg font-black text-navy">Keep</h3>
+            <span class="rounded-full bg-navy/8 px-3 py-1 text-xs font-bold text-navy/60">¥30,000〜/月</span>
+          </div>
+          <ol class="space-y-4">
+            {[
+              { step: '月初', label: 'ヒアリング', text: '更新・修正の依頼をSlackで受け付け。優先順位を整理します。' },
+              { step: '月中', label: '更新作業', text: 'テキスト修正・画像差し替えなどの更新を実施。表示・動作チェックも行います。' },
+              { step: '月末', label: 'レポート', text: '簡易アクセスレポートを送付。前月比でサイトの状態を確認します。' },
+            ].map((item) => (
+              <li class="flex gap-4">
+                <div class="flex flex-col items-center">
+                  <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-navy/8 text-[10px] font-bold text-navy">{item.step[0]}</span>
+                  <div class="mt-1 h-full w-px bg-navy/8"></div>
+                </div>
+                <div class="pb-4">
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-gray/60">{item.step}</p>
+                  <p class="mt-0.5 text-sm font-bold text-navy">{item.label}</p>
+                  <p class="mt-1 text-xs leading-relaxed text-ink/60">{item.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <!-- Grow -->
+        <div class="rounded-2xl border-2 border-pink bg-white p-7 shadow-[0_4px_32px_rgba(228,49,114,0.10)]" data-animate>
+          <div class="mb-5 flex items-center justify-between">
+            <h3 class="text-lg font-black text-navy">Grow</h3>
+            <span class="rounded-full bg-pink/10 px-3 py-1 text-xs font-bold text-pink">¥80,000〜/月</span>
+          </div>
+          <ol class="space-y-4">
+            {[
+              { step: '月初', label: '改善提案レポート', text: 'アクセスデータを分析し「今月直すべき箇所」を優先度つきでまとめて送付します。' },
+              { step: '月中前半', label: '改善実装', text: 'デザイン・導線・コンテンツの改善を実施。AIO対応（構造化データ・FAQの整備）も継続します。' },
+              { step: '月中後半', label: 'AIO対応', text: 'JSON-LD・メタ情報・HTML構造を見直し、AI検索に引用されやすい状態を維持します。' },
+              { step: '月末', label: 'MTG・翌月計画', text: 'オンラインMTGで成果を確認し、翌月の改善計画を共有します。' },
+            ].map((item) => (
+              <li class="flex gap-4">
+                <div class="flex flex-col items-center">
+                  <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-pink/15 text-[10px] font-bold text-pink">{item.step[0]}</span>
+                  <div class="mt-1 h-full w-px bg-pink/15"></div>
+                </div>
+                <div class="pb-4">
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-pink/60">{item.step}</p>
+                  <p class="mt-0.5 text-sm font-bold text-navy">{item.label}</p>
+                  <p class="mt-1 text-xs leading-relaxed text-ink/60">{item.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <!-- Partner -->
+        <div class="rounded-2xl border border-navy/8 bg-white p-7" data-animate>
+          <div class="mb-5 flex items-center justify-between">
+            <h3 class="text-lg font-black text-navy">Partner</h3>
+            <span class="rounded-full bg-navy/8 px-3 py-1 text-xs font-bold text-navy/60">¥150,000〜/月</span>
+          </div>
+          <ol class="space-y-4">
+            {[
+              { step: '月初', label: '戦略レビュー', text: '共同目標の進捗を確認し、今月の優先アクションを決定します。隔週MTGの1回目。' },
+              { step: '月中前半', label: 'デザイン・改善実装', text: 'サイト全体のデザイン改善・採用ページ対応・AIO本格対応を並行して実施します。' },
+              { step: '月中後半', label: 'MTG・軌道修正', text: '隔週MTGの2回目。数値確認と残タスクの調整を行い、月末に向けて動きます。' },
+              { step: '月末', label: 'レポート・翌月計画', text: '成果レポートと翌月の数値目標・アクション計画を共有します。' },
+            ].map((item) => (
+              <li class="flex gap-4">
+                <div class="flex flex-col items-center">
+                  <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-navy/8 text-[10px] font-bold text-navy">{item.step[0]}</span>
+                  <div class="mt-1 h-full w-px bg-navy/8"></div>
+                </div>
+                <div class="pb-4">
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-gray/60">{item.step}</p>
+                  <p class="mt-0.5 text-sm font-bold text-navy">{item.label}</p>
+                  <p class="mt-1 text-xs leading-relaxed text-ink/60">{item.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="bg-white">
     <div class="container-pd py-16 md:py-20">
       <div class="text-center">
         <p class="section-label">- FAQ -</p>
