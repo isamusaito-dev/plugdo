@@ -61,6 +61,31 @@ const breadcrumbLd = {
     </div>
   </section>
 
+  <!-- セルフ診断ブロック -->
+  <section class="border-b border-mist bg-[#EEF2F8]">
+    <div class="container-pd py-10 md:py-12">
+      <p class="mb-5 text-sm font-bold text-navy">迷ったら、これで選べます。</p>
+      <ul class="space-y-3">
+        {[
+          { text: 'サイトをまず「動いている状態」にしたい', plan: 'Keep', anchor: 'plan-keep' },
+          { text: '問い合わせを増やしたい', plan: 'Grow', anchor: 'plan-grow' },
+          { text: '採用も含めて数値で一緒に追いたい', plan: 'Partner', anchor: 'plan-partner' },
+        ].map((row) => (
+          <li>
+            <a
+              href={`#${row.anchor}`}
+              class="group flex items-center gap-3 rounded-xl border border-navy/10 bg-white px-5 py-3.5 text-sm text-ink transition-shadow hover:shadow-md"
+            >
+              <span class="font-bold text-navy group-hover:text-pink">→</span>
+              <span class="flex-1">{row.text}</span>
+              <span class="rounded-full bg-navy px-3 py-1 text-[11px] font-bold text-paper">{row.plan}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
   <section>
     <div class="container-pd py-16 md:py-20">
       <PriceTable variant="full" />

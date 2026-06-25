@@ -6,8 +6,10 @@ export type Plan = {
   id: 'keep' | 'grow' | 'partner';
   name: string;
   tagline: string;
+  target: string;      // こんな会社に
   commit: string;      // 何にコミットするか（メイン）
   commitNote: string;  // コミットの補足
+  monthlyItems: string[]; // 月にやること
   price: string;
   priceNote: string;
   hours: string;       // 想定工数
@@ -21,8 +23,15 @@ export const plans: Plan[] = [
     id: 'keep',
     name: 'Keep',
     tagline: '放置状態から抜け出す',
+    target: 'サイトが何年も止まったまま、まず動かしたい',
     commit: 'サイトを健康に保つ',
     commitNote: 'まず更新を止めないことが目標',
+    monthlyItems: [
+      'テキスト・画像の更新代行（月1回）',
+      'リンク切れ・表示崩れの巡回チェック',
+      '簡易アクセスレポートの送付',
+      'Slackでいつでも質問・相談OK',
+    ],
     price: '¥30,000',
     priceNote: '〜 / 月（税別）',
     hours: '3〜4h / 月',
@@ -43,8 +52,16 @@ export const plans: Plan[] = [
     id: 'grow',
     name: 'Grow',
     tagline: '改善して、増やす',
+    target: '問い合わせを増やしたい。改善まで任せたい',
     commit: '問い合わせを増やす',
     commitNote: '先行指標に責任',
+    monthlyItems: [
+      '今月直すべき箇所を優先度つきで提案',
+      'デザイン・導線・コンテンツの改善を実装',
+      'AI検索に引用されやすい構造に整備（AIO）',
+      '月1回オンラインMTGで成果を確認',
+      'Slackでいつでも質問・相談OK',
+    ],
     price: '¥80,000',
     priceNote: '〜 / 月（税別）',
     hours: '6〜8h / 月',
@@ -67,8 +84,16 @@ export const plans: Plan[] = [
     id: 'partner',
     name: 'Partner',
     tagline: '成果まで、一緒に',
+    target: '採用・集客の数値目標を一緒に追ってほしい',
     commit: '事業の成果を一緒に追う',
     commitNote: '共同目標＋説明責任',
+    monthlyItems: [
+      'サイト全体のデザイン主導＋採用ページ対応',
+      '問い合わせ・採用の数値目標を共同で設定',
+      'AIO本格対応（競合比較・記事設計まで）',
+      '隔週オンラインMTG（月2回）で並走',
+      'Slackでいつでも質問・相談OK',
+    ],
     price: '¥150,000',
     priceNote: '〜 / 月（税別）',
     hours: '12〜15h / 月',

@@ -21,6 +21,7 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
   {
     plans.map((plan) => (
       <div
+        id={`plan-${plan.id}`}
         class:list={[
           'card relative flex flex-col overflow-hidden',
           plan.highlight ? 'border-pink shadow-[0_4px_32px_rgba(228,49,114,0.15)]' : '',
@@ -35,8 +36,14 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
           <div class="py-1.5 text-xs" aria-hidden="true">&nbsp;</div>
         )}
 
+        {/* こんな会社に */}
+        <div class="border-b border-mist bg-sky/40 px-6 py-3">
+          <p class="text-[10px] font-bold text-pink">こんな会社に →</p>
+          <p class="mt-0.5 text-[13px] font-medium leading-snug text-navy">{plan.target}</p>
+        </div>
+
         {/* ヘッダー */}
-        <div class:list={['p-7 pb-5', plan.highlight ? 'bg-navy/[0.02]' : '']}>
+        <div class:list={['px-6 pb-4 pt-5', plan.highlight ? 'bg-navy/[0.02]' : '']}>
           <div class="flex items-start justify-between gap-2">
             <div>
               <span class="font-display text-2xl font-bold text-navy">{plan.name}</span>
@@ -53,46 +60,28 @@ function cellVal(v: string | boolean): { label: string; positive: boolean } {
             )}
           </div>
 
-          {/* コミット */}
-          <div
-            class:list={[
-              'mt-5 rounded-xl px-4 py-3.5',
-              plan.highlight ? 'bg-pink/[0.18] ring-1 ring-pink/20' : 'bg-mist',
-            ]}
-          >
-            <p class="text-[10px] font-bold uppercase tracking-widest text-gray/70">コミット</p>
-            <p class="mt-1 text-[15px] font-bold leading-snug text-navy">{plan.commit}</p>
-            <p class="mt-0.5 text-xs text-gray">（{plan.commitNote}）</p>
-          </div>
-
           {/* 価格 */}
-          <div class="mt-5 flex items-end gap-1">
+          <div class="mt-4 flex items-end gap-1">
             <span class="font-display text-[2rem] leading-none text-navy">{plan.price}</span>
             <span class="mb-1 text-xs text-gray">{plan.priceNote}</span>
           </div>
         </div>
 
-        {/* 機能リスト */}
-        {variant === 'full' && (
-          <div class="flex flex-1 flex-col border-t border-mist px-7 py-6">
-            <ul class="space-y-2.5">
-              {plan.groups[0].items.map((item) => (
-                <li class="flex items-start gap-2 text-sm text-ink">
-                  <span class="mt-0.5 text-pink" aria-hidden="true">✓</span>
-                  <span>
-                    {item.label}
-                    {item.note && (
-                      <span class="ml-1 text-[11px] text-gray">（{item.note}）</span>
-                    )}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {/* 月にやること */}
+        <div class="flex flex-1 flex-col border-t border-mist px-6 py-5">
+          <p class="mb-3 text-[10px] font-bold uppercase tracking-widest text-gray/60">月にやること</p>
+          <ul class="space-y-2.5">
+            {plan.monthlyItems.map((item) => (
+              <li class="flex items-start gap-2 text-sm text-ink">
+                <span class="mt-0.5 font-bold text-navy" aria-hidden="true">✓</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         {/* CTA */}
-        <div class="px-7 pb-7 pt-4">
+        <div class="px-6 pb-6 pt-4">
           <a
             href="/contact"
             class:list={[
