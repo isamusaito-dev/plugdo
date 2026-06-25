@@ -10,6 +10,10 @@ const breadcrumbLd = {
   ],
 };
 
+// 副CTA「結果をメールで受け取る」の送信先（既存 contact と同じ Formspree を流用）。
+const FORMSPREE_ENDPOINT =
+  import.meta.env.PUBLIC_FORMSPREE_ENDPOINT || 'https://formspree.io/f/mwvjwbll';
+
 // 診断中に順番に点灯するチェック項目（仕様書 §2 画面②。専門用語は使わない）。
 const checkSteps = [
   '第一印象をチェック中…',
@@ -160,6 +164,31 @@ const checkSteps = [
             <p class="mt-4 text-xs text-gray">無料・オンライン30分・契約不要</p>
           </div>
 
+          <!-- 副CTA：結果をメールで受け取る（リード取得→ナーチャリング） -->
+          <div class="mt-6 rounded-xl border border-mist bg-paper p-6 text-center md:p-7">
+            <p class="text-sm font-bold text-navy">今すぐ相談しなくても大丈夫です</p>
+            <p class="mt-1.5 text-xs leading-relaxed text-gray">
+              診断結果と「改善のヒント」を、メールでお届けします。
+            </p>
+            <form id="mail-form" action={FORMSPREE_ENDPOINT} method="POST" class="mx-auto mt-4 flex max-w-md flex-col gap-2 sm:flex-row">
+              <!-- ハニーポット（スパム対策） -->
+              <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+              <input
+                id="mail-input"
+                type="email"
+                name="email"
+                required
+                placeholder="メールアドレス"
+                class="w-full flex-1 rounded-full border border-mist px-5 py-3 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy"
+              />
+              <button type="submit" class="btn-outline shrink-0 !px-6 !py-3 text-sm">
+                結果をメールで受け取る
+              </button>
+            </form>
+            <p id="mail-done" class="mt-3 hidden text-sm font-bold leading-relaxed text-navy" role="status"></p>
+            <p id="mail-error" class="mt-2 hidden text-xs text-pink" role="alert"></p>
+          </div>
+
           <div class="mt-6 text-center">
             <button id="retry" class="text-sm font-bold text-navy underline underline-offset-4 hover:text-pink">
               別のサイトを診断する
@@ -187,6 +216,7 @@ const checkSteps = [
     };
 
     const colorHex = { red: '#E43172', yellow: '#C8A951', green: '#1F9D6B' };
+    let lastResult = null; // 副CTA（メール受取）に引き継ぐ最新の診断結果
 
     // ── 診断中アニメ：チェック項目を順に点灯 ──
     let stepTimers = [];
@@ -223,6 +253,12 @@ const checkSteps = [
 
     // ── 結果レンダリング ──
     function renderResult(data) {
+      lastResult = data;
+      // 副CTA（メール受取）を初期状態に戻す（再診断時）
+      $('mail-form').classList.remove('hidden');
+      $('mail-form').reset();
+      $('mail-done').classList.add('hidden');
+      $('mail-error').classList.add('hidden');
       $('result-url').textContent = data.url;
       $('band-message').textContent = data.bandMessage;
 
@@ -358,6 +394,44 @@ const checkSteps = [
     $('retry').addEventListener('click', () => {
       $('url-input').value = '';
       show('input');
+    });
+
+    // ── 副CTA：結果をメールで受け取る（Formspreeでリード取得）──
+    const mailForm = $('mail-form');
+    mailForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errP = $('mail-error');
+      errP.classList.add('hidden');
+      const email = $('mail-input').value.trim();
+      if (!email) return;
+
+      const fd = new FormData(mailForm); // email と _gotcha を含む
+      fd.append('種別', 'Web診断 結果メール希望');
+      fd.append('_subject', '【plugdo】Web診断 結果メールのご希望');
+      if (lastResult) {
+        fd.append('診断URL', lastResult.url);
+        fd.append('総合スコア', String(lastResult.total) + '点');
+      }
+      try {
+        const res = await fetch(mailForm.action, {
+          method: 'POST',
+          body: fd,
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          mailForm.classList.add('hidden');
+          const done = $('mail-done');
+          done.textContent =
+            'ありがとうございます。担当者より、診断結果と改善のヒントをメールでお送りします。';
+          done.classList.remove('hidden');
+        } else {
+          errP.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
+          errP.classList.remove('hidden');
+        }
+      } catch {
+        errP.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
+        errP.classList.remove('hidden');
+      }
     });
   })();
 </script>
