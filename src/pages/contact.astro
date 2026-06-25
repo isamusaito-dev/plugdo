@@ -160,6 +160,18 @@ const breadcrumbLd = {
 </BaseLayout>
 
 <script is:inline>
+  // 自動Web診断（/check）からの遷移時：URL・スコアを相談内容に前埋め（連続体験）
+  const checkUrl = new URLSearchParams(window.location.search).get('url');
+  const checkScore = new URLSearchParams(window.location.search).get('score');
+  if (checkUrl) {
+    const messageEl = document.getElementById('message');
+    if (messageEl && !messageEl.value) {
+      const scoreLine = checkScore ? `（自動診断スコア：${checkScore}点）` : '';
+      messageEl.value =
+        `自動Web診断を受けて相談したいです。\n対象サイト：${checkUrl}${scoreLine}\n\n結果をもとに、改善の優先順位と進め方を教えてください。`;
+    }
+  }
+
   // 成功リダイレクト時にサンクスメッセージを表示
   const params = new URLSearchParams(window.location.search);
   if (params.get('success') === 'true') {

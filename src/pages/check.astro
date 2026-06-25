@@ -1,0 +1,357 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
+    { '@type': 'ListItem', position: 2, name: '無料Web診断', item: 'https://plugdo.jp/check/' },
+  ],
+};
+
+// 診断中に順番に点灯するチェック項目（仕様書 §2 画面②。専門用語は使わない）。
+const checkSteps = [
+  '第一印象をチェック中…',
+  '何の会社か伝わるか確認中…',
+  '問い合わせのしやすさを確認中…',
+  'スマホ表示をチェック中…',
+  '検索・AIに見つけてもらえるか確認中…',
+];
+---
+
+<BaseLayout
+  title="無料Web診断｜URLを入れるだけ、30秒で採点"
+  description="ホームページのURLを入れるだけ。プロのWebデザイナーが設計した診断ロジックが、30秒で「問い合わせにつながる状態か」を5つの視点で採点します。中小企業の経営者向け、無料。"
+  jsonLd={breadcrumbLd}
+>
+  <!-- ══ 画面① 入口（URL入力） ══ -->
+  <section id="screen-input" class="hero-gradient">
+    <div class="container-pd py-16 md:py-24">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="section-label justify-center">- Web Check -</p>
+        <h1 class="section-title mt-2">
+          そのホームページ、<br class="md:hidden" />問い合わせに<br />つながっていますか？
+        </h1>
+        <p class="mt-6 text-base leading-relaxed text-ink md:text-lg">
+          URLを入れるだけ。30秒で、プロの視点であなたのサイトを採点します。
+        </p>
+
+        <form id="check-form" class="mx-auto mt-8 max-w-xl">
+          <div class="flex flex-col gap-3 sm:flex-row">
+            <input
+              id="url-input"
+              type="text"
+              inputmode="url"
+              autocomplete="url"
+              required
+              placeholder="例：plugdo.jp"
+              class="w-full flex-1 rounded-full border border-mist px-6 py-4 text-base shadow-sm focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/20"
+            />
+            <button type="submit" class="btn-pink shrink-0 whitespace-nowrap !px-8 !py-4">
+              無料で診断する
+            </button>
+          </div>
+          <p id="input-error" class="mt-3 hidden text-sm font-bold text-pink" role="alert"></p>
+        </form>
+
+        <p class="mt-6 text-xs text-gray">
+          ＊ プロのWebデザイナーが設計した診断ロジック。入力されたURLは診断のみに利用します。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 画面② 診断中 ══ -->
+  <section id="screen-loading" class="hidden">
+    <div class="container-pd py-20 md:py-28">
+      <div class="mx-auto max-w-md text-center">
+        <p class="font-display text-sm font-semibold uppercase tracking-[0.2em] text-pink">
+          Analyzing
+        </p>
+        <p id="loading-url" class="mt-2 break-all text-sm text-gray"></p>
+        <h2 class="mt-3 text-2xl font-black text-navy">プロの視点で診断しています</h2>
+
+        <ul class="mx-auto mt-10 max-w-sm space-y-4 text-left">
+          {
+            checkSteps.map((step, i) => (
+              <li
+                class="check-step flex items-center gap-3 text-sm text-gray opacity-40 transition-all duration-500"
+                data-step={i}
+              >
+                <span class="check-dot flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-mist">
+                  <span class="check-spinner hidden h-3 w-3 animate-spin rounded-full border-2 border-pink border-t-transparent" />
+                  <svg class="check-done hidden h-4 w-4 text-paper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </span>
+                <span class="check-label font-bold">{step}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 画面③ 結果 ══ -->
+  <section id="screen-result" class="hidden">
+    <div class="container-pd py-16 md:py-20">
+      <div class="mx-auto max-w-3xl">
+        <p class="reveal text-center text-sm text-gray" data-reveal="0">
+          診断結果：<span id="result-url" class="break-all font-bold text-navy"></span>
+        </p>
+
+        <!-- 総合スコア ゲージ -->
+        <div class="reveal mt-6 text-center" data-reveal="1">
+          <div class="relative mx-auto h-48 w-48">
+            <svg class="h-full w-full -rotate-90" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="52" fill="none" stroke="#EBEEF2" stroke-width="12" />
+              <circle
+                id="gauge-arc"
+                cx="60"
+                cy="60"
+                r="52"
+                fill="none"
+                stroke="#E43172"
+                stroke-width="12"
+                stroke-linecap="round"
+                stroke-dasharray="326.7"
+                stroke-dashoffset="326.7"
+                style="transition: stroke-dashoffset 1.4s cubic-bezier(0.22,1,0.36,1);"
+              />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="gauge-number" class="font-display text-5xl font-black text-navy">0</span>
+              <span class="text-xs font-bold tracking-wider text-gray">/ 100点</span>
+            </div>
+          </div>
+          <p id="band-message" class="mx-auto mt-5 max-w-md text-base font-bold leading-relaxed text-navy"></p>
+        </div>
+
+        <!-- 5軸スコア -->
+        <div class="reveal mt-12" data-reveal="2">
+          <h3 class="text-lg font-black text-navy">5つの視点で見ると</h3>
+          <div id="axes" class="mt-5 space-y-5"></div>
+        </div>
+
+        <!-- 気づき -->
+        <div class="reveal mt-12" data-reveal="3">
+          <h3 class="text-lg font-black text-navy">見つかった“もったいない”ポイント</h3>
+          <ul id="findings" class="mt-5 space-y-3"></ul>
+        </div>
+
+        <!-- ゲート＋CTA -->
+        <div class="reveal mt-12" data-reveal="4">
+          <div class="card border-pink/30 bg-pink/5 p-7 text-center md:p-9">
+            <p class="text-base font-bold leading-relaxed text-navy">
+              <span id="remaining-count" class="text-pink">あと数個</span>の改善ポイントが見つかっています。
+            </p>
+            <p class="mt-3 text-sm leading-relaxed text-ink">
+              具体的な直し方と「何から手をつけるべきか」は、<br class="hidden sm:block" />
+              無料診断でプロが、あなたのサイトに合わせて解説します。
+            </p>
+            <a id="cta-primary" href="/contact/" class="btn-pink mt-6 w-full sm:w-auto">
+              この結果をもとに、無料で詳しく診てもらう
+            </a>
+            <p class="mt-4 text-xs text-gray">無料・オンライン30分・契約不要</p>
+          </div>
+
+          <div class="mt-6 text-center">
+            <button id="retry" class="text-sm font-bold text-navy underline underline-offset-4 hover:text-pink">
+              別のサイトを診断する
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const screens = {
+      input: $('screen-input'),
+      loading: $('screen-loading'),
+      result: $('screen-result'),
+    };
+    const show = (name) => {
+      Object.entries(screens).forEach(([k, el]) => el.classList.toggle('hidden', k !== name));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const colorHex = { red: '#E43172', yellow: '#C8A951', green: '#1F9D6B' };
+
+    // ── 診断中アニメ：チェック項目を順に点灯 ──
+    let stepTimers = [];
+    function runLoadingAnimation() {
+      const steps = Array.from(document.querySelectorAll('.check-step'));
+      stepTimers.forEach(clearTimeout);
+      stepTimers = [];
+      steps.forEach((el) => {
+        el.classList.add('opacity-40');
+        el.querySelector('.check-dot').classList.remove('bg-pink', 'border-pink');
+        el.querySelector('.check-spinner').classList.add('hidden');
+        el.querySelector('.check-done').classList.add('hidden');
+      });
+      steps.forEach((el, i) => {
+        // 点灯（スピナー表示）
+        stepTimers.push(
+          setTimeout(() => {
+            el.classList.remove('opacity-40');
+            el.querySelector('.check-dot').classList.add('border-pink');
+            el.querySelector('.check-spinner').classList.remove('hidden');
+          }, i * 900 + 200)
+        );
+        // 完了（チェック表示）
+        stepTimers.push(
+          setTimeout(() => {
+            const dot = el.querySelector('.check-dot');
+            dot.classList.add('bg-pink');
+            el.querySelector('.check-spinner').classList.add('hidden');
+            el.querySelector('.check-done').classList.remove('hidden');
+          }, i * 900 + 900)
+        );
+      });
+    }
+
+    // ── 結果レンダリング ──
+    function renderResult(data) {
+      $('result-url').textContent = data.url;
+      $('band-message').textContent = data.bandMessage;
+
+      // ゲージ
+      const circumference = 326.7;
+      const arc = $('gauge-arc');
+      arc.setAttribute('stroke', colorHex[data.total >= 75 ? 'green' : data.total >= 50 ? 'yellow' : 'red']);
+      arc.style.strokeDashoffset = String(circumference);
+      // 数字カウントアップ
+      const numEl = $('gauge-number');
+      let start = null;
+      const duration = 1400;
+      function tick(ts) {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        numEl.textContent = String(Math.round(data.total * eased));
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(() => {
+        arc.style.strokeDashoffset = String(circumference * (1 - data.total / 100));
+        requestAnimationFrame(tick);
+      });
+
+      // 5軸バー
+      const axesEl = $('axes');
+      axesEl.innerHTML = '';
+      data.axes.forEach((ax, i) => {
+        const row = document.createElement('div');
+        row.innerHTML =
+          '<div class="flex items-center justify-between text-sm">' +
+          '<span class="font-bold text-navy">' + ax.label + '</span>' +
+          '<span class="font-display font-bold" style="color:' + colorHex[ax.color] + '">' + ax.score + '</span>' +
+          '</div>' +
+          '<div class="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-mist">' +
+          '<div class="axis-bar h-full rounded-full" style="width:0%;background:' + colorHex[ax.color] + ';transition:width 1s cubic-bezier(0.22,1,0.36,1) ' + (0.3 + i * 0.12) + 's"></div>' +
+          '</div>';
+        axesEl.appendChild(row);
+        requestAnimationFrame(() => {
+          row.querySelector('.axis-bar').style.width = ax.score + '%';
+        });
+      });
+
+      // 気づき
+      const fEl = $('findings');
+      fEl.innerHTML = '';
+      data.findings.forEach((text) => {
+        const li = document.createElement('li');
+        li.className = 'flex gap-3 rounded-lg border border-mist bg-paper p-4 text-sm leading-relaxed text-ink';
+        li.innerHTML =
+          '<span class="mt-0.5 shrink-0 text-pink">●</span><span>' + text + '</span>';
+        fEl.appendChild(li);
+      });
+
+      // ゲート残数
+      $('remaining-count').textContent =
+        data.remainingCount > 0 ? 'あと' + data.remainingCount + '個' : 'さらに細かな';
+
+      // CTAにURL・スコアを引き継ぐ（画面④を前埋め）
+      const params = new URLSearchParams({ url: data.url, score: String(data.total) });
+      $('cta-primary').href = '/contact/?' + params.toString();
+
+      // リビール（上から順に出す）
+      document.querySelectorAll('.reveal').forEach((el) => {
+        const delay = parseInt(el.dataset.reveal, 10) * 140;
+        setTimeout(() => el.classList.add('is-in'), delay + 60);
+      });
+    }
+
+    // ── 送信 ──
+    const form = $('check-form');
+    const errEl = $('input-error');
+    let analyzeStart = 0;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errEl.classList.add('hidden');
+      const url = $('url-input').value.trim();
+      if (!url) {
+        errEl.textContent = 'URLを入力してください。';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      $('loading-url').textContent = url;
+      show('loading');
+      runLoadingAnimation();
+      analyzeStart = Date.now();
+
+      try {
+        const res = await fetch('/api/check', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ url }),
+        });
+        const data = await res.json();
+
+        // 演出を最低限見せる（最短4.5秒）。
+        const wait = Math.max(0, 4500 - (Date.now() - analyzeStart));
+        setTimeout(() => {
+          if (!res.ok) {
+            errEl.textContent = data.error || '診断に失敗しました。時間をおいて再度お試しください。';
+            errEl.classList.remove('hidden');
+            show('input');
+            return;
+          }
+          renderResult(data);
+          show('result');
+        }, wait);
+      } catch {
+        const wait = Math.max(0, 1500 - (Date.now() - analyzeStart));
+        setTimeout(() => {
+          errEl.textContent = 'サイトを読み込めませんでした。URLをご確認ください。';
+          errEl.classList.remove('hidden');
+          show('input');
+        }, wait);
+      }
+    });
+
+    $('retry').addEventListener('click', () => {
+      $('url-input').value = '';
+      show('input');
+    });
+  })();
+</script>
+
+<style>
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.is-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
