@@ -132,7 +132,10 @@ const checkSteps = [
         <!-- 5軸スコア -->
         <div class="reveal mt-12" data-reveal="2">
           <h3 class="text-lg font-black text-navy">5つの視点で見ると</h3>
-          <div id="axes" class="mt-5 space-y-5"></div>
+          <p class="mt-1.5 text-xs leading-relaxed text-gray">
+            各項目は、あなたのサイトを実際にチェックした結果です（<span class="font-bold text-navy">✓</span>＝できている／<span class="font-bold text-pink">✕</span>＝もったいない）。
+          </p>
+          <div id="axes" class="mt-5 space-y-6"></div>
         </div>
 
         <!-- 気づき -->
@@ -171,6 +174,8 @@ const checkSteps = [
 <script is:inline>
   (function () {
     const $ = (id) => document.getElementById(id);
+    const esc = (s) =>
+      String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const screens = {
       input: $('screen-input'),
       loading: $('screen-loading'),
@@ -247,6 +252,18 @@ const checkSteps = [
       axesEl.innerHTML = '';
       data.axes.forEach((ax, i) => {
         const row = document.createElement('div');
+        const evHtml = (ax.evidence || [])
+          .map(function (e) {
+            const mark =
+              '<span style="color:' + (e.ok ? '#1F9D6B' : '#E43172') + ';font-weight:700">' +
+              (e.ok ? '✓' : '✕') + '</span>';
+            const val = e.value ? ' <span class="text-gray/60">' + esc(e.value) + '</span>' : '';
+            return (
+              '<span class="inline-flex items-center gap-1 text-xs ' +
+              (e.ok ? 'text-ink' : 'text-gray') + '">' + mark + esc(e.label) + val + '</span>'
+            );
+          })
+          .join('');
         row.innerHTML =
           '<div class="flex items-center justify-between text-sm">' +
           '<span class="font-bold text-navy">' + ax.label + '</span>' +
@@ -254,7 +271,8 @@ const checkSteps = [
           '</div>' +
           '<div class="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-mist">' +
           '<div class="axis-bar h-full rounded-full" style="width:0%;background:' + colorHex[ax.color] + ';transition:width 1s cubic-bezier(0.22,1,0.36,1) ' + (0.3 + i * 0.12) + 's"></div>' +
-          '</div>';
+          '</div>' +
+          '<div class="mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5">' + evHtml + '</div>';
         axesEl.appendChild(row);
         requestAnimationFrame(() => {
           row.querySelector('.axis-bar').style.width = ax.score + '%';
@@ -268,7 +286,7 @@ const checkSteps = [
         const li = document.createElement('li');
         li.className = 'flex gap-3 rounded-lg border border-mist bg-paper p-4 text-sm leading-relaxed text-ink';
         li.innerHTML =
-          '<span class="mt-0.5 shrink-0 text-pink">●</span><span>' + text + '</span>';
+          '<span class="mt-0.5 shrink-0 text-pink">●</span><span>' + esc(text) + '</span>';
         fEl.appendChild(li);
       });
 

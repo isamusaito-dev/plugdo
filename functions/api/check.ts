@@ -193,14 +193,13 @@ function deterministicScore(x: Extracted): DetResult {
   else issues.push('「相談する」などの行動ボタンが弱いです');
   if (x.ctaCount >= 2) contact += 10;
 
-  // ④ スマホ対応（15%）
-  let mobile = 0;
-  if (x.hasViewport) mobile += 60;
-  else issues.push('スマホ表示の基本設定（viewport）が無く、崩れている可能性があります');
-  if (x.hasMediaQuery) mobile += 40;
-  else {
-    mobile += 15; // 外部CSSで対応している可能性があるため0にはしない
-    issues.push('スマホ向けのレイアウト切り替えが確認できません');
+  // ④ スマホ対応（15%）：viewport が主信号。外部CSS内の媒体クエリは取得できないため、
+  // 「無い」ことを減点・指摘しない（Tailwind等のレスポンシブサイトでの誤検出を防ぐ）。
+  let mobile = x.hasViewport ? 85 : 25;
+  if (x.hasViewport) {
+    if (x.hasMediaQuery) mobile += 15; // インラインで確認できた場合のみ加点
+  } else {
+    issues.push('スマホ表示の基本設定（viewport）が無く、崩れている可能性があります');
   }
 
   // ⑤ 見つけてもらえるか（15%）
@@ -233,6 +232,47 @@ function deterministicScore(x: Extracted): DetResult {
     findability: clamp(findability),
     impressionDet: clamp(impressionDet),
     issues,
+  };
+}
+
+// ── 根拠（各軸の「なぜこの点数か」＝実際のチェック結果・実物引用） ──
+
+interface EvidenceItem {
+  label: string;
+  ok: boolean;
+  value?: string; // 実物の引用や件数（例：ページタイトル文字列、CTA件数）
+}
+
+const truncate = (s: string, n = 42): string => (s.length > n ? s.slice(0, n) + '…' : s);
+
+/** 点数の根拠を軸ごとに返す。サイトの実物（タイトル・見出し）を引用して信頼性を上げる。 */
+function buildEvidence(x: Extracted): Record<AxisKey, EvidenceItem[]> {
+  const altPct = x.imgTotal === 0 ? 100 : Math.round((x.imgWithAlt / x.imgTotal) * 100);
+  const titleOk = !!x.title && x.title.length >= 10;
+  return {
+    impression: [
+      { label: '通信の暗号化（HTTPS）', ok: x.isHttps },
+      { label: 'タブに出るアイコン', ok: x.hasFavicon },
+      { label: 'スマホ表示の基本設定', ok: x.hasViewport },
+    ],
+    clarity: [
+      { label: 'ページの見出し', ok: titleOk, value: x.title ? `「${truncate(x.title)}」` : '未設定' },
+      { label: '最初の大見出し', ok: x.h1s.length > 0, value: x.h1s[0] ? `「${truncate(x.h1s[0])}」` : '未検出' },
+    ],
+    contact: [
+      { label: '問い合わせへのリンク', ok: x.hasContactLink },
+      { label: '問い合わせフォーム', ok: x.hasForm },
+      { label: '電話のタップ発信', ok: x.hasTelLink },
+      { label: '行動をうながすボタン', ok: x.ctaCount >= 1, value: `${x.ctaCount}件` },
+    ],
+    mobile: [{ label: 'スマホ表示の基本設定（viewport）', ok: x.hasViewport }],
+    findability: [
+      { label: '検索結果に出るタイトル', ok: titleOk, value: x.title ? `「${truncate(x.title)}」` : '未設定' },
+      { label: '検索結果に出る説明文', ok: !!x.metaDescription },
+      { label: '主役の見出し（h1）', ok: x.h1s.length > 0 },
+      { label: 'AI検索向けの情報設定', ok: x.hasJsonLd },
+      { label: '画像の説明文', ok: altPct >= 60, value: x.imgTotal ? `${altPct}%` : '画像なし' },
+    ],
   };
 }
 
@@ -423,6 +463,8 @@ export async function onRequestPost(context: EventContext): Promise<Response> {
   const allIssues = new Set([...det.issues, ...qual.findings.map((f) => f.text)]);
   const remainingCount = Math.max(0, allIssues.size - findings.length);
 
+  const evidenceMap = buildEvidence(x);
+
   return json({
     url: target.href,
     title: x.title,
@@ -433,6 +475,7 @@ export async function onRequestPost(context: EventContext): Promise<Response> {
       label: AXES[k].label,
       score: axisScores[k],
       color: colorFor(axisScores[k]),
+      evidence: evidenceMap[k],
     })),
     findings,
     remainingCount,
