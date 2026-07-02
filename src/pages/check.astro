@@ -97,6 +97,12 @@ const checkSteps = [
             ))
           }
         </ul>
+
+        <!-- チェック完了後〜結果表示までの待ち時間を埋める -->
+        <div id="analyze-finalizing" class="mt-9 hidden items-center justify-center gap-2.5 text-sm font-bold text-navy">
+          <span class="h-4 w-4 animate-spin rounded-full border-2 border-pink border-t-transparent"></span>
+          <span>結果をまとめています…</span>
+        </div>
       </div>
     </div>
   </section>
@@ -138,11 +144,11 @@ const checkSteps = [
 
         <!-- 5軸スコア -->
         <div class="reveal mt-12" data-reveal="2">
-          <h3 class="text-lg font-black text-navy">5つの視点で見ると</h3>
+          <h3 class="text-lg font-black text-navy">7つの視点で見ると</h3>
           <p class="mt-1.5 text-xs leading-relaxed text-gray">
-            各項目は、あなたのサイトを実際にチェックした結果です（<span class="font-bold text-navy">✓</span>＝できている／<span class="font-bold text-pink">✕</span>＝もったいない）。
+            各項目は、あなたのサイトを実際にチェックした結果です（<span class="font-bold" style="color:#1F9D6B">✓</span>＝できている／<span class="font-bold text-pink">✕</span>＝もったいない）。
           </p>
-          <div id="axes" class="mt-5 space-y-6"></div>
+          <div id="axes" class="mt-5 space-y-3"></div>
         </div>
 
         <!-- 気づき -->
@@ -227,12 +233,22 @@ const checkSteps = [
       const steps = Array.from(document.querySelectorAll('.check-step'));
       stepTimers.forEach(clearTimeout);
       stepTimers = [];
+      const fin = $('analyze-finalizing');
+      fin.classList.add('hidden');
+      fin.classList.remove('flex');
       steps.forEach((el) => {
         el.classList.add('opacity-40');
         el.querySelector('.check-dot').classList.remove('bg-pink', 'border-pink');
         el.querySelector('.check-spinner').classList.add('hidden');
         el.querySelector('.check-done').classList.add('hidden');
       });
+      // 全ステップ完了後、結果がまだなら「まとめています…」を表示
+      stepTimers.push(
+        setTimeout(() => {
+          fin.classList.remove('hidden');
+          fin.classList.add('flex');
+        }, steps.length * 720 + 850)
+      );
       steps.forEach((el, i) => {
         // 点灯（スピナー表示）
         stepTimers.push(
@@ -286,11 +302,13 @@ const checkSteps = [
         requestAnimationFrame(tick);
       });
 
-      // 5軸バー
+      // 7軸カード
       const axesEl = $('axes');
       axesEl.innerHTML = '';
+      const tint = { red: '#FCE9F0', yellow: '#F7F1DE', green: '#E4F3EC' };
       data.axes.forEach((ax, i) => {
         const row = document.createElement('div');
+        row.className = 'rounded-xl border border-mist bg-paper p-4 md:p-5';
         const evHtml = (ax.evidence || [])
           .map(function (e) {
             const mark =
@@ -304,14 +322,15 @@ const checkSteps = [
           })
           .join('');
         row.innerHTML =
-          '<div class="flex items-center justify-between text-sm">' +
+          '<div class="flex items-center justify-between gap-3">' +
           '<span class="font-bold text-navy">' + ax.label + '</span>' +
-          '<span class="font-display font-bold" style="color:' + colorHex[ax.color] + '">' + ax.score + '</span>' +
+          '<span class="inline-flex min-w-[2.6rem] justify-center rounded-full px-2.5 py-0.5 font-display text-sm font-bold" ' +
+          'style="color:' + colorHex[ax.color] + ';background:' + tint[ax.color] + '">' + ax.score + '</span>' +
           '</div>' +
-          '<div class="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-mist">' +
-          '<div class="axis-bar h-full rounded-full" style="width:0%;background:' + colorHex[ax.color] + ';transition:width 1s cubic-bezier(0.22,1,0.36,1) ' + (0.3 + i * 0.12) + 's"></div>' +
+          '<div class="mt-3 h-2 w-full overflow-hidden rounded-full bg-mist">' +
+          '<div class="axis-bar h-full rounded-full" style="width:0%;background:' + colorHex[ax.color] + ';transition:width 1s cubic-bezier(0.22,1,0.36,1) ' + (0.3 + i * 0.1) + 's"></div>' +
           '</div>' +
-          '<div class="mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5">' + evHtml + '</div>';
+          '<div class="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 border-t border-mist pt-3">' + evHtml + '</div>';
         axesEl.appendChild(row);
         requestAnimationFrame(() => {
           row.querySelector('.axis-bar').style.width = ax.score + '%';
