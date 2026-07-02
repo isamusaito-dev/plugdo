@@ -14,13 +14,15 @@ const breadcrumbLd = {
 const FORMSPREE_ENDPOINT =
   import.meta.env.PUBLIC_FORMSPREE_ENDPOINT || 'https://formspree.io/f/mwvjwbll';
 
-// 診断中に順番に点灯するチェック項目（仕様書 §2 画面②。専門用語は使わない）。
+// 診断中に順番に点灯するチェック項目（7軸。専門用語は使わない）。
 const checkSteps = [
   '第一印象をチェック中…',
   '何の会社か伝わるか確認中…',
   '問い合わせのしやすさを確認中…',
   'スマホ表示をチェック中…',
   '検索・AIに見つけてもらえるか確認中…',
+  '実績・お客様の声を確認中…',
+  'ページの表示速度をチェック中…',
 ];
 ---
 
@@ -152,8 +154,8 @@ const checkSteps = [
         <!-- ゲート＋CTA -->
         <div class="reveal mt-12" data-reveal="4">
           <div class="card border-pink/30 bg-pink/5 p-7 text-center md:p-9">
-            <p class="text-base font-bold leading-relaxed text-navy">
-              <span id="remaining-count" class="text-pink">あと数個</span>の改善ポイントが見つかっています。
+            <p id="gate-headline" class="text-base font-bold leading-relaxed text-navy">
+              <span class="text-pink">あと数個</span>の改善ポイントが見つかっています。
             </p>
             <p class="mt-3 text-sm leading-relaxed text-ink">
               具体的な直し方と「何から手をつけるべきか」は、<br class="hidden sm:block" />
@@ -238,7 +240,7 @@ const checkSteps = [
             el.classList.remove('opacity-40');
             el.querySelector('.check-dot').classList.add('border-pink');
             el.querySelector('.check-spinner').classList.remove('hidden');
-          }, i * 900 + 200)
+          }, i * 720 + 200)
         );
         // 完了（チェック表示）
         stepTimers.push(
@@ -247,7 +249,7 @@ const checkSteps = [
             dot.classList.add('bg-pink');
             el.querySelector('.check-spinner').classList.add('hidden');
             el.querySelector('.check-done').classList.remove('hidden');
-          }, i * 900 + 900)
+          }, i * 720 + 720)
         );
       });
     }
@@ -316,20 +318,31 @@ const checkSteps = [
         });
       });
 
-      // 気づき
+      // 気づき（根拠つき）
       const fEl = $('findings');
       fEl.innerHTML = '';
-      data.findings.forEach((text) => {
+      data.findings.forEach((f) => {
+        // 後方互換：文字列でもオブジェクト{text,evidence}でも受ける
+        const text = typeof f === 'string' ? f : f.text;
+        const evidence = typeof f === 'string' ? '' : f.evidence;
         const li = document.createElement('li');
         li.className = 'flex gap-3 rounded-lg border border-mist bg-paper p-4 text-sm leading-relaxed text-ink';
+        const ev = evidence
+          ? '<span class="mt-1.5 block text-xs text-gray">根拠：' + esc(evidence) + '</span>'
+          : '';
         li.innerHTML =
-          '<span class="mt-0.5 shrink-0 text-pink">●</span><span>' + esc(text) + '</span>';
+          '<span class="mt-0.5 shrink-0 text-pink">●</span><span>' + esc(text) + ev + '</span>';
         fEl.appendChild(li);
       });
 
-      // ゲート残数
-      $('remaining-count').textContent =
-        data.remainingCount > 0 ? 'あと' + data.remainingCount + '個' : 'さらに細かな';
+      // ゲート見出し：高得点でも「次のレベルの改善」で予約導線を残す（追補仕様書 §6）
+      const gh = $('gate-headline');
+      if (data.total >= 80) {
+        gh.innerHTML = '<span class="text-pink">上位クラスの完成度</span>です。あと数点で“さらに伸びる”状態になります。';
+      } else {
+        const label = data.remainingCount > 0 ? 'あと' + data.remainingCount + '個' : 'さらに細かな';
+        gh.innerHTML = '<span class="text-pink">' + label + '</span>の改善ポイントが見つかっています。';
+      }
 
       // CTAにURL・スコアを引き継ぐ（画面④を前埋め）
       const params = new URLSearchParams({ url: data.url, score: String(data.total) });
@@ -370,8 +383,8 @@ const checkSteps = [
         });
         const data = await res.json();
 
-        // 演出を最低限見せる（最短4.5秒）。
-        const wait = Math.max(0, 4500 - (Date.now() - analyzeStart));
+        // 演出を最低限見せる（7ステップ完了まで＝約5.2秒）。
+        const wait = Math.max(0, 5200 - (Date.now() - analyzeStart));
         setTimeout(() => {
           if (!res.ok) {
             errEl.textContent = data.error || '診断に失敗しました。時間をおいて再度お試しください。';
