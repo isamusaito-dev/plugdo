@@ -179,7 +179,54 @@ const serviceLd = {
         <p class="section-label">- Problem -</p>
         <h2 class="section-title">こんな状態、<br class="sm:hidden" />ありませんか。</h2>
       </div>
-      <div class="mx-auto mt-10 grid max-w-4xl gap-x-10 gap-y-8 md:grid-cols-2">
+
+      <!-- フラットイラスト：放置された古いサイト（PCは止まったまま／スマホは崩れている） -->
+      <div class="mx-auto mt-10 max-w-2xl" data-animate>
+        <svg viewBox="0 0 480 260" class="w-full" role="img" aria-label="更新が止まり、スマホ表示も崩れた古いホームページのイメージ">
+          <!-- PCブラウザ本体 -->
+          <rect x="24" y="30" width="312" height="212" rx="14" fill="#FFFFFF" stroke="#EBEEF2" stroke-width="2"/>
+          <!-- タイトルバー -->
+          <path d="M24 44a14 14 0 0 1 14-14h284a14 14 0 0 1 14 14v14H24z" fill="#EAF3FB"/>
+          <circle cx="46" cy="44" r="4" fill="#103366" opacity="0.18"/>
+          <circle cx="62" cy="44" r="4" fill="#103366" opacity="0.18"/>
+          <circle cx="78" cy="44" r="4" fill="#103366" opacity="0.18"/>
+          <rect x="104" y="37" width="150" height="14" rx="7" fill="#FFFFFF"/>
+          <!-- 本文（色あせて放置された印象） -->
+          <rect x="48" y="82" width="130" height="16" rx="4" fill="#103366" opacity="0.12"/>
+          <rect x="48" y="112" width="240" height="9" rx="4.5" fill="#EBEEF2"/>
+          <rect x="48" y="130" width="210" height="9" rx="4.5" fill="#EBEEF2"/>
+          <rect x="48" y="148" width="228" height="9" rx="4.5" fill="#EBEEF2"/>
+          <!-- 画像プレースホルダ（山アイコン） -->
+          <rect x="48" y="176" width="120" height="46" rx="8" fill="#EAF3FB"/>
+          <circle cx="70" cy="192" r="6" fill="#103366" opacity="0.15"/>
+          <path d="M56 214l20-18 14 12 10-8 16 14z" fill="#103366" opacity="0.15"/>
+          <rect x="180" y="176" width="108" height="46" rx="8" fill="#EBEEF2"/>
+          <!-- 「止まっている」時計バッジ -->
+          <circle cx="300" cy="58" r="26" fill="#FFFFFF" stroke="#EBEEF2" stroke-width="2"/>
+          <circle cx="300" cy="58" r="26" fill="none" stroke="#103366" stroke-width="2" stroke-opacity="0.12"/>
+          <line x1="300" y1="58" x2="300" y2="44" stroke="#103366" stroke-width="2.4" stroke-linecap="round"/>
+          <line x1="300" y1="58" x2="311" y2="63" stroke="#103366" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="300" cy="58" r="2.4" fill="#103366"/>
+
+          <!-- スマホ（崩れた表示） -->
+          <rect x="320" y="96" width="118" height="150" rx="18" fill="#103366"/>
+          <rect x="329" y="108" width="100" height="126" rx="8" fill="#FFFFFF"/>
+          <!-- 画面からはみ出す＝レイアウト崩れ -->
+          <rect x="337" y="120" width="118" height="12" rx="4" fill="#EBEEF2"/>
+          <rect x="337" y="140" width="70" height="8" rx="4" fill="#EBEEF2"/>
+          <rect x="337" y="156" width="104" height="8" rx="4" fill="#EBEEF2"/>
+          <rect x="337" y="176" width="54" height="26" rx="6" fill="#EAF3FB"/>
+          <rect x="399" y="176" width="52" height="26" rx="6" fill="#EBEEF2"/>
+          <!-- 崩れ強調ライン -->
+          <rect x="337" y="212" width="96" height="8" rx="4" fill="#EBEEF2"/>
+          <!-- 警告バッジ -->
+          <circle cx="332" cy="104" r="15" fill="#E43172"/>
+          <rect x="330.5" y="97" width="3" height="8" rx="1.5" fill="#FFFFFF"/>
+          <circle cx="332" cy="109.5" r="1.8" fill="#FFFFFF"/>
+        </svg>
+      </div>
+
+      <div class="mx-auto mt-12 grid max-w-4xl gap-x-10 gap-y-8 md:grid-cols-2">
         {
           problems.map((p) => (
             <div class="border-t border-navy/10 pt-5">
@@ -244,20 +291,35 @@ const serviceLd = {
           入口は無料のAI診断。そこから必要なものだけを選べます。
         </p>
       </div>
-      <ol class="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-4">
-        {
-          steps.map((s) => (
-            <li class="border-t-2 border-navy pt-4">
-              <div class="flex items-center justify-between gap-2">
-                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-mist text-navy" set:html={s.icon} />
-                <span class="font-display text-xs font-bold tracking-widest text-gray">STEP {s.no}</span>
-              </div>
-              <h3 class="mt-3 text-base font-bold text-navy">{s.title}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-gray">{s.desc}</p>
-            </li>
-          ))
-        }
-      </ol>
+      <div class="relative mx-auto mt-12 max-w-4xl">
+        <!-- 横プログレスライン（PC：ノード中心を結ぶ） -->
+        <div class="absolute left-[12.5%] right-[12.5%] top-5 hidden h-0.5 bg-mist md:block" aria-hidden="true"></div>
+        <ol class="grid gap-0 md:grid-cols-4 md:gap-4">
+          {
+            steps.map((s, i) => (
+              <li class="relative flex items-start gap-4 pb-8 last:pb-0 md:flex-col md:items-center md:gap-0 md:pb-0 md:text-center">
+                {i < steps.length - 1 && (
+                  <span
+                    class="absolute left-5 top-11 h-[calc(100%-2.75rem)] w-0.5 -translate-x-1/2 bg-mist md:hidden"
+                    aria-hidden="true"
+                  />
+                )}
+                <span class="relative z-10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-navy font-display text-base font-black text-white ring-4 ring-paper [font-variant-numeric:tabular-nums]">
+                  {s.no}
+                </span>
+                <div class="pt-1.5 md:mt-4 md:pt-0">
+                  <div class="mb-1 flex items-center gap-2 md:justify-center">
+                    <span class="inline-flex h-5 w-5 items-center justify-center text-pink" set:html={s.icon} />
+                    <span class="font-display text-[10px] font-bold uppercase tracking-widest text-gray">STEP {s.no}</span>
+                  </div>
+                  <h3 class="text-base font-bold text-navy">{s.title}</h3>
+                  <p class="mt-1.5 text-sm leading-relaxed text-gray">{s.desc}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
     </div>
   </section>
 

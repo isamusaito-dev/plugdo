@@ -4,7 +4,8 @@ const cards = [
   {
     name: 'リニューアル',
     lead: '作り直しが必要なサイトへ',
-    price: '¥198,000',
+    pricePrefix: '',
+    priceAmount: '198,000',
     priceUnit: '〜',
     href: '/renewal',
     desc: '診断で減点が集中したサイトを、必要な分だけ作り直します。5ページ構成・スマホ対応・基本SEOを含む定額パッケージ。',
@@ -14,7 +15,8 @@ const cards = [
   {
     name: 'Web運用',
     lead: '作り直すほどではないサイトへ',
-    price: '月¥9,800',
+    pricePrefix: '月',
+    priceAmount: '9,800',
     priceUnit: '〜',
     href: '/care',
     desc: 'サーバー管理・更新代行・月次の改善提案まで。最低契約期間なし、いつでも解約できます。',
@@ -81,10 +83,14 @@ const cards = [
           >
             <p class="text-xs font-bold text-pink">{c.lead}</p>
             <h3 class="mt-2 text-2xl font-black text-navy">{c.name}</h3>
-            <div class="mt-4 flex items-end gap-1 border-t border-mist pt-4">
-              <span class="font-display text-[2rem] leading-none text-navy [font-variant-numeric:tabular-nums]">{c.price}</span>
-              <span class="mb-0.5 text-sm font-bold text-navy">{c.priceUnit}</span>
-              <span class="mb-1 ml-1 text-xs text-gray">（税込）</span>
+            <div class="mt-4 flex items-end gap-0.5 border-t border-mist pt-4">
+              {c.pricePrefix && (
+                <span class="mb-1.5 text-lg font-black text-navy">{c.pricePrefix}</span>
+              )}
+              <span class="mb-1.5 font-display text-xl font-bold text-navy">¥</span>
+              <span class="font-display text-[2.75rem] font-black leading-none text-navy [font-variant-numeric:tabular-nums]">{c.priceAmount}</span>
+              <span class="mb-1.5 text-lg font-black text-navy">{c.priceUnit}</span>
+              <span class="mb-2 ml-1 text-xs text-gray">（税込）</span>
             </div>
             <p class="mt-4 flex-1 text-sm leading-relaxed text-gray">{c.desc}</p>
             <p class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-navy group-hover:text-pink">
