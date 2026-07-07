@@ -79,7 +79,16 @@ const checkSteps = [
         <p id="loading-url" class="mt-2 break-all text-sm text-gray"></p>
         <h2 class="mt-3 text-2xl font-black text-navy">プロの視点で診断しています</h2>
 
-        <ul class="mx-auto mt-10 max-w-sm space-y-4 text-left">
+        <!-- 進捗カウンター -->
+        <div class="mt-6 flex items-baseline justify-center gap-1">
+          <span id="loading-percent" class="font-display text-5xl font-black text-navy [font-variant-numeric:tabular-nums]">0</span>
+          <span class="font-display text-lg font-bold text-gray">%</span>
+        </div>
+        <div class="mx-auto mt-3 h-1 w-56 overflow-hidden rounded-full bg-mist">
+          <div id="loading-bar" class="h-full w-0 rounded-full bg-pink transition-[width] duration-300 ease-out"></div>
+        </div>
+
+        <ul class="scan-area relative mx-auto mt-10 max-w-sm space-y-4 text-left">
           {
             checkSteps.map((step, i) => (
               <li
@@ -96,6 +105,8 @@ const checkSteps = [
               </li>
             ))
           }
+          <!-- スキャンライン（近未来演出。reduced-motion時は非表示） -->
+          <li class="scan-line pointer-events-none absolute inset-x-[-16px] top-0 !mt-0 h-9 rounded-lg" aria-hidden="true"></li>
         </ul>
 
         <!-- チェック完了後〜結果表示までの待ち時間を埋める -->
@@ -142,33 +153,40 @@ const checkSteps = [
           <p id="band-message" class="mx-auto mt-5 max-w-md text-base font-bold leading-relaxed text-navy"></p>
         </div>
 
-        <!-- 5軸スコア -->
+        <!-- 7軸スコア（詳細ラベルはティザー＝ぼかし表示） -->
         <div class="reveal mt-12" data-reveal="2">
           <h3 class="text-lg font-black text-navy">7つの視点で見ると</h3>
           <p class="mt-1.5 text-xs leading-relaxed text-gray">
             各項目は、あなたのサイトを実際にチェックした結果です（<span class="font-bold" style="color:#1F9D6B">✓</span>＝できている／<span class="font-bold text-pink">✕</span>＝もったいない）。
           </p>
           <div id="axes" class="mt-5 space-y-3"></div>
+          <div class="mt-4 flex items-center justify-center gap-2 rounded-xl border border-navy/10 bg-navy/[0.03] px-4 py-3 text-xs font-bold text-navy">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="9" height="6" rx="1.5"/><path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6"/></svg>
+            チェック項目の詳細と「どこをどう直すか」は、無料相談でお渡しします
+          </div>
         </div>
 
-        <!-- 気づき -->
+        <!-- 気づき（先頭1件のみ公開・残りはロック） -->
         <div class="reveal mt-12" data-reveal="3">
-          <h3 class="text-lg font-black text-navy">見つかった“もったいない”ポイント</h3>
+          <div class="flex items-baseline justify-between gap-3">
+            <h3 class="text-lg font-black text-navy">見つかった“もったいない”ポイント</h3>
+            <p id="findings-count" class="text-xs font-bold text-pink"></p>
+          </div>
           <ul id="findings" class="mt-5 space-y-3"></ul>
         </div>
 
-        <!-- ゲート＋CTA（スコアで /renewal と /care に振り分け） -->
+        <!-- ゲート＋CTA（主：無料相談／副：スコア別のサービス案内） -->
         <div class="reveal mt-12" data-reveal="4">
           <div class="card border-pink/30 bg-pink/5 p-7 text-center md:p-9">
             <p id="gate-headline" class="text-base font-bold leading-relaxed text-navy"></p>
             <p id="gate-desc" class="mt-3 text-sm leading-relaxed text-ink"></p>
-            <a id="cta-primary" href="/renewal/" class="btn-pink mt-6 w-full sm:w-auto"></a>
+            <a id="cta-primary" href="/contact/" class="btn-pink mt-6 w-full sm:w-auto">
+              この結果をもとに、無料相談で全部聞く
+            </a>
             <div class="mt-4">
-              <a id="cta-secondary" href="/contact/" class="text-sm font-bold text-navy underline underline-offset-4 hover:text-pink">
-                この結果を持って30分相談する
-              </a>
+              <a id="cta-secondary" href="/renewal/" class="text-sm font-bold text-navy underline underline-offset-4 hover:text-pink"></a>
             </div>
-            <p class="mt-4 text-xs text-gray">無料・オンライン30分・契約不要</p>
+            <p class="mt-4 text-xs text-gray">無料・オンライン30分・契約不要／ロックされた項目もすべてお見せします</p>
           </div>
 
           <!-- 副CTA：結果をメールで受け取る（リード取得→ナーチャリング）
@@ -228,12 +246,26 @@ const checkSteps = [
     const colorHex = { red: '#E43172', yellow: '#C8A951', green: '#1F9D6B' };
     let lastResult = null; // 副CTA（メール受取）に引き継ぐ最新の診断結果
 
-    // ── 診断中アニメ：チェック項目を順に点灯 ──
+    // ── 診断中アニメ：チェック項目を順に点灯＋％カウンター ──
     let stepTimers = [];
+    let percentTimer = null;
     function runLoadingAnimation() {
       const steps = Array.from(document.querySelectorAll('.check-step'));
       stepTimers.forEach(clearTimeout);
       stepTimers = [];
+      if (percentTimer) clearInterval(percentTimer);
+      // ％カウンター：約6.5秒かけて0→99（結果表示までの体感演出）
+      const pctEl = $('loading-percent');
+      const barEl = $('loading-bar');
+      pctEl.textContent = '0';
+      barEl.style.width = '0%';
+      let pct = 0;
+      percentTimer = setInterval(() => {
+        pct += Math.random() * 3 + 0.8;
+        if (pct >= 99) { pct = 99; clearInterval(percentTimer); }
+        pctEl.textContent = String(Math.floor(pct));
+        barEl.style.width = Math.floor(pct) + '%';
+      }, 140);
       const fin = $('analyze-finalizing');
       fin.classList.add('hidden');
       fin.classList.remove('flex');
@@ -274,6 +306,7 @@ const checkSteps = [
     // ── 結果レンダリング ──
     function renderResult(data) {
       lastResult = data;
+      if (percentTimer) clearInterval(percentTimer);
       // 副CTA（メール受取）を初期状態に戻す（再診断時）
       $('mail-form').classList.remove('hidden');
       $('mail-form').reset();
@@ -310,23 +343,31 @@ const checkSteps = [
       data.axes.forEach((ax, i) => {
         const row = document.createElement('div');
         row.className = 'rounded-xl border border-mist bg-paper p-4 md:p-5';
-        const evHtml = (ax.evidence || [])
+        // ティザー：✓✕と件数は見せ、項目名はぼかす（詳細は無料相談で開示）
+        const evList = ax.evidence || [];
+        const okCount = evList.filter(function (e) { return e.ok; }).length;
+        const ngCount = evList.length - okCount;
+        const evHtml = evList
           .map(function (e) {
             const mark =
               '<span style="color:' + (e.ok ? '#1F9D6B' : '#E43172') + ';font-weight:700">' +
               (e.ok ? '✓' : '✕') + '</span>';
-            const val = e.value ? ' <span class="text-gray/60">' + esc(e.value) + '</span>' : '';
             return (
               '<span class="inline-flex items-center gap-1 text-xs ' +
-              (e.ok ? 'text-ink' : 'text-gray') + '">' + mark + esc(e.label) + val + '</span>'
+              (e.ok ? 'text-ink' : 'text-gray') + '">' + mark +
+              '<span class="select-none blur-[4px]" aria-hidden="true">' + esc(e.label) + '</span></span>'
             );
           })
           .join('');
+        const evSummary =
+          '<span class="text-xs font-bold"><span style="color:#1F9D6B">✓' + okCount + '</span>' +
+          '<span class="mx-1 text-gray/40">/</span><span class="text-pink">✕' + ngCount + '</span></span>';
         row.innerHTML =
           '<div class="flex items-center justify-between gap-3">' +
           '<span class="font-bold text-navy">' + ax.label + '</span>' +
-          '<span class="inline-flex min-w-[2.6rem] justify-center rounded-full px-2.5 py-0.5 font-display text-sm font-bold" ' +
-          'style="color:' + colorHex[ax.color] + ';background:' + tint[ax.color] + '">' + ax.score + '</span>' +
+          '<span class="inline-flex items-center gap-2">' + evSummary +
+          '<span class="inline-flex min-w-[2.6rem] justify-center rounded-full px-2.5 py-0.5 font-display text-sm font-bold [font-variant-numeric:tabular-nums]" ' +
+          'style="color:' + colorHex[ax.color] + ';background:' + tint[ax.color] + '">' + ax.score + '</span></span>' +
           '</div>' +
           '<div class="mt-3 h-2 w-full overflow-hidden rounded-full bg-mist">' +
           '<div class="axis-bar h-full rounded-full" style="width:0%;background:' + colorHex[ax.color] + ';transition:width 1s cubic-bezier(0.22,1,0.36,1) ' + (0.3 + i * 0.1) + 's"></div>' +
@@ -338,42 +379,55 @@ const checkSteps = [
         });
       });
 
-      // 気づき（根拠つき）
+      // 気づき：先頭1件のみ公開し、残りはロック（ぼかし＋鍵）＝無料相談へのゲート
       const fEl = $('findings');
       fEl.innerHTML = '';
-      data.findings.forEach((f) => {
+      const totalIssues = 1 + Math.max(data.remainingCount || 0, (data.findings || []).length - 1);
+      $('findings-count').textContent = totalIssues > 1 ? '全' + totalIssues + '件中 1件を表示中' : '';
+      const lockSvg =
+        '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="9" height="6" rx="1.5"/><path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6"/></svg>';
+      (data.findings || []).forEach((f, idx) => {
         // 後方互換：文字列でもオブジェクト{text,evidence}でも受ける
         const text = typeof f === 'string' ? f : f.text;
         const evidence = typeof f === 'string' ? '' : f.evidence;
         const li = document.createElement('li');
-        li.className = 'flex gap-3 rounded-lg border border-mist bg-paper p-4 text-sm leading-relaxed text-ink';
-        const ev = evidence
-          ? '<span class="mt-1.5 block text-xs text-gray">根拠：' + esc(evidence) + '</span>'
-          : '';
-        li.innerHTML =
-          '<span class="mt-0.5 shrink-0 text-pink">●</span><span>' + esc(text) + ev + '</span>';
+        if (idx === 0) {
+          li.className = 'flex gap-3 rounded-lg border border-mist bg-paper p-4 text-sm leading-relaxed text-ink';
+          const ev = evidence
+            ? '<span class="mt-1.5 block text-xs text-gray">根拠：' + esc(evidence) + '</span>'
+            : '';
+          li.innerHTML =
+            '<span class="mt-0.5 shrink-0 text-pink">●</span><span>' + esc(text) + ev + '</span>';
+        } else {
+          li.className = 'relative overflow-hidden rounded-lg border border-mist bg-paper p-4 text-sm leading-relaxed';
+          li.innerHTML =
+            '<div class="flex gap-3 select-none blur-[6px]" aria-hidden="true">' +
+            '<span class="mt-0.5 shrink-0 text-pink">●</span><span class="text-ink">' + esc(text) + '</span></div>' +
+            '<div class="absolute inset-0 flex items-center justify-center gap-1.5 bg-white/40 text-xs font-bold text-navy">' +
+            lockSvg + '無料相談で開示</div>';
+        }
         fEl.appendChild(li);
       });
 
-      // ゲート出口：スコアで /renewal（<60）と /care（>=60）に振り分け
+      // ゲート出口：主CTAは無料相談（スコア・URLを引き継ぐ）。副はスコア別のサービス案内。
       const gh = $('gate-headline');
       const gd = $('gate-desc');
-      const cta = $('cta-primary');
+      const sub = $('cta-secondary');
       if (data.total < 60) {
         gh.textContent = 'この課題は、更新では直りません。';
-        gd.textContent = '減点の多くはサイトの土台（構造・スマホ対応・速度）にあります。作り直しの内容と料金をご確認ください。';
-        cta.textContent = 'リニューアルの内容を見る';
-        cta.href = '/renewal/';
+        gd.textContent = '減点の多くはサイトの土台（構造・スマホ対応・速度）にあります。ロックされた項目と「どこから直すか」を、無料相談でお見せします。';
+        sub.textContent = 'リニューアル（¥198,000〜）の内容を見る';
+        sub.href = '/renewal/';
       } else {
         gh.textContent = '土台は良好。運用で伸ばせます。';
-        gd.textContent = '作り直しは不要です。月々の更新と改善で、いまのサイトを問い合わせが増える状態に育てられます。';
-        cta.textContent = 'Web運用の内容を見る';
-        cta.href = '/care/';
+        gd.textContent = '作り直しは不要です。ロックされた項目と「何から伸ばすか」を、無料相談でお見せします。';
+        sub.textContent = 'Web運用（月¥9,800〜）の内容を見る';
+        sub.href = '/care/';
       }
 
-      // 副CTA：スコア・URLを相談フォームに引き継ぐ
+      // 主CTA：スコア・URLを相談フォームに引き継ぐ
       const params = new URLSearchParams({ url: data.url, score: String(data.total) });
-      $('cta-secondary').href = '/contact/?' + params.toString();
+      $('cta-primary').href = '/contact/?' + params.toString();
 
       // リビール（上から順に出す）
       document.querySelectorAll('.reveal').forEach((el) => {
@@ -486,5 +540,22 @@ const checkSteps = [
   .reveal.is-in {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* ── 診断中のスキャンライン（近未来演出・ブランド色のみ） ── */
+  .scan-line {
+    display: none;
+    background: rgba(228, 49, 114, 0.06);
+    border-top: 1.5px solid rgba(228, 49, 114, 0.45);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .scan-line {
+      display: block;
+      animation: scan-sweep 2.6s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+    }
+  }
+  @keyframes scan-sweep {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(19rem); }
   }
 </style>
