@@ -135,3 +135,16 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* 動きを減らす設定のユーザーにはアニメーションを無効化 */
+@media (prefers-reduced-motion: reduce) {
+  [data-animate],
+  .js-animate-ready [data-animate] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .hero-animated {
+    animation: none !important;
+  }
+}
