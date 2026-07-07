@@ -20,24 +20,54 @@ const targets = [
     title: 'AI検索（ChatGPT等）に内容を読まれない構造',
     desc: 'AIが読み取れない作りのサイトは、AI検索の回答に引用されず、新しい入口を逃します。',
   },
+  {
+    title: '問い合わせフォーム・電話番号が見つけにくい',
+    desc: '連絡先までの導線が分かりにくいと、興味を持った人がそこで離れてしまいます。',
+  },
+  {
+    title: 'お客様の声・実績が載っていない',
+    desc: '第三者の評価がないと、初めての人は「本当に大丈夫か」と不安になります。',
+  },
+  {
+    title: '会社概要・所在地が曖昧',
+    desc: '運営者情報がはっきりしないサイトは、それだけで信頼を得にくくなります。',
+  },
+  {
+    title: '何のサービスか一目で伝わらない',
+    desc: 'トップページの数秒で「誰向けの何のサイトか」が伝わらないと、そのまま離脱されます。',
+  },
 ];
 
-// 料金プラン（価格は指示書の仮確定値）
+// 料金プラン
 const plans = [
   {
     name: 'ライト',
-    price: '¥198,000',
+    priceAmount: '198,000',
     priceNote: '税込',
     period: '2〜3週間',
     items: ['5ページ構成', 'スマホ対応', '基本SEO', 'お問い合わせフォーム', '公開作業'],
   },
   {
     name: 'スタンダード',
-    price: '¥398,000',
+    priceAmount: '298,000',
     priceNote: '税込',
     period: '4〜6週間',
     items: ['10ページ構成', 'オリジナルデザイン', 'CMS導入（自社更新可）', '構造化データ・AI検索対応', '公開作業'],
   },
+];
+
+// オプション（基本プランに含まれない追加対応）
+const options = [
+  { label: 'ページ追加', price: '¥15,000', note: '/ページ（税込）' },
+  { label: '予約システム連携（外部ツール導入）', price: 'お見積り' },
+  { label: 'ECサイト機能（オンライン販売）', price: 'お見積り' },
+  { label: '会員・マイページ機能', price: 'お見積り' },
+  { label: 'LINE公式アカウント連携・導線設計', price: 'お見積り' },
+  { label: '多言語対応（英語・中国語など）', price: 'お見積り' },
+  { label: 'ロゴ・ブランドデザイン制作', price: 'お見積り' },
+  { label: 'デザインシステム構築（コンポーネント・ガイドライン整備）', price: 'お見積り' },
+  { label: '写真・動画撮影', price: 'お見積り' },
+  { label: '独自ドメイン取得・移管代行', price: 'お見積り' },
 ];
 
 // 制作の流れ
@@ -85,10 +115,10 @@ const serviceLd = {
   serviceType: 'Webサイト制作・リニューアル',
   areaServed: { '@type': 'Country', name: 'Japan' },
   description:
-    '無料のAI診断で現状を採点してから、必要な分だけ作り直すホームページリニューアル。ライト¥198,000（税込）・スタンダード¥398,000（税込）。',
+    '無料のAI診断で現状を採点してから、必要な分だけ作り直すホームページリニューアル。ライト¥198,000（税込）・スタンダード¥298,000（税込）。',
   offers: [
     { '@type': 'Offer', name: 'ライト', price: '198000', priceCurrency: 'JPY' },
-    { '@type': 'Offer', name: 'スタンダード', price: '398000', priceCurrency: 'JPY' },
+    { '@type': 'Offer', name: 'スタンダード', price: '298000', priceCurrency: 'JPY' },
   ],
 };
 
@@ -104,7 +134,7 @@ const breadcrumbLd = {
 
 <BaseLayout
   title="ホームページリニューアル ¥198,000〜 | Plugdo"
-  description="無料のAI診断で現状を採点してから、必要な分だけ作り直す。ライト¥198,000・スタンダード¥398,000（税込）。補助金対象なら実質負担は約1/3。全国対応。"
+  description="無料のAI診断で現状を採点してから、必要な分だけ作り直す。ライト¥198,000・スタンダード¥298,000（税込）。補助金対象なら実質負担は約1/3。全国対応。"
   jsonLd={[faqLd, serviceLd, breadcrumbLd]}
 >
   <!-- Hero -->
@@ -136,7 +166,7 @@ const breadcrumbLd = {
         <p class="section-label">- For These Sites -</p>
         <h2 class="section-title">こんなサイトが対象です</h2>
         <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-gray">
-          無料診断で減点が集中しやすい、4つの典型パターンです。
+          無料診断で減点が集中しやすい、代表的なパターンです。
         </p>
       </div>
       <div class="mx-auto mt-10 grid max-w-4xl gap-x-10 gap-y-8 md:grid-cols-2">
@@ -148,6 +178,10 @@ const breadcrumbLd = {
             </div>
           ))
         }
+      </div>
+      <div class="mt-12 text-center" data-animate="fade-in">
+        <a href="/check/" class="btn-pink">無料で自社サイトを診断する（30秒）</a>
+        <p class="mt-3 text-xs text-gray">URLを入れるだけ・30秒／自分のサイトが何個当てはまるか確認できます</p>
       </div>
     </div>
   </section>
@@ -171,9 +205,10 @@ const breadcrumbLd = {
                 <span class="text-lg font-bold text-navy">{plan.name}</span>
                 <span class="rounded-full bg-mist px-3 py-1 text-xs font-bold text-gray">納期目安 {plan.period}</span>
               </div>
-              <div class="mt-4 flex items-end gap-2">
-                <span class="font-display text-[2rem] leading-none text-navy [font-variant-numeric:tabular-nums]">{plan.price}</span>
-                <span class="mb-0.5 text-xs text-gray">（{plan.priceNote}）</span>
+              <div class="mt-4 flex items-end gap-0.5">
+                <span class="mb-1.5 font-display text-xl font-bold text-navy">¥</span>
+                <span class="font-display text-[2.75rem] font-black leading-none text-navy [font-variant-numeric:tabular-nums]">{plan.priceAmount}</span>
+                <span class="mb-2 ml-1 text-xs text-gray">（{plan.priceNote}）</span>
               </div>
               <ul class="mt-6 flex-1 space-y-2.5 border-t border-mist pt-5">
                 {plan.items.map((item) => (
@@ -199,17 +234,23 @@ const breadcrumbLd = {
           <p class="border-b border-mist px-6 py-3 text-xs font-bold uppercase tracking-widest text-gray">オプション</p>
           <table class="w-full text-sm">
             <tbody>
-              <tr class="border-b border-mist/60">
-                <td class="px-6 py-3.5 text-ink">ページ追加</td>
-                <td class="px-6 py-3.5 text-right font-display text-navy [font-variant-numeric:tabular-nums]">¥15,000<span class="ml-1 text-xs text-gray">/ページ（税込）</span></td>
-              </tr>
-              <tr>
-                <td class="px-6 py-3.5 text-ink">その他（撮影・ロゴ・多言語など）</td>
-                <td class="px-6 py-3.5 text-right text-gray">お見積り</td>
-              </tr>
+              {
+                options.map((o, i) => (
+                  <tr class:list={[i !== options.length - 1 && 'border-b border-mist/60']}>
+                    <td class="px-6 py-3.5 text-ink">{o.label}</td>
+                    <td class="px-6 py-3.5 text-right font-display text-navy [font-variant-numeric:tabular-nums]">
+                      {o.price}
+                      {o.note && <span class="ml-1 text-xs text-gray">{o.note}</span>}
+                    </td>
+                  </tr>
+                ))
+              }
             </tbody>
           </table>
         </div>
+        <p class="mt-3 text-center text-xs text-gray">
+          上記以外のご要望も、まずはご相談ください。
+        </p>
       </div>
     </div>
   </section>
@@ -248,7 +289,7 @@ const breadcrumbLd = {
         </div>
         <div class="mt-8 rounded-xl border border-gray/10 bg-paper p-7 md:p-9">
           <p class="text-sm leading-relaxed text-ink">
-            小規模事業者持続化補助金の対象になる場合、スタンダードプラン（<span class="font-display font-bold [font-variant-numeric:tabular-nums]">¥398,000</span>・税込）の実質負担は約<span class="font-display font-bold text-navy [font-variant-numeric:tabular-nums]">¥133,000</span>まで抑えられる試算です。対象になるかどうか・申請の段取りは、無料相談時にあわせてご案内します。
+            小規模事業者持続化補助金の対象になる場合、スタンダードプラン（<span class="font-display font-bold [font-variant-numeric:tabular-nums]">¥298,000</span>・税込）の実質負担は約<span class="font-display font-bold text-navy [font-variant-numeric:tabular-nums]">¥99,000</span>まで抑えられる試算です。対象になるかどうか・申請の段取りは、無料相談時にあわせてご案内します。
           </p>
           <p class="mt-4 border-t border-mist pt-4 text-xs text-gray">
             ※ 試算は補助率2/3の場合の一例です。申請可否は公募要領によります。
