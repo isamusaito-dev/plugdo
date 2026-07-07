@@ -155,7 +155,7 @@ const checkSteps = [
           <p id="band-message" class="mx-auto mt-5 max-w-md text-base font-bold leading-relaxed text-navy"></p>
         </div>
 
-        <!-- 7軸スコア（詳細ラベルはティザー＝ぼかし表示） -->
+        <!-- 7軸スコア（チェック項目は全公開。直し方のみ無料相談でゲート） -->
         <div class="reveal mt-12" data-reveal="2">
           <h3 class="text-lg font-black text-navy">7つの視点で見ると</h3>
           <p class="mt-1.5 text-xs leading-relaxed text-gray">
@@ -164,7 +164,7 @@ const checkSteps = [
           <div id="axes" class="mt-5 space-y-3"></div>
           <div class="mt-4 flex items-center justify-center gap-2 rounded-xl border border-navy/10 bg-navy/[0.03] px-4 py-3 text-xs font-bold text-navy">
             <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="9" height="6" rx="1.5"/><path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6"/></svg>
-            チェック項目の詳細と「どこをどう直すか」は、無料相談でお渡しします
+            「どこをどう直すか」は、無料相談でお渡しします
           </div>
         </div>
 
@@ -345,27 +345,19 @@ const checkSteps = [
       data.axes.forEach((ax, i) => {
         const row = document.createElement('div');
         row.className = 'rounded-xl border border-mist bg-paper p-4 md:p-5';
-        // ティザー：✓✕と件数は見せ、根拠チップは半分だけ公開・残りはぼかす
+        // 根拠チップは全項目そのまま表示（ティザーは「気づき」側のみ）
         const evList = ax.evidence || [];
         const okCount = evList.filter(function (e) { return e.ok; }).length;
         const ngCount = evList.length - okCount;
-        const evUnlockCount = Math.max(1, Math.ceil(evList.length / 2));
         const evHtml = evList
-          .map(function (e, ei) {
+          .map(function (e) {
             const mark =
               '<span style="color:' + (e.ok ? '#1F9D6B' : '#E43172') + ';font-weight:700">' +
               (e.ok ? '✓' : '✕') + '</span>';
-            if (ei < evUnlockCount) {
-              const val = e.value ? ' <span class="text-gray/60">' + esc(e.value) + '</span>' : '';
-              return (
-                '<span class="inline-flex items-center gap-1 text-xs ' +
-                (e.ok ? 'text-ink' : 'text-gray') + '">' + mark + esc(e.label) + val + '</span>'
-              );
-            }
+            const val = e.value ? ' <span class="text-gray/60">' + esc(e.value) + '</span>' : '';
             return (
               '<span class="inline-flex items-center gap-1 text-xs ' +
-              (e.ok ? 'text-ink' : 'text-gray') + '">' + mark +
-              '<span class="select-none blur-[4px]" aria-hidden="true">' + esc(e.label) + '</span></span>'
+              (e.ok ? 'text-ink' : 'text-gray') + '">' + mark + esc(e.label) + val + '</span>'
             );
           })
           .join('');
@@ -426,7 +418,7 @@ const checkSteps = [
       const gh = $('gate-headline');
       const gd = $('gate-desc');
       const sub = $('cta-secondary');
-      if (data.total < 60) {
+      if (data.total < 65) {
         gh.textContent = 'この課題は、更新では直りません。';
         gd.textContent = '減点の多くはサイトの土台（構造・スマホ対応・速度）にあります。ロックされた項目と「どこから直すか」を、無料相談でお見せします。';
         sub.textContent = 'リニューアル（¥198,000〜）の内容を見る';
