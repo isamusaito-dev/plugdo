@@ -1,0 +1,63 @@
+---
+// TOPのサービス分岐カード（リニューアル / Web運用）。#services アンカー先。
+const cards = [
+  {
+    name: 'リニューアル',
+    lead: '作り直しが必要なサイトへ',
+    price: '¥198,000',
+    priceUnit: '〜',
+    href: '/renewal',
+    desc: '診断で減点が集中したサイトを、必要な分だけ作り直します。5ページ構成・スマホ対応・基本SEOを含む定額パッケージ。',
+    cta: 'リニューアルの内容を見る',
+    highlight: false,
+  },
+  {
+    name: 'Web運用',
+    lead: '作り直すほどではないサイトへ',
+    price: '月¥9,800',
+    priceUnit: '〜',
+    href: '/care',
+    desc: 'サーバー管理・更新代行・月次の改善提案まで。最低契約期間なし、いつでも解約できます。',
+    cta: 'Web運用の内容を見る',
+    highlight: true,
+  },
+];
+---
+
+<section id="services" class="bg-mist">
+  <div class="container-pd py-16 md:py-20">
+    <div class="text-center" data-animate="fade-in">
+      <p class="section-label">- Services -</p>
+      <h2 class="section-title">サービスは、2つだけ。</h2>
+      <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-gray">
+        どちらが必要かは、診断が教えてくれます。
+      </p>
+    </div>
+
+    <div class="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
+      {
+        cards.map((c) => (
+          <a
+            href={c.href}
+            class:list={[
+              'card group flex flex-col p-7 no-underline md:p-8',
+              c.highlight ? 'border-navy/20' : '',
+            ]}
+          >
+            <p class="text-xs font-bold text-pink">{c.lead}</p>
+            <h3 class="mt-2 text-2xl font-black text-navy">{c.name}</h3>
+            <div class="mt-4 flex items-end gap-1 border-t border-mist pt-4">
+              <span class="font-display text-[2rem] leading-none text-navy [font-variant-numeric:tabular-nums]">{c.price}</span>
+              <span class="mb-0.5 text-sm font-bold text-navy">{c.priceUnit}</span>
+            </div>
+            <p class="mt-4 flex-1 text-sm leading-relaxed text-gray">{c.desc}</p>
+            <p class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-navy group-hover:text-pink">
+              {c.cta}
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4" /></svg>
+            </p>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
