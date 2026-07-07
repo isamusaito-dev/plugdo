@@ -13,7 +13,7 @@ const date = new Date(item.publishedAt).toLocaleDateString('ja-JP', {
 });
 ---
 
-<a href={`/blog/${item.slug}`} class="card group flex flex-col overflow-hidden">
+<a href={`/blog/${item.slug}/`} class="card group flex flex-col overflow-hidden">
   <div class="aspect-[16/9] overflow-hidden bg-mist">
     {
       item.eyecatch ? (

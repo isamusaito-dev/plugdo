@@ -46,7 +46,7 @@ const caseLd = {
     ...(item.industry ? { description: item.industry } : {}),
   },
   mentions: { '@id': `${SITE_URL}/#service` },
-  mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/cases/${item.slug}` },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/cases/${item.slug}/` },
   ...(item.voice ? {
     review: {
       '@type': 'Review',
@@ -63,7 +63,7 @@ const breadcrumbLd = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
     { '@type': 'ListItem', position: 2, name: '導入事例', item: `${SITE_URL}/cases/` },
-    { '@type': 'ListItem', position: 3, name: item.title, item: `${SITE_URL}/cases/${item.slug}` },
+    { '@type': 'ListItem', position: 3, name: item.title, item: `${SITE_URL}/cases/${item.slug}/` },
   ],
 };
 ---

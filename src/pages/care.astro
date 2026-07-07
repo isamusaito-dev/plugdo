@@ -3,7 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import WhyAffordable from '../components/WhyAffordable.astro';
 import TimeCompressSection from '../components/TimeCompressSection.astro';
 
-// 毎月やること比較表（価格は指示書の仮確定値）
+const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+
+// 毎月やること比較表
 type Cell = string | boolean;
 const compareRows: { label: string; light: Cell; standard: Cell }[] = [
   { label: 'サーバー・ドメイン・SSL管理', light: true, standard: true },
@@ -54,7 +56,7 @@ const serviceLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   name: 'Web運用（ホームページ運用代行）',
-  provider: { '@id': 'https://plugdo.jp/#organization' },
+  provider: { '@id': `${SITE_URL}/#organization` },
   serviceType: 'ホームページ運用・保守',
   areaServed: { '@type': 'Country', name: 'Japan' },
   description:
@@ -69,8 +71,8 @@ const breadcrumbLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
-    { '@type': 'ListItem', position: 2, name: 'Web運用', item: 'https://plugdo.jp/care/' },
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'Web運用', item: `${SITE_URL}/care/` },
   ],
 };
 ---

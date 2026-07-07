@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTASection from '../components/CTASection.astro';
 
+const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+
 const company = [
   { label: '社名', value: '株式会社ハンチス（HUNCHES）' },
   { label: '設立日', value: '2024年1月16日' },
@@ -19,8 +21,8 @@ const breadcrumbLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
-    { '@type': 'ListItem', position: 2, name: '運営会社', item: 'https://plugdo.jp/about/' },
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: '運営会社', item: `${SITE_URL}/about/` },
   ],
 };
 ---

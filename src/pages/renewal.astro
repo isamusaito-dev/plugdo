@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import WhyAffordable from '../components/WhyAffordable.astro';
 
+const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+
 // 対象となるサイト（診断の減点パターンに対応）
 const targets = [
   {
@@ -111,7 +113,7 @@ const serviceLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   name: 'ホームページリニューアル',
-  provider: { '@id': 'https://plugdo.jp/#organization' },
+  provider: { '@id': `${SITE_URL}/#organization` },
   serviceType: 'Webサイト制作・リニューアル',
   areaServed: { '@type': 'Country', name: 'Japan' },
   description:
@@ -126,8 +128,8 @@ const breadcrumbLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
-    { '@type': 'ListItem', position: 2, name: 'リニューアル', item: 'https://plugdo.jp/renewal/' },
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'リニューアル', item: `${SITE_URL}/renewal/` },
   ],
 };
 ---

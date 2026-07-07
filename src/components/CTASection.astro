@@ -2,10 +2,14 @@
 interface Props {
   heading?: string;
   text?: string;
+  priceHref?: string;
+  priceLabel?: string;
 }
 const {
   heading = 'そのホームページ、働かせてみませんか。',
   text = 'まずは無料のAI診断から。現状の課題と、伸ばせるポイントをお返しします。最低契約期間なし。',
+  priceHref = '/renewal/#price',
+  priceLabel = '料金を見る',
 } = Astro.props;
 ---
 
@@ -32,10 +36,10 @@ const {
         無料相談する
       </a>
       <a
-        href="/renewal/#price"
+        href={priceHref}
         class="btn border-2 border-white/30 bg-transparent text-white hover:border-white hover:bg-white hover:text-navy"
       >
-        料金を見る
+        {priceLabel}
       </a>
     </div>
     <p class="mt-6 text-xs text-white/50">URLを入れるだけ・30秒で採点／契約不要</p>

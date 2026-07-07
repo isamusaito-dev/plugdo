@@ -117,8 +117,8 @@ const breadcrumbLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
-    { '@type': 'ListItem', position: 2, name: 'サービス', item: 'https://plugdo.jp/service/' },
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'サービス', item: `${SITE_URL}/service/` },
   ],
 };
 ---
@@ -293,7 +293,7 @@ const breadcrumbLd = {
     </div>
   </section>
 
-  <!-- 4.5 対応範囲 -->
+  <!-- 5. 対応範囲 -->
   <section>
     <div class="container-pd py-20 md:py-28">
       <div class="text-center" data-animate="fade-in">
@@ -357,7 +357,7 @@ const breadcrumbLd = {
     </div>
   </section>
 
-  <!-- 5. 選ばれる理由 -->
+  <!-- 6. 選ばれる理由 -->
   <section>
     <div class="container-pd py-20 md:py-28">
       <div class="text-center" data-animate="fade-in">
@@ -429,7 +429,7 @@ const breadcrumbLd = {
     </div>
   </section>
 
-  <!-- 8. 最終CTA -->
+  <!-- 9. 最終CTA -->
   <CTASection />
 
 </BaseLayout>

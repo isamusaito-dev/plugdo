@@ -379,7 +379,7 @@ interface EvidenceItem {
 
 const truncate = (s: string, n = 42): string => (s.length > n ? s.slice(0, n) + '…' : s);
 
-function buildEvidence(x: Extracted, speed: number): Record<AxisKey, EvidenceItem[]> {
+function buildEvidence(x: Extracted): Record<AxisKey, EvidenceItem[]> {
   const altPct = x.imgTotal === 0 ? 100 : Math.round((x.imgWithAlt / x.imgTotal) * 100);
   const titleOk = x.title.length >= 15 && x.title.length <= 60;
   return {
@@ -686,7 +686,7 @@ export async function onRequestPost(context: EventContext): Promise<Response> {
   const allIssues = new Set([...det.issues, ...qual.findings.map((f) => f.text)]);
   const remainingCount = Math.max(0, allIssues.size - 1); // 公開は1件のみ
 
-  const evidenceMap = buildEvidence(x, det.speed);
+  const evidenceMap = buildEvidence(x);
 
   return json({
     url: target.href,

@@ -8,8 +8,8 @@ const breadcrumbLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://plugdo.jp/' },
-    { '@type': 'ListItem', position: 2, name: 'お問い合わせ', item: 'https://plugdo.jp/contact/' },
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'お問い合わせ', item: `${SITE_URL}/contact/` },
   ],
 };
 ---
@@ -53,7 +53,7 @@ const breadcrumbLd = {
           class="space-y-6"
         >
           <!-- 成功時に戻すURL（JS無効環境のフォールバック） -->
-          <input type="hidden" name="_next" value={`${SITE_URL}/contact?success=true`} />
+          <input type="hidden" name="_next" value={`${SITE_URL}/contact/?success=true`} />
           <input type="hidden" name="_subject" value="【plugdo】お問い合わせがありました" />
 
           <!-- ハニーポット（スパム対策・人間には非表示） -->

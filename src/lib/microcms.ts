@@ -48,7 +48,7 @@ export type Case = {
   slug: string;
   clientName: string;
   industry?: string;
-  plan?: string;          // 利用プラン名（例：Growth）
+  plan?: string;          // 利用プラン名（現在UIでは非表示。過去のプラン体系の名残でmicroCMS側に残っている場合のみ）
   thumbnail?: MicroCMSImage;
   metrics?: CaseMetric[]; // 成果の数値ハイライト（最大3つ）
   challenge: string;
