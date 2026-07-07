@@ -56,7 +56,7 @@ const problems = [
     title: '作ってから3年以上そのまま',
     text: '情報が古いまま放置されたサイトは、見た人に「本当に営業しているのか」という不安を与えます。',
     // カレンダー＋止まった時計
-    svg: `<svg viewBox="0 0 120 84" class="h-20 w-auto" role="img" aria-label="止まったカレンダー">
+    svg: `<svg viewBox="0 0 120 84" class="h-28 w-auto" role="img" aria-label="止まったカレンダー">
       <rect x="30" y="18" width="60" height="52" rx="7" fill="#FFFFFF" stroke="#EBEEF2" stroke-width="2"/>
       <path d="M30 25a7 7 0 0 1 7-7h46a7 7 0 0 1 7 7v9H30z" fill="#E43172"/>
       <rect x="42" y="12" width="4" height="12" rx="2" fill="#103366"/>
@@ -72,7 +72,7 @@ const problems = [
     title: '更新のたびに見積もりと納期待ち',
     text: '文言ひとつ直すのに見積もり依頼と数週間の納期。だんだん更新を頼まなくなっていきます。',
     // 書類＋砂時計
-    svg: `<svg viewBox="0 0 120 84" class="h-20 w-auto" role="img" aria-label="見積書と砂時計">
+    svg: `<svg viewBox="0 0 120 84" class="h-28 w-auto" role="img" aria-label="見積書と砂時計">
       <path d="M28 14h28l14 14v40a2 2 0 0 1-2 2H28a2 2 0 0 1-2-2V16a2 2 0 0 1 2-2z" fill="#FFFFFF" stroke="#EBEEF2" stroke-width="2"/>
       <path d="M56 14v14h14" fill="none" stroke="#EBEEF2" stroke-width="2"/>
       <rect x="33" y="40" width="30" height="4" rx="2" fill="#EBEEF2"/>
@@ -87,7 +87,7 @@ const problems = [
     title: 'スマホで崩れている',
     text: 'アクセスの過半はスマホから。表示が崩れているだけで、問い合わせの機会を失っています。',
     // スマホ（レイアウト崩れ）
-    svg: `<svg viewBox="0 0 120 84" class="h-20 w-auto" role="img" aria-label="表示が崩れたスマホ">
+    svg: `<svg viewBox="0 0 120 84" class="h-28 w-auto" role="img" aria-label="表示が崩れたスマホ">
       <rect x="40" y="8" width="46" height="68" rx="10" fill="#103366"/>
       <rect x="45" y="16" width="36" height="53" rx="4" fill="#FFFFFF"/>
       <rect x="50" y="23" width="46" height="6" rx="2" fill="#EBEEF2"/>
@@ -104,7 +104,7 @@ const problems = [
     title: '誰に頼めばいいかわからない',
     text: '制作会社・フリーランス・広告代理店。相場も違いもわからず、比較のしようがありません。',
     // ？＋3つの選択肢
-    svg: `<svg viewBox="0 0 120 84" class="h-20 w-auto" role="img" aria-label="選択肢に迷う">
+    svg: `<svg viewBox="0 0 120 84" class="h-28 w-auto" role="img" aria-label="選択肢に迷う">
       <circle cx="60" cy="26" r="18" fill="#EAF3FB"/>
       <text x="60" y="35" font-size="26" font-weight="900" fill="#103366" text-anchor="middle" font-family="system-ui, sans-serif">?</text>
       <rect x="12" y="58" width="28" height="16" rx="4" fill="#FFFFFF" stroke="#EBEEF2" stroke-width="2"/>
@@ -236,7 +236,7 @@ const serviceLd = {
               data-animate
               data-animate-delay={String(i * 90)}
             >
-              <div class="flex items-center justify-center bg-mist/50 py-6" set:html={p.svg} />
+              <div class="flex items-center justify-center bg-mist/50 py-9" set:html={p.svg} />
               <div class="p-6">
                 <h3 class="text-base font-bold text-navy">{p.title}</h3>
                 <p class="mt-2 text-sm leading-relaxed text-gray">{p.text}</p>
