@@ -103,7 +103,7 @@
       <div>
 
         <!-- ── 価格帯バッジ ─────────────────────────────── -->
-        <div class="mb-6 flex flex-wrap gap-2">
+        <div class="mb-2 flex flex-wrap gap-2">
           <span class="inline-flex items-center rounded-full border border-navy/15 bg-white/75 px-4 py-1.5 text-xs font-bold text-navy backdrop-blur-sm">
             リニューアル&nbsp;<span class="font-display [font-variant-numeric:tabular-nums]">¥198,000</span>〜
           </span>
@@ -111,6 +111,7 @@
             運用 月<span class="font-display [font-variant-numeric:tabular-nums]">¥9,800</span>〜
           </span>
         </div>
+        <p class="mb-6 text-[11px] text-gray/70">価格はすべて税込表示です</p>
 
         <!-- ── メインキャッチ ────────────────────────── -->
         <h1 class="text-[2rem] font-black leading-[1.25] tracking-tight text-navy md:text-[2.75rem]">
@@ -178,7 +179,7 @@
               set:html={f.icon}
             />
             <div>
-              <p class="text-[9px] font-bold leading-snug text-white md:text-[13px]">{f.title}</p>
+              <p class="text-[9px] font-bold leading-snug text-white [font-variant-numeric:tabular-nums] md:text-[13px]">{f.title}</p>
               <p class="mt-0.5 hidden text-[10px] leading-snug text-white/45 md:block">{f.desc}</p>
             </div>
           </li>

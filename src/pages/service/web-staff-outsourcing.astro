@@ -7,7 +7,7 @@ const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
 const faqs = [
   {
     q: 'Web担当者を採用するのと何が違いますか？',
-    a: '正社員を採用する場合、求人・採用・育成のコスト（数十万〜数百万円）に加え、人件費・社会保険・教育コストが発生します。Plugdoは月額¥9,800〜で即日スタートでき、12年以上のUI/UXデザイン経験をそのまま活用できます。',
+    a: '正社員を採用する場合、求人・採用・育成のコスト（¥数十万〜数百万）に加え、人件費・社会保険・教育コストが発生します。Plugdoは月額¥9,800〜（税込）で即日スタートでき、12年以上のUI/UXデザイン経験をそのまま活用できます。',
   },
   {
     q: 'フリーランスや制作会社に頼むのと何が違いますか？',
@@ -44,8 +44,8 @@ const breadcrumbLd = {
 };
 
 const compareRows = [
-  { label: '初期コスト', hire: '数十〜数百万円', spot: '0〜数万円/回', plugdo: 'なし' },
-  { label: '月額目安', hire: '25万円〜（社保込）', spot: '都度発生', plugdo: '¥9,800〜' },
+  { label: '初期コスト', hire: '¥数十万〜数百万', spot: '¥0〜数万/回', plugdo: 'なし' },
+  { label: '月額目安', hire: '¥250,000〜（社保込）', spot: '都度発生', plugdo: '¥9,800〜（税込）' },
   { label: 'スタートまで', hire: '2〜6ヶ月', spot: '1〜4週間', plugdo: '即日〜1週間' },
   { label: '継続改善', hire: '○（ただし育成が必要）', spot: '△（都度ブリーフ）', plugdo: '◎（月次で伴走）' },
   { label: 'デザイン力', hire: '採用次第', spot: '発注次第', plugdo: '◎（12年のUX経験）' },
@@ -80,7 +80,7 @@ const whatWeDo = [
       <p class="section-label-left">- Web担当 外注 -</p>
       <h1 class="mt-3 text-4xl font-black text-navy md:text-5xl">Web担当者がいなくても、<br />サイトを改善し続けられます。</h1>
       <p class="mt-6 max-w-xl text-base leading-relaxed text-ink">
-        Plugdoは、Web担当者を採用する余裕がない中小企業向けに、ホームページの更新・改善・SEO/AIO対応を月額制で代行する<strong class="font-bold text-navy">Web運用サービス</strong>です。月額¥9,800〜、初期費用なし。
+        Plugdoは、Web担当者を採用する余裕がない中小企業向けに、ホームページの更新・改善・SEO/AIO対応を月額制で代行する<strong class="font-bold text-navy">Web運用サービス</strong>です。月額¥9,800〜（税込）、初期費用なし。
       </p>
       <div class="mt-8 flex flex-wrap items-center gap-4">
         <a href="/contact/" class="btn-pink">無料相談する</a>
@@ -149,9 +149,9 @@ const whatWeDo = [
             {compareRows.map((row) => (
               <tr class="border-b border-navy/6">
                 <td class="py-4 pr-6 font-bold text-navy">{row.label}</td>
-                <td class="py-4 px-4 text-center text-ink/60">{row.hire}</td>
-                <td class="py-4 px-4 text-center text-ink/60">{row.spot}</td>
-                <td class="py-4 px-4 text-center font-bold text-pink">{row.plugdo}</td>
+                <td class="py-4 px-4 text-center text-ink/60 [font-variant-numeric:tabular-nums]">{row.hire}</td>
+                <td class="py-4 px-4 text-center text-ink/60 [font-variant-numeric:tabular-nums]">{row.spot}</td>
+                <td class="py-4 px-4 text-center font-bold text-pink [font-variant-numeric:tabular-nums]">{row.plugdo}</td>
               </tr>
             ))}
           </tbody>
