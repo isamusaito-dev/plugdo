@@ -345,15 +345,23 @@ const checkSteps = [
       data.axes.forEach((ax, i) => {
         const row = document.createElement('div');
         row.className = 'rounded-xl border border-mist bg-paper p-4 md:p-5';
-        // ティザー：✓✕と件数は見せ、項目名はぼかす（詳細は無料相談で開示）
+        // ティザー：✓✕と件数は見せ、根拠チップは半分だけ公開・残りはぼかす
         const evList = ax.evidence || [];
         const okCount = evList.filter(function (e) { return e.ok; }).length;
         const ngCount = evList.length - okCount;
+        const evUnlockCount = Math.max(1, Math.ceil(evList.length / 2));
         const evHtml = evList
-          .map(function (e) {
+          .map(function (e, ei) {
             const mark =
               '<span style="color:' + (e.ok ? '#1F9D6B' : '#E43172') + ';font-weight:700">' +
               (e.ok ? '✓' : '✕') + '</span>';
+            if (ei < evUnlockCount) {
+              const val = e.value ? ' <span class="text-gray/60">' + esc(e.value) + '</span>' : '';
+              return (
+                '<span class="inline-flex items-center gap-1 text-xs ' +
+                (e.ok ? 'text-ink' : 'text-gray') + '">' + mark + esc(e.label) + val + '</span>'
+              );
+            }
             return (
               '<span class="inline-flex items-center gap-1 text-xs ' +
               (e.ok ? 'text-ink' : 'text-gray') + '">' + mark +
@@ -381,19 +389,22 @@ const checkSteps = [
         });
       });
 
-      // 気づき：先頭1件のみ公開し、残りはロック（ぼかし＋鍵）＝無料相談へのゲート
+      // 気づき：約半分を公開し、残りはロック（ぼかし＋鍵）＝無料相談へのゲート
       const fEl = $('findings');
       fEl.innerHTML = '';
-      const totalIssues = 1 + Math.max(data.remainingCount || 0, (data.findings || []).length - 1);
-      $('findings-count').textContent = totalIssues > 1 ? '全' + totalIssues + '件中 1件を表示中' : '';
+      const findingsList = data.findings || [];
+      const unlockCount = Math.max(1, Math.ceil(findingsList.length / 2));
+      const totalIssues = findingsList.length + Math.max(0, data.remainingCount || 0);
+      $('findings-count').textContent =
+        totalIssues > unlockCount ? '全' + totalIssues + '件中 ' + unlockCount + '件を表示中' : '';
       const lockSvg =
         '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="9" height="6" rx="1.5"/><path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6"/></svg>';
-      (data.findings || []).forEach((f, idx) => {
+      findingsList.forEach((f, idx) => {
         // 後方互換：文字列でもオブジェクト{text,evidence}でも受ける
         const text = typeof f === 'string' ? f : f.text;
         const evidence = typeof f === 'string' ? '' : f.evidence;
         const li = document.createElement('li');
-        if (idx === 0) {
+        if (idx < unlockCount) {
           li.className = 'flex gap-3 rounded-lg border border-mist bg-paper p-4 text-sm leading-relaxed text-ink';
           const ev = evidence
             ? '<span class="mt-1.5 block text-xs text-gray">根拠：' + esc(evidence) + '</span>'

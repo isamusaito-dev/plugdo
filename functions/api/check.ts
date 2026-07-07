@@ -676,15 +676,16 @@ export async function onRequestPost(context: EventContext): Promise<Response> {
   );
 
   // 気づきは Claude（根拠つき）＋決定的課題から最大6点。直し方は出さない。
-  // UI側で先頭1件のみ公開し、残りはロック表示（ティザー→無料相談へのゲート）。
+  // UI側で約半分を公開し、残りはロック表示（ティザー→無料相談へのゲート）。
   const claudeFindings: Finding[] = qual.findings.map((f) => ({ text: f.text, evidence: f.evidence || '' }));
   const detFindings: Finding[] = det.issues
     .filter((t) => !claudeFindings.some((f) => f.text === t))
     .map((t) => ({ text: t }));
   const findings = [...claudeFindings, ...detFindings].slice(0, 6);
 
+  // findings に入りきらなかった残数（allIssuesはfindingsの母集団なのでこちらが正しい基準）。
   const allIssues = new Set([...det.issues, ...qual.findings.map((f) => f.text)]);
-  const remainingCount = Math.max(0, allIssues.size - 1); // 公開は1件のみ
+  const remainingCount = Math.max(0, allIssues.size - findings.length);
 
   const evidenceMap = buildEvidence(x);
 
