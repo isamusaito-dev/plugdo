@@ -9,35 +9,28 @@ import { SITE_URL } from '../lib/site';
 // TODO: ノエクリ様の掲載許可が取れたら true にする。数値・文言も許可時に確定させること。
 const SHOW_NOEKURI_CASE = false;
 
-// 制作実績（実際に制作したサイト。画像は各サイトの実物ビジュアル）
+// 制作実績（実際に制作したサイト。画像は制作物のモックアップ）
 const works = [
   {
     name: 'HUNCHES メンタリング',
     category: 'サービスサイト',
     desc: 'Webデザイナー向け伴走型サポートのサービスサイト。LINE導線と実績数値を軸にした構成で設計・制作。',
     url: 'https://hunches-mentoring.com/',
-    image: '/works/hunches-mentoring.png',
-    imgW: 1200,
-    imgH: 630,
+    image: '/works/exa_01.png',
   },
   {
     name: 'HIROHISA SATO DESIGN GARALLY',
     category: 'ポートフォリオサイト',
     desc: '建築デザイナー佐藤博久氏の作品ギャラリー。写真を主役にした静かなダークトーンで制作。',
     url: 'https://www.baku-ado.com/',
-    image: null, // 実物スクリーンショット未取得のためロゴ＋タイポグラフィで構成
-    logo: '/works/baku-logo.png',
-    logoW: 868,
-    logoH: 204,
+    image: '/works/exa_02.png',
   },
   {
     name: '東京人間ドッククリニック',
     category: '医療機関LP',
     desc: '人間ドックの集患LP。WEB予約・LINE相談への導線と、不安を解く説明重視の構成で制作。',
     url: 'https://www.e-dock.jp/lp',
-    image: '/works/e-dock.png',
-    imgW: 786,
-    imgH: 1278,
+    image: '/works/exa_03.png',
   },
 ];
 
@@ -284,28 +277,15 @@ const serviceLd = {
               rel="noopener noreferrer"
               class="card group flex flex-col overflow-hidden no-underline"
             >
-              <div class="aspect-[16/10] overflow-hidden border-b border-mist bg-white">
-                {w.image ? (
-                  <img
-                    src={w.image}
-                    alt={`${w.name} のサイトビジュアル`}
-                    width={w.imgW}
-                    height={w.imgH}
-                    loading="lazy"
-                    class="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
-                  />
-                ) : (
-                  <div class="flex h-full w-full items-center justify-center bg-slate px-8">
-                    <img
-                      src={w.logo}
-                      alt={`${w.name} のロゴ`}
-                      width={w.logoW}
-                      height={w.logoH}
-                      loading="lazy"
-                      class="w-full max-w-[240px]"
-                    />
-                  </div>
-                )}
+              <div class="aspect-[16/9] overflow-hidden border-b border-mist bg-white">
+                <img
+                  src={w.image}
+                  alt={`${w.name} の制作物`}
+                  width="1672"
+                  height="941"
+                  loading="lazy"
+                  class="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
+                />
               </div>
               <div class="flex flex-1 flex-col p-6">
                 <p class="text-[10px] font-bold uppercase tracking-widest text-pink">{w.category}</p>
