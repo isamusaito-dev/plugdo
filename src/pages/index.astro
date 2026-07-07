@@ -9,6 +9,38 @@ import { SITE_URL } from '../lib/site';
 // TODO: ノエクリ様の掲載許可が取れたら true にする。数値・文言も許可時に確定させること。
 const SHOW_NOEKURI_CASE = false;
 
+// 制作実績（実際に制作したサイト。画像は各サイトの実物ビジュアル）
+const works = [
+  {
+    name: 'HUNCHES メンタリング',
+    category: 'サービスサイト',
+    desc: 'Webデザイナー向け伴走型サポートのサービスサイト。LINE導線と実績数値を軸にした構成で設計・制作。',
+    url: 'https://hunches-mentoring.com/',
+    image: '/works/hunches-mentoring.png',
+    imgW: 1200,
+    imgH: 630,
+  },
+  {
+    name: 'HIROHISA SATO DESIGN GARALLY',
+    category: 'ポートフォリオサイト',
+    desc: '建築デザイナー佐藤博久氏の作品ギャラリー。写真を主役にした静かなダークトーンで制作。',
+    url: 'https://www.baku-ado.com/',
+    image: null, // 実物スクリーンショット未取得のためロゴ＋タイポグラフィで構成
+    logo: '/works/baku-logo.png',
+    logoW: 868,
+    logoH: 204,
+  },
+  {
+    name: '東京人間ドッククリニック',
+    category: '医療機関LP',
+    desc: '人間ドックの集患LP。WEB予約・LINE相談への導線と、不安を解く説明重視の構成で制作。',
+    url: 'https://www.e-dock.jp/lp',
+    image: '/works/e-dock.png',
+    imgW: 786,
+    imgH: 1278,
+  },
+];
+
 // 出典つきの定量データ（一次ソースで検証済み。出典は脚注で控えめに掲載）
 const SRC_PLUST = 'https://www.profuture.co.jp/mk/column/11182';
 const SRC_KUBELL = 'https://www.kubell.com/news/2025/12/research.html';
@@ -232,23 +264,75 @@ const serviceLd = {
   <!-- なぜこの価格でできるのか -->
   <WhyAffordable />
 
+  <!-- 制作実績 -->
+  <section id="works" class="bg-mist">
+    <div class="container-pd py-16 md:py-20">
+      <div class="text-center" data-animate="fade-in">
+        <p class="section-label">- Works -</p>
+        <h2 class="section-title">制作実績</h2>
+        <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-gray">
+          実際に制作したサイトの一部です。
+        </p>
+      </div>
+
+      <div class="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-3">
+        {
+          works.map((w) => (
+            <a
+              href={w.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="card group flex flex-col overflow-hidden no-underline"
+            >
+              <div class="aspect-[16/10] overflow-hidden border-b border-mist bg-white">
+                {w.image ? (
+                  <img
+                    src={w.image}
+                    alt={`${w.name} のサイトビジュアル`}
+                    width={w.imgW}
+                    height={w.imgH}
+                    loading="lazy"
+                    class="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+                  />
+                ) : (
+                  <div class="flex h-full w-full items-center justify-center bg-slate px-8">
+                    <img
+                      src={w.logo}
+                      alt={`${w.name} のロゴ`}
+                      width={w.logoW}
+                      height={w.logoH}
+                      loading="lazy"
+                      class="w-full max-w-[240px]"
+                    />
+                  </div>
+                )}
+              </div>
+              <div class="flex flex-1 flex-col p-6">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-pink">{w.category}</p>
+                <h3 class="mt-1.5 text-base font-bold leading-snug text-navy group-hover:text-pink">{w.name}</h3>
+                <p class="mt-2 flex-1 text-sm leading-relaxed text-gray">{w.desc}</p>
+                <p class="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-navy">
+                  サイトを見る
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 2H10v5.5M10 2 2 10" /></svg>
+                </p>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
   <!-- 実績（ノエクリ事例）
        TODO: 掲載許可が取れたら SHOW_NOEKURI_CASE を true にし、実際の数値・スクリーンショット・
-             コメントを掲載許可の範囲で確定させること。許可が下りるまでは非表示。 -->
+             コメントを掲載許可の範囲で確定させ、上の works 配列にカードとして追加すること。 -->
   {
     SHOW_NOEKURI_CASE && (
-      <section class="bg-mist">
+      <section class="bg-paper">
         <div class="container-pd py-16 md:py-20">
-          <div class="text-center" data-animate="fade-in">
-            <p class="section-label">- Case -</p>
-            <h2 class="section-title">実績</h2>
-          </div>
-          <div class="mx-auto mt-10 max-w-3xl rounded-xl border border-gray/10 bg-paper p-7 md:p-9">
+          <div class="mx-auto max-w-3xl rounded-xl border border-gray/10 bg-paper p-7 md:p-9">
             <p class="text-xs font-bold text-gray">株式会社ノエクリ 様</p>
             <h3 class="mt-2 text-lg font-bold text-navy">コーポレートサイト リニューアル＋運用</h3>
-            <p class="mt-3 text-sm leading-relaxed text-ink">
-              {/* TODO: 掲載許可取得後、課題・施策・成果（数値）を確定文言で記載 */}
-            </p>
           </div>
         </div>
       </section>
@@ -256,7 +340,7 @@ const serviceLd = {
   }
 
   <!-- よくある質問（FAQ） -->
-  <section class="bg-mist">
+  <section>
     <div class="container-pd py-16 md:py-20">
       <div class="text-center" data-animate="fade-in">
         <p class="section-label">- FAQ -</p>
