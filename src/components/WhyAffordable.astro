@@ -1,0 +1,46 @@
+---
+// 低価格の種明かしセクション。TOP / /renewal / /care の3箇所で共通使用。
+// デザイントークンは docs/kaishu-design-tokens.md の値のみ使用。
+
+const reasons = [
+  {
+    title: '実装をAIで自動化',
+    desc: 'コーディング・検証・文章整備の大部分をAIで自動化。人手は設計と品質確認に集中します。',
+    icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="15" height="12" rx="2"/><path d="M6.5 8.5 8.5 10.5 6.5 12.5"/><line x1="10.5" y1="12.5" x2="13.5" y2="12.5"/></svg>',
+  },
+  {
+    title: '外注コストゼロ',
+    desc: '制作の外注も営業部隊も持たない少数運営。中間マージンが発生しません。',
+    icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3.5"/><path d="M4 16.5c0-2.8 2.7-4.5 6-4.5s6 1.7 6 4.5"/></svg>',
+  },
+  {
+    title: '広告より診断ツールで集客',
+    desc: '広告費をかけず、無料のAI診断ツールでお客様と出会う仕組み。その分を価格に還元しています。',
+    icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="5.5"/><line x1="13" y1="13" x2="17.5" y2="17.5"/></svg>',
+  },
+];
+---
+
+<section class="border-t border-mist">
+  <div class="container-pd py-16 md:py-20">
+    <div class="text-center" data-animate="fade-in">
+      <p class="section-label">- Why Affordable -</p>
+      <h2 class="section-title">なぜ、この価格でできるのか。</h2>
+      <p class="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-ink md:text-base">
+        Plugdoは実装の大部分をAIで自動化し、外注も営業部隊も持たない少数運営です。安いのは手を抜くからではなく、作り方が新しいから。浮いたコストは、そのまま価格に反映しています。
+      </p>
+    </div>
+
+    <div class="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-3">
+      {
+        reasons.map((r) => (
+          <div class="border-t border-navy/10 pt-5">
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-mist text-navy" set:html={r.icon} />
+            <h3 class="mt-4 text-base font-bold text-navy">{r.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-gray">{r.desc}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,70 @@
+---
+// PDCA 30日→7日の時間圧縮比較セクション。/care で使用。
+// TODO: 改修指示書では「既存 TimeCompressSection.astro を移設・文言は現行のまま」とあるが、
+//       当リポジトリに該当コンポーネント・該当文言は存在しなかったため新規作成した。
+//       文言の正本が別リポジトリ等にある場合は差し替えること。
+
+const before = [
+  { label: '依頼・見積もり待ち', days: '〜7日' },
+  { label: '制作会社の順番待ち', days: '〜14日' },
+  { label: '実装・確認・反映', days: '〜9日' },
+];
+
+const after = [
+  { label: '依頼（Slack・メール）', days: '当日' },
+  { label: 'AI支援で実装・確認', days: '〜5日' },
+  { label: '反映・報告', days: '〜2日' },
+];
+---
+
+<section>
+  <div class="container-pd py-16 md:py-20">
+    <div class="text-center" data-animate="fade-in">
+      <p class="section-label">- Speed -</p>
+      <h2 class="section-title">改善の1周を、30日から7日へ。</h2>
+      <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-gray">
+        依頼してから反映されるまでの待ち時間を、AI実装と少数運営で圧縮します。
+      </p>
+    </div>
+
+    <div class="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
+      <!-- 一般的な外注 -->
+      <div class="rounded-xl border border-gray/10 bg-paper p-7">
+        <div class="flex items-baseline justify-between gap-3 border-b border-mist pb-4">
+          <p class="text-sm font-bold text-gray">一般的な外注</p>
+          <p class="font-display text-2xl font-black text-gray [font-variant-numeric:tabular-nums]">約30日</p>
+        </div>
+        <ul class="mt-5 space-y-3">
+          {
+            before.map((row) => (
+              <li class="flex items-center justify-between gap-3 text-sm">
+                <span class="text-gray">{row.label}</span>
+                <span class="font-display text-gray [font-variant-numeric:tabular-nums]">{row.days}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- plugdo運用 -->
+      <div class="rounded-xl border border-navy/10 bg-sky/50 p-7">
+        <div class="flex items-baseline justify-between gap-3 border-b border-navy/10 pb-4">
+          <p class="text-sm font-bold text-navy">Plugdoの運用</p>
+          <p class="font-display text-2xl font-black text-navy [font-variant-numeric:tabular-nums]">約7日</p>
+        </div>
+        <ul class="mt-5 space-y-3">
+          {
+            after.map((row) => (
+              <li class="flex items-center justify-between gap-3 text-sm">
+                <span class="text-ink">{row.label}</span>
+                <span class="font-display font-bold text-navy [font-variant-numeric:tabular-nums]">{row.days}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <p class="mt-6 text-center text-xs text-gray">※ 日数は一般的な修正依頼（テキスト・画像変更等）の目安です。内容により前後します。</p>
+  </div>
+</section>
