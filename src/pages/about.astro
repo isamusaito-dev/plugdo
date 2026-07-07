@@ -79,9 +79,7 @@ const breadcrumbLd = {
                 <dt class="text-sm font-bold text-navy">{row.label}</dt>
                 <dd class="text-sm leading-relaxed text-ink">
                   {row.isEmail ? (
-                    <a href={`mailto:${row.value}`} class="text-pink underline underline-offset-2 hover:text-pinkAlt">
-                      {row.value}
-                    </a>
+                    <Fragment set:html={`<!--email_off--><a href="mailto:${row.value}" class="text-pink underline underline-offset-2 hover:text-pinkAlt">${row.value}</a><!--/email_off-->`} />
                   ) : row.isUrl ? (
                     <a href={row.value} target="_blank" rel="noopener noreferrer" class="text-pink underline underline-offset-2 hover:text-pinkAlt">
                       {row.value}
