@@ -27,13 +27,6 @@ const sections = [
   { label: 'Result',    heading: '成果', html: item.result    },
 ];
 
-const planColor: Record<string, string> = {
-  Basic:   'bg-slate/10 text-slate',
-  Growth:  'bg-pink/10 text-pink',
-  Partner: 'bg-navy/10 text-navy',
-};
-const planBadgeClass = item.plan ? (planColor[item.plan] ?? 'bg-mist text-navy') : '';
-
 const caseLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
@@ -101,11 +94,6 @@ const breadcrumbLd = {
           {item.industry && (
             <span class="rounded-full bg-mist px-3 py-1 text-xs font-bold text-navy">
               {item.industry}
-            </span>
-          )}
-          {item.plan && (
-            <span class={`rounded-full px-3 py-1 text-xs font-bold ${planBadgeClass}`}>
-              {item.plan} プラン
             </span>
           )}
           <span class="text-xs text-gray">{item.clientName}</span>

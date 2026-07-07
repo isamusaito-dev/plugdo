@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTASection from '../components/CTASection.astro';
-import { plans } from '../lib/plans';
+import ServiceCards from '../components/ServiceCards.astro';
 
 const steps = [
   {
@@ -138,8 +138,8 @@ const breadcrumbLd = {
         社内にWeb担当がいない中小企業向けに、放置されたホームページを毎月改善し、<strong class="font-bold text-navy">問い合わせ・採用につなげる</strong>サービスです。
       </p>
       <div class="mt-8 flex flex-wrap items-center gap-4">
-        <a href="/contact" class="btn-pink">無料相談する</a>
-        <a href="/price" class="btn-outline">料金を見る</a>
+        <a href="/check" class="btn-pink">無料で自社サイトを診断する（30秒）</a>
+        <a href="/renewal#price" class="btn-outline">料金を見る</a>
       </div>
       <p class="mt-4 text-xs text-gray">初期費用なし・まずは診断だけでもOK</p>
     </div>
@@ -400,37 +400,8 @@ const breadcrumbLd = {
     </div>
   </section>
 
-  <!-- 8. 料金サマリー -->
-  <section>
-    <div class="container-pd py-20 md:py-28">
-      <div class="text-center" data-animate="fade-in">
-        <p class="section-label">- Price -</p>
-        <h2 class="section-title">料金プラン</h2>
-        <p class="mx-auto mt-4 max-w-md text-sm text-gray">成果へのコミットの度合いで選べる、3プラン。<br />どのプランも初期費用なし・最低3ヶ月から。</p>
-      </div>
-
-      <div class="mt-12 grid gap-5 md:grid-cols-3" data-animate>
-        {plans.map((plan, i) => (
-          <div class={`relative flex flex-col rounded-2xl border p-8 shadow-sm ${plan.highlight ? 'border-pink bg-navy text-white' : 'border-gray/10 bg-white'}`} data-animate data-animate-delay={String(i * 80)}>
-            {plan.highlight && (
-              <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-pink px-4 py-1 text-xs font-bold text-white">★ おすすめ</span>
-            )}
-            <p class={`text-[10px] font-bold uppercase tracking-widest ${plan.highlight ? 'text-white/40' : 'text-navy/30'}`}>{plan.tagline}</p>
-            <p class={`mt-1 text-2xl font-black ${plan.highlight ? 'text-white' : 'text-navy'}`}>{plan.name}</p>
-            <p class={`mt-4 text-3xl font-black ${plan.highlight ? 'text-white' : 'text-navy'}`}>
-              {plan.price}<span class={`text-sm font-normal ${plan.highlight ? 'text-white/60' : 'text-gray'}`}>{plan.priceNote}</span>
-            </p>
-            <div class={`my-5 border-t ${plan.highlight ? 'border-white/10' : 'border-mist'}`}></div>
-            <p class={`flex-1 text-sm leading-relaxed ${plan.highlight ? 'text-white/70' : 'text-ink/70'}`}>{plan.commit}</p>
-          </div>
-        ))}
-      </div>
-
-      <div class="mt-10 text-center">
-        <a href="/price" class="btn-outline">料金プランの詳細を見る</a>
-      </div>
-    </div>
-  </section>
+  <!-- 8. 料金サマリー（リニューアル＋運用の2商品） -->
+  <ServiceCards />
 
   <!-- 関連ページ -->
   <section class="bg-mist">

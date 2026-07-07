@@ -6,12 +6,8 @@ interface Props {
 }
 const { item } = Astro.props;
 
-// プランごとのアクセントカラー
-const accentClass =
-  item.plan === 'Partner' ? 'bg-navy' :
-  item.plan === 'Growth'  ? 'bg-pink' :
-  item.plan === 'Basic'   ? 'bg-slate/30' :
-  'bg-gray/20';
+// トップアクセントライン（旧プラン名バッジは廃止済み）
+const accentClass = 'bg-navy';
 ---
 
 <a href={`/cases/${item.slug}`} class="card group flex h-full flex-col overflow-hidden">
@@ -42,16 +38,8 @@ const accentClass =
   <!-- テキストエリア -->
   <div class="flex flex-1 flex-col p-6">
 
-    <!-- バッジ + クライアント名 -->
+    <!-- クライアント名 -->
     <div class="flex flex-wrap items-center gap-1.5">
-      {item.plan && (
-        <span class={`rounded-full px-2.5 py-0.5 text-[11px] font-bold
-          ${item.plan === 'Partner' ? 'bg-navy/8 text-navy' :
-            item.plan === 'Growth'  ? 'bg-pink/10 text-pink' :
-            'bg-slate/8 text-slate'}`}>
-          {item.plan}
-        </span>
-      )}
       <span class="text-xs text-gray">{item.clientName}</span>
     </div>
 

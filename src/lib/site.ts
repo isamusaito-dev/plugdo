@@ -70,14 +70,15 @@ export const organizationLd = {
   areaServed: { '@type': 'Country', name: 'Japan' },
   knowsAbout: COMPANY.knowsAbout,
   slogan: SITE_TAGLINE,
-  priceRange: '¥30,000〜¥150,000/月',
+  priceRange: '¥9,800/月〜¥398,000',
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
-    name: 'plugdo 料金プラン',
+    name: 'plugdo サービス',
     itemListElement: [
-      { '@type': 'Offer', name: 'Keep', price: '30000', priceCurrency: 'JPY', description: '放置状態から抜け出す。サイトを健康に保つ。' },
-      { '@type': 'Offer', name: 'Grow', price: '80000', priceCurrency: 'JPY', description: '改善して、増やす。問い合わせを増やす。' },
-      { '@type': 'Offer', name: 'Partner', price: '150000', priceCurrency: 'JPY', description: '成果まで、一緒に。事業の成果を一緒に追う。' },
+      { '@type': 'Offer', name: 'ホームページリニューアル ライト', price: '198000', priceCurrency: 'JPY', description: '5ページ構成・スマホ対応・基本SEO・お問い合わせフォーム・公開作業（税込）' },
+      { '@type': 'Offer', name: 'ホームページリニューアル スタンダード', price: '398000', priceCurrency: 'JPY', description: '10ページ構成・オリジナルデザイン・CMS導入・構造化データ/AI検索対応・公開作業（税込）' },
+      { '@type': 'Offer', name: 'Web運用 ライト', price: '9800', priceCurrency: 'JPY', description: 'サーバー・ドメイン・SSL管理、セキュリティ更新、修正月2回まで（月額・税込）' },
+      { '@type': 'Offer', name: 'Web運用 スタンダード', price: '19800', priceCurrency: 'JPY', description: '修正回数無制限、月次アクセスレポート、改善提案月1件、入稿代行（月額・税込）' },
     ],
   },
   contactPoint: {

@@ -3,5 +3,7 @@
 # 例:
 #   /old-service   /service   301
 #   /company       /about     301
-#
-# 現状は新URL構成に統一。必要に応じて旧URLを追加すること。
+
+# 旧料金ページ（Keep/Grow/Partner）→ リニューアルページへ 301
+/price     /renewal/   301
+/price/    /renewal/   301
