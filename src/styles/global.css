@@ -7,6 +7,13 @@
     scroll-behavior: smooth;
   }
 
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2.5px solid #103366;
+    outline-offset: 3px;
+  }
+
   body {
     @apply bg-paper text-ink font-sans;
     font-size: 16px;

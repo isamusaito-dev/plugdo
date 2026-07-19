@@ -14,6 +14,7 @@ export default {
         paper: '#FFFFFF', // 背景
         mist: '#EBEEF2', // セクション背景（薄い青グレー）
         sky: '#EAF3FB', // ヒーロー背景グラデ上端
+        good: '#1F9D6B', // 良好・チェック済み（/checkの診断結果と共通）
       },
       fontFamily: {
         sans: ['"Noto Sans JP"', 'system-ui', 'sans-serif'],

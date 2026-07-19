@@ -1,255 +1,386 @@
 ---
-// トップページのヒーロー。左:テキスト+CTA / 右:ダッシュボードイラスト / 下:サービス特徴バー
+// トップページのヒーロー。左:キャッチ+CTA / 右:AI診断スコアの模擬UI / 下:サービス特徴バー
+const findings = [
+  { label: '要改善', point: '+18', text: 'スマホ表示が崩れている', chip: 'bg-pink text-white' },
+  { label: '改善余地', point: '+11', text: '表示速度が遅い', chip: 'bg-gold text-white' },
+  { label: '軽微', point: '+6', text: '問い合わせ導線が弱い', chip: 'bg-good text-white' },
+];
 
+const statBar = [
+  {
+    icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#103366" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="3" width="15" height="13.5" rx="2.5"/><path d="M5.5 1.5v3M12.5 1.5v3M1.5 7.5h15"/><circle cx="5.5" cy="12" r="1" fill="#103366" stroke="none"/><circle cx="9" cy="12" r="1" fill="#103366" stroke="none"/><circle cx="12.5" cy="12" r="1" fill="#103366" stroke="none"/></svg>',
+    title: 'リニューアル ¥198,000〜',
+    desc: '診断してから、必要な分だけ作り直す',
+  },
+  {
+    icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#103366" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1.5 L16 5.5 L16 12.5 L9 16.5 L2 12.5 L2 5.5 Z"/><circle cx="9" cy="9" r="2.5" fill="#103366" stroke="none"/></svg>',
+    title: '運用 月¥9,800〜',
+    desc: '最低契約期間なし・いつでも解約可',
+  },
+  {
+    icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#103366" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 14 6 8.5 9 11 14.5 4"/><polyline points="11 4 14.5 4 14.5 7.5"/></svg>',
+    title: '依頼から48時間以内に反映',
+    desc: '見積もり・納期待ちをなくす運用の型',
+  },
+  {
+    icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#103366" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="7.5" r="5"/><line x1="11.2" y1="11.2" x2="16" y2="16"/><path d="M5.5 7.5h4M7.5 5.5v4"/></svg>',
+    title: 'まずは無料AI診断',
+    desc: 'URLを入れるだけ・30秒で採点',
+  },
+];
+
+const checkIcon =
+  '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#1F9D6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7"/></svg>';
 ---
 
 <style>
-  /* ── グラデーション: 薄いブルー ↔ 白 ─────────────────── */
-  .hero-animated {
-    background: linear-gradient(
-      150deg,
-      #bdd8f0 0%,
-      #daeeff 20%,
-      #f0f8ff 40%,
-      #ffffff 55%,
-      #e8f5ff 70%,
-      #c8e4f8 85%,
-      #bdd8f0 100%
-    );
-    background-size: 400% 400%;
-    animation: hero-shift 10s ease-in-out infinite;
+  /* ── 背景: メッシュグラデ + スポットライト + グレイン ─────── */
+  .hero-ambient {
+    background:
+      radial-gradient(600px circle at 12% 18%, rgba(228, 49, 114, 0.13), transparent 60%),
+      radial-gradient(680px circle at 88% 12%, rgba(16, 51, 102, 0.14), transparent 60%),
+      radial-gradient(620px circle at 55% 96%, rgba(200, 169, 81, 0.1), transparent 60%),
+      linear-gradient(180deg, #eaf3fb 0%, #ffffff 100%);
+  }
+  .hero-spotlight {
+    top: -8%;
+    right: -8%;
+    width: 55%;
+    height: 60%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 70%);
+    filter: blur(6px);
+  }
+  .hero-grain {
+    opacity: 0.35;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  @keyframes hero-shift {
-    0%   { background-position: 0%   30%; }
-    35%  { background-position: 100% 70%; }
-    65%  { background-position: 60%  10%; }
-    100% { background-position: 0%   30%; }
+  /* ── 右カラム: 診断UIのフロート ───────────────────────── */
+  @keyframes hero-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
   }
-
-
-  /* ── チャート描画 ────────────────────────────────────────── */
-  #hero-chart-line {
-    stroke-dasharray: 500;
-    stroke-dashoffset: 500;
-    animation: svg-draw 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+  #hero-visual {
+    animation: hero-float 7s ease-in-out infinite;
   }
-  #hero-area-fill {
-    opacity: 0;
-    animation: svg-fade 0.7s ease-out 1.5s forwards;
+  @media (prefers-reduced-motion: reduce) {
+    #hero-visual {
+      animation: none !important;
+    }
   }
-  #hero-pt-1 {
-    opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0);
-    animation: svg-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s forwards;
-  }
-  #hero-pt-2 {
-    opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0);
-    animation: svg-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 1.0s forwards;
-  }
-  #hero-pt-3 {
-    opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0);
-    animation: svg-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 1.15s forwards;
-  }
-  #hero-pt-4 {
-    opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0);
-    animation: svg-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 1.3s forwards;
-  }
-  #hero-pt-5 {
-    opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0);
-    animation: svg-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) 1.45s forwards;
-  }
-  #hero-tooltip {
-    opacity: 0; transform-box: fill-box; transform-origin: bottom center;
-    transform: translateY(6px) scale(0.95);
-    animation: svg-tooltip 0.4s cubic-bezier(0.34, 1.4, 0.64, 1) 1.7s forwards;
-  }
-  #hero-notif {
-    opacity: 0; transform-box: fill-box; transform-origin: center bottom;
-    transform: translateY(18px);
-    animation: svg-slide-up 0.55s cubic-bezier(0.34, 1.4, 0.64, 1) 2.1s forwards;
-  }
-
-  @keyframes svg-draw    { to { stroke-dashoffset: 0; } }
-  @keyframes svg-fade    { to { opacity: 1; } }
-  @keyframes svg-pop {
-    0%   { opacity: 0; transform: scale(0); }
-    70%  { transform: scale(1.25); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-  @keyframes svg-tooltip  { to { opacity: 1; transform: translateY(0) scale(1); } }
-  @keyframes svg-slide-up { to { opacity: 1; transform: translateY(0); } }
 </style>
 
-<section class="hero-animated relative overflow-hidden">
-
-  <!-- 流線背景 canvas -->
-  <canvas
-    id="flow-bg"
-    data-color="16,51,102"
-    data-opacity="0.13"
-    class="pointer-events-none absolute inset-0 h-full w-full"
-    style="z-index:0"
-    aria-hidden="true"
-  ></canvas>
-
-  <!-- 装飾円 -->
-  <div class="pointer-events-none absolute -right-32 -top-32 h-[480px] w-[480px] rounded-full bg-sky opacity-60 blur-3xl" style="z-index:1"></div>
-  <div class="pointer-events-none absolute -bottom-16 left-1/3 h-[300px] w-[300px] rounded-full bg-pink/5 blur-3xl" style="z-index:1"></div>
+<section class="hero-ambient relative overflow-hidden">
+  <div class="hero-spotlight pointer-events-none absolute" aria-hidden="true"></div>
+  <div class="hero-grain pointer-events-none absolute inset-0" aria-hidden="true"></div>
 
   <div class="container-pd relative py-20 md:py-28" style="z-index:10">
     <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
 
       <!-- 左カラム: テキスト + CTA -->
       <div>
-
-        <!-- ── メインキャッチ ────────────────────────── -->
-        <h1 class="text-[2rem] font-black leading-[1.25] tracking-tight text-navy md:text-[2.75rem]">
-          <span class="inline-block">古くなった</span><span class="inline-block">ホームページ、</span><br class="hidden md:block" /><span class="inline-block">作り直して、</span><span class="inline-block">育てませんか。</span>
+        <h1 class="text-[2rem] font-black leading-[1.15] tracking-tight text-navy md:text-[2.75rem] lg:text-[3.25rem]">
+          古くなったサイト、<br />
+          まず<span
+            class="bg-no-repeat"
+            style="background-image:linear-gradient(rgba(228,49,114,.32),rgba(228,49,114,.12));background-position:0 88%;background-size:100% 0.34em;"
+          >30秒で採点</span>。<br />
+          直して、育てる。
         </h1>
         <p class="mt-6 max-w-md text-base leading-[1.9] text-ink/70">
-          まず無料のAI診断で現状を採点。必要ならリニューアル、その後は月<span class="font-display font-bold text-navy [font-variant-numeric:tabular-nums]">¥9,800</span>からの運用で、更新が止まらないサイトに。
+          無料のAI診断であなたのサイトを採点。必要な分だけリニューアルして、
+          その後は月<span class="font-display text-[1.28em] font-extrabold text-pink [font-variant-numeric:tabular-nums]">¥9,800</span>〜の運用で、更新が止まらないサイトに。
         </p>
+
         <div class="mt-8 flex flex-wrap items-center gap-5">
-          <a href="/check/" class="btn-pink">無料で自社サイトを診断する（30秒）</a>
+          <a
+            href="/check/"
+            class="group inline-flex items-center gap-2 rounded-[14px] px-8 py-4 text-sm font-bold text-white shadow-[0_20px_45px_-15px_rgba(228,49,114,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_24px_50px_-12px_rgba(228,49,114,0.6)]"
+            style="background-image:linear-gradient(180deg,#E43172,#F00A5F)"
+          >
+            無料で自社サイトを診断する
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-1">
+              <path d="M2 8h12M9 3l5 5-5 5" />
+            </svg>
+          </a>
           <a href="#services" class="text-sm font-bold text-navy underline underline-offset-4 hover:text-pink">料金を先に見る</a>
         </div>
-        <p class="mt-5 text-xs text-gray">URLを入れるだけ・30秒／契約不要</p>
+
+        <ul class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs text-gray">
+          <li class="flex items-center gap-1.5"><span set:html={checkIcon} />依頼から48時間以内に反映</li>
+          <li class="flex items-center gap-1.5"><span set:html={checkIcon} />最低契約期間なし</li>
+          <li class="flex items-center gap-1.5"><span set:html={checkIcon} />いつでも解約OK</li>
+        </ul>
       </div>
 
-      <!-- 右カラム: FVイメージ -->
-      <div class="relative hidden lg:block">
-        <div class="overflow-hidden rounded-3xl shadow-[0_8px_48px_rgba(16,51,102,0.14)]">
-          <img
-            src="/fv001.png"
-            alt="Plugdo サービスイメージ"
-            class="w-full"
-            loading="eager"
-          />
+      <!-- 右カラム: AI診断スコアの模擬UI -->
+      <div id="hero-visual" class="relative mx-auto h-[520px] w-full max-w-[420px] lg:h-[566px]">
+
+        <!-- ブラウザカード -->
+        <div
+          id="hero-browser"
+          class="absolute left-0 top-2 w-[min(300px,86%)] rounded-2xl border border-white/60 bg-white/70 p-4 shadow-[0_30px_70px_-25px_rgba(16,51,102,0.35)] backdrop-blur-[14px] lg:w-[340px]"
+        >
+          <div class="flex items-center gap-1.5" aria-hidden="true">
+            <span class="h-2.5 w-2.5 rounded-full bg-pink/30"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-gold/40"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-good/40"></span>
+          </div>
+          <div class="mt-3 flex items-center gap-1 rounded-full border border-mist bg-white px-3 py-2 text-xs text-gray">
+            <span>https://</span>
+            <span id="hero-url-text" class="font-medium text-navy"></span>
+            <span id="hero-caret" class="inline-block h-3.5 w-px bg-pink"></span>
+          </div>
+          <div class="relative mt-3 h-16 overflow-hidden rounded-lg bg-mist/60">
+            <div id="hero-scan" class="absolute inset-x-0 top-0 h-1/3 opacity-0" style="background-image:linear-gradient(180deg,rgba(228,49,114,0),rgba(228,49,114,.28),rgba(228,49,114,0))"></div>
+            <div class="space-y-1.5 p-3" aria-hidden="true">
+              <div class="h-2 w-3/4 rounded bg-navy/10"></div>
+              <div class="h-2 w-1/2 rounded bg-navy/10"></div>
+              <div class="h-2 w-2/3 rounded bg-navy/10"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- スコアカード -->
+        <div
+          id="hero-score-card"
+          class="absolute right-0 top-[130px] w-[min(320px,94%)] rounded-[20px] bg-white p-6 opacity-0 shadow-[0_40px_90px_-30px_rgba(20,30,70,0.35)] lg:w-[360px]"
+        >
+          <div class="flex items-center justify-between">
+            <p class="text-xs font-bold uppercase tracking-widest text-gray">サイト診断スコア</p>
+            <span class="rounded-full bg-navy px-2.5 py-1 text-[10px] font-bold text-white">AI</span>
+          </div>
+
+          <div class="relative mx-auto mt-4 h-[104px] w-[104px] lg:h-32 lg:w-32">
+            <svg viewBox="0 0 120 120" class="h-full w-full -rotate-90">
+              <circle cx="60" cy="60" r="50" fill="none" stroke="#EBEEF2" stroke-width="12"></circle>
+              <circle
+                id="hero-gauge"
+                cx="60"
+                cy="60"
+                r="50"
+                fill="none"
+                stroke="url(#hero-gauge-gradient)"
+                stroke-width="12"
+                stroke-linecap="round"
+                stroke-dasharray="314"
+                stroke-dashoffset="314"
+              ></circle>
+              <defs>
+                <linearGradient id="hero-gauge-gradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#E43172"></stop>
+                  <stop offset="1" stop-color="#C8A951"></stop>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="hero-score-number" class="font-display text-4xl font-black text-navy [font-variant-numeric:tabular-nums]">0</span>
+              <span class="text-[11px] font-bold text-gray">/100点</span>
+            </div>
+          </div>
+
+          <p class="mt-4 text-center text-sm font-bold leading-snug text-navy">
+            伸びしろ大<br />
+            <span class="text-xs font-normal text-gray">表示速度とスマホ対応で大きく改善できます。</span>
+          </p>
+
+          <ul class="mt-5 space-y-2.5 border-t border-mist pt-4">
+            {findings.map((f) => (
+              <li class="hero-finding flex items-center justify-between gap-2 opacity-0">
+                <span class="flex items-center gap-2 text-xs text-ink">
+                  <span class:list={['rounded-full px-2 py-0.5 text-[10px] font-bold', f.chip]}>{f.label}</span>
+                  {f.text}
+                </span>
+                <span class="text-xs font-bold text-navy [font-variant-numeric:tabular-nums]">{f.point}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- 改善想定ピル -->
+        <div
+          id="hero-pill"
+          class="absolute bottom-0 left-0 flex items-center gap-2 rounded-full bg-white px-4 py-2.5 opacity-0 shadow-[0_20px_45px_-20px_rgba(20,30,70,0.4)]"
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#1F9D6B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 12l4.5-5 3 3L16 4" />
+            <path d="M11.5 4H16v4.5" />
+          </svg>
+          <span class="text-xs font-bold text-navy [font-variant-numeric:tabular-nums]">+35点 <span class="font-normal text-gray">/ 改善後の想定スコア</span></span>
         </div>
       </div>
 
     </div>
   </div>
 
-  <!-- ── サービス特徴バー ─────────────────────────────────── -->
-  <div class="bg-navy" style="position:relative;z-index:10">
-    <div class="mx-auto w-full max-w-content px-0 md:px-8">
-      <ul class="grid grid-cols-2 md:grid-cols-4">
-        {[
-          {
-            icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="3" width="15" height="13.5" rx="2.5"/><path d="M5.5 1.5v3M12.5 1.5v3M1.5 7.5h15"/><circle cx="5.5" cy="12" r="1" fill="white" stroke="none"/><circle cx="9" cy="12" r="1" fill="white" stroke="none"/><circle cx="12.5" cy="12" r="1" fill="white" stroke="none"/></svg>',
-            title: 'リニューアル ¥198,000〜',
-            desc: '診断してから、必要な分だけ作り直す',
-          },
-          {
-            icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1.5 L16 5.5 L16 12.5 L9 16.5 L2 12.5 L2 5.5 Z"/><circle cx="9" cy="9" r="2.5" fill="white" stroke="none"/></svg>',
-            title: '運用 月¥9,800〜',
-            desc: '最低契約期間なし・いつでも解約可',
-          },
-          {
-            icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 14 6 8.5 9 11 14.5 4"/><polyline points="11 4 14.5 4 14.5 7.5"/></svg>',
-            title: '依頼から48時間以内に反映',
-            desc: '見積もり・納期待ちをなくす運用の型',
-          },
-          {
-            icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="7.5" r="5"/><line x1="11.2" y1="11.2" x2="16" y2="16"/><path d="M5.5 7.5h4M7.5 5.5v4"/></svg>',
-            title: 'まずは無料AI診断',
-            desc: 'URLを入れるだけ・30秒で採点',
-          },
-        ].map((f, i) => (
-          <li class:list={[
-            'flex items-center gap-2 px-4 py-3 md:gap-3 md:px-6 md:py-5',
-            i < 2 && 'border-b border-white/15 md:border-b-0',
-            (i === 1 || i === 3) && 'border-l border-white/15',
-            i === 2 && 'md:border-l md:border-white/15',
-          ]}>
-            <span
-              class="flex h-5 w-5 flex-shrink-0 items-center justify-center opacity-80 md:h-8 md:w-8"
-              set:html={f.icon}
-            />
-            <div>
-              <p class="text-[9px] font-bold leading-snug text-white [font-variant-numeric:tabular-nums] md:text-[13px]">{f.title}</p>
-              <p class="mt-0.5 hidden text-[10px] leading-snug text-white/45 md:block">{f.desc}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+  <!-- ── サービス特徴バー（グラスカード） ─────────────────── -->
+  <div class="relative" style="z-index:10">
+    <div class="container-pd pb-16 md:pb-20">
+      <div class="overflow-hidden rounded-2xl border border-white/60 bg-white/70 shadow-[0_20px_60px_-28px_rgba(16,51,102,0.28)] backdrop-blur-xl">
+        <ul class="grid grid-cols-2 md:grid-cols-4">
+          {statBar.map((f, i) => (
+            <li class:list={[
+              'flex items-center gap-2 px-4 py-3 md:gap-3 md:px-6 md:py-5',
+              i < 2 && 'border-b border-navy/10 md:border-b-0',
+              (i === 1 || i === 3) && 'border-l border-navy/10',
+              i === 2 && 'md:border-l md:border-navy/10',
+            ]}>
+              <span
+                class="flex h-5 w-5 flex-shrink-0 items-center justify-center md:h-8 md:w-8"
+                set:html={f.icon}
+              />
+              <div>
+                <p class="text-[11px] font-bold leading-snug text-navy [font-variant-numeric:tabular-nums] md:text-[13px]">{f.title}</p>
+                <p class="mt-0.5 hidden text-[11px] leading-snug text-gray md:block">{f.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   </div>
 </section>
 
 <script is:inline>
 (function () {
-  function initFlow(canvas) {
-    if (canvas.dataset.flowInit) return;
-    canvas.dataset.flowInit = "1";
-    var ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    var color = canvas.dataset.color || "16,51,102";
-    var baseOpacity = parseFloat(canvas.dataset.opacity || "0.07");
-    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var w = 0, h = 0, t = 0, raf = null, particles = [];
-    function build() {
-      var mobile = w < 640;
-      var density = mobile ? 16000 : 8500;
-      var n = Math.max(8, Math.round((w * h) / density));
-      particles = [];
-      for (var i = 0; i < n; i++) {
-        particles.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          s: 0.18 + Math.random() * 0.4,
-          r: 1.2 + Math.random() * 2.0
-        });
-      }
-    }
-    function resize() {
-      var dpr = Math.min(window.devicePixelRatio || 1, 2);
-      var r = canvas.getBoundingClientRect();
-      w = r.width; h = r.height;
-      canvas.width = w * dpr; canvas.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      build();
-    }
-    function field(x, y) {
-      return Math.sin(x * 0.006 + t * 0.01) * 0.6
-           + Math.cos(y * 0.008 - t * 0.006) * 0.5;
-    }
-    function render() {
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = "rgba(" + color + "," + baseOpacity + ")";
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-        var a = field(p.x, p.y);
-        if (!reduce) {
-          p.x += Math.cos(a) * p.s + 0.22;
-          p.y += Math.sin(a) * p.s;
-        }
-        if (p.x > w + 20) { p.x = -20; p.y = Math.random() * h; }
-        if (p.y > h + 20) p.y = -20;
-        if (p.y < -20) p.y = h + 20;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-    function loop() { render(); t += 1; raf = requestAnimationFrame(loop); }
-    function start() { if (!raf) loop(); }
-    function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } }
-    resize();
-    window.addEventListener("resize", resize);
-    if (reduce) { render(); return; }
-    var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) start(); else stop();
-    }, { threshold: 0 });
-    io.observe(canvas);
-    start();
-  }
   function boot() {
-    document.querySelectorAll("#flow-bg").forEach(function(c) { initFlow(c); });
+    var root = document.getElementById('hero-visual');
+    if (!root || root.dataset.heroInit) return;
+    root.dataset.heroInit = '1';
+
+    var urlText = document.getElementById('hero-url-text');
+    var caret = document.getElementById('hero-caret');
+    var scan = document.getElementById('hero-scan');
+    var scoreCard = document.getElementById('hero-score-card');
+    var gauge = document.getElementById('hero-gauge');
+    var scoreNumber = document.getElementById('hero-score-number');
+    var findings = Array.prototype.slice.call(document.querySelectorAll('.hero-finding'));
+    var pill = document.getElementById('hero-pill');
+    if (!urlText || !scoreCard || !gauge || !scoreNumber || !pill) return;
+
+    var domain = 'yourcompany.co.jp';
+    var TARGET_SCORE = 62;
+    var CIRC = 314;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function setFinalState() {
+      urlText.textContent = domain;
+      if (caret) caret.style.display = 'none';
+      if (scan) scan.style.opacity = '0';
+      scoreCard.style.transition = 'none';
+      scoreCard.style.opacity = '1';
+      scoreCard.style.transform = 'none';
+      gauge.style.strokeDashoffset = String(CIRC * (1 - TARGET_SCORE / 100));
+      scoreNumber.textContent = String(TARGET_SCORE);
+      findings.forEach(function (el) {
+        el.style.transition = 'none';
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+      pill.style.transition = 'none';
+      pill.style.opacity = '1';
+      pill.style.transform = 'none';
+    }
+
+    if (reduce) {
+      setFinalState();
+      return;
+    }
+
+    scoreCard.style.transform = 'translateY(16px) scale(.97)';
+    findings.forEach(function (el) {
+      el.style.transform = 'translateY(8px)';
+    });
+    pill.style.transform = 'translateY(8px)';
+
+    function typeDomain(cb) {
+      var i = 0;
+      (function step() {
+        if (i <= domain.length) {
+          urlText.textContent = domain.slice(0, i);
+          i += 1;
+          setTimeout(step, 55);
+        } else {
+          cb();
+        }
+      })();
+    }
+
+    function runScan(cb) {
+      if (!scan) {
+        cb();
+        return;
+      }
+      scan.style.transition = 'none';
+      scan.style.opacity = '1';
+      scan.style.transform = 'translateY(-100%)';
+      requestAnimationFrame(function () {
+        scan.style.transition = 'transform 1.5s linear';
+        scan.style.transform = 'translateY(300%)';
+      });
+      setTimeout(function () {
+        scan.style.opacity = '0';
+        cb();
+      }, 1500);
+    }
+
+    function revealScoreCard(cb) {
+      scoreCard.style.transition = 'opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1)';
+      scoreCard.style.opacity = '1';
+      scoreCard.style.transform = 'none';
+      setTimeout(cb, 600);
+    }
+
+    function animateGauge() {
+      var start = null;
+      var duration = 1300;
+      function frame(ts) {
+        if (!start) start = ts;
+        var p = Math.min((ts - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        var current = Math.round(TARGET_SCORE * eased);
+        scoreNumber.textContent = String(current);
+        gauge.style.strokeDashoffset = String(CIRC * (1 - (TARGET_SCORE * eased) / 100));
+        if (p < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function staggerFindings() {
+      findings.forEach(function (el, i) {
+        setTimeout(function () {
+          el.style.transition = 'opacity .4s ease, transform .4s ease';
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        }, i * 180);
+      });
+    }
+
+    function showPill() {
+      pill.style.transition = 'opacity .5s ease, transform .5s ease';
+      pill.style.opacity = '1';
+      pill.style.transform = 'none';
+    }
+
+    typeDomain(function () {
+      runScan(function () {
+        revealScoreCard(function () {
+          animateGauge();
+          setTimeout(staggerFindings, 700);
+          setTimeout(showPill, 700 + findings.length * 180 + 600);
+        });
+      });
+    });
   }
-  if (document.readyState !== "loading") boot();
-  else document.addEventListener("DOMContentLoaded", boot);
-  document.addEventListener("astro:page-load", boot);
+
+  if (document.readyState !== 'loading') boot();
+  else document.addEventListener('DOMContentLoaded', boot);
+  document.addEventListener('astro:page-load', boot);
 })();
 </script>
