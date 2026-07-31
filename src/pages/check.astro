@@ -155,20 +155,20 @@ const checkSteps = [
           <p id="band-message" class="mx-auto mt-5 max-w-md text-base font-bold leading-relaxed text-navy"></p>
         </div>
 
-        <!-- 7軸スコア（チェック項目は全公開。直し方のみ無料相談でゲート） -->
+        <!-- 7軸スコア（チェック項目は全公開。直し方のみ詳細レポートでゲート） -->
         <div class="reveal mt-12" data-reveal="2">
           <h3 class="text-lg font-black text-navy">7つの視点で見ると</h3>
           <p class="mt-1.5 text-xs leading-relaxed text-gray">
             各項目は、あなたのサイトを実際にチェックした結果です（<span class="font-bold" style="color:#1F9D6B">✓</span>＝できている／<span class="font-bold text-pink">✕</span>＝もったいない）。
           </p>
           <div id="axes" class="mt-5 space-y-3"></div>
-          <div class="mt-4 flex items-center justify-center gap-2 rounded-xl border border-navy/10 bg-navy/[0.03] px-4 py-3 text-xs font-bold text-navy">
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="9" height="6" rx="1.5"/><path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6"/></svg>
-            「どこをどう直すか」は、無料相談でお渡しします
+          <div class="mt-4 flex items-center justify-center gap-2 rounded-xl border border-navy/10 bg-navy/[0.03] px-4 py-3 text-center text-xs font-bold text-navy">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="2.5" width="11" height="9" rx="1.5"/><path d="M1.5 4l5.5 3.5L12.5 4"/></svg>
+            各項目を「どう直すか」は、無料レポートでお送りします
           </div>
         </div>
 
-        <!-- 気づき（先頭1件のみ公開・残りはロック） -->
+        <!-- 気づき（指摘は全件公開。「どう直すか」は詳細レポート側でゲート） -->
         <div class="reveal mt-12" data-reveal="3">
           <div class="flex items-baseline justify-between gap-3">
             <h3 class="text-lg font-black text-navy">見つかった“もったいない”ポイント</h3>
@@ -177,46 +177,84 @@ const checkSteps = [
           <ul id="findings" class="mt-5 space-y-3"></ul>
         </div>
 
-        <!-- ゲート＋CTA（主：無料相談／副：スコア別のサービス案内） -->
+        <!-- ゲート＋CTA（主：詳細レポートのメール送付＝リード取得／副：今すぐ無料相談）
+             NOTE: レポートは自動送信ではなく、Formspree のリード通知を見て担当者が手動で作成・返信する運用。
+                   そのため「1営業日以内」と明示している。将来的に自動生成・自動送信へ移行する場合は
+                   この文言と運用フローをあわせて見直すこと。 -->
         <div class="reveal mt-12" data-reveal="4">
-          <div class="card border-pink/30 bg-pink/5 p-7 text-center md:p-9">
-            <p id="gate-headline" class="text-base font-bold leading-relaxed text-navy"></p>
-            <p id="gate-desc" class="mt-3 text-sm leading-relaxed text-ink"></p>
-            <a id="cta-primary" href="/contact/" class="btn-pink mt-6 w-full sm:w-auto">
-              この結果をもとに、無料相談で全部聞く
-            </a>
-            <div class="mt-4">
-              <a id="cta-secondary" href="/renewal/" class="text-sm font-bold text-navy underline underline-offset-4 hover:text-pink"></a>
-            </div>
-            <p class="mt-4 text-xs text-gray">無料・オンライン30分・契約不要／ロックされた項目もすべてお見せします</p>
-          </div>
+          <div class="card border-pink/30 bg-pink/5 p-7 md:p-9">
+            <p id="gate-headline" class="text-center text-lg font-black leading-relaxed text-navy"></p>
+            <p id="gate-desc" class="mt-3 text-center text-sm leading-relaxed text-ink"></p>
 
-          <!-- 副CTA：結果をメールで受け取る（リード取得→ナーチャリング）
-               NOTE: 結果メールは自動送信ではなく、Formspree リードに担当者が手動返信する運用。
-               TODO: 返信メールテンプレートの末尾に任意アンケート（Van Westendorp 価格調査）への
-                     リンク枠を追加する。リンク先URLは未確定（kaishu-todo.md 参照）。 -->
-          <div class="mt-6 rounded-xl border border-mist bg-paper p-6 text-center md:p-7">
-            <p class="text-sm font-bold text-navy">今すぐ相談しなくても大丈夫です</p>
-            <p class="mt-1.5 text-xs leading-relaxed text-gray">
-              診断結果と「改善のヒント」を、メールでお届けします。
-            </p>
-            <form id="mail-form" action={FORMSPREE_ENDPOINT} method="POST" class="mx-auto mt-4 flex max-w-md flex-col gap-2 sm:flex-row">
+            <!-- レポートに含まれる内容 -->
+            <ul class="mx-auto mt-6 max-w-md space-y-2.5 rounded-xl bg-paper/70 p-5">
+              {
+                [
+                  '7つの視点それぞれの、具体的な改善方法',
+                  'どこから手をつけるべきかの優先順位',
+                  '見つかった指摘の全件リスト',
+                ].map((item) => (
+                  <li class="flex items-start gap-2.5 text-sm leading-relaxed text-ink">
+                    <svg class="mt-1 shrink-0" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#1F9D6B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" /></svg>
+                    <span>{item}</span>
+                  </li>
+                ))
+              }
+            </ul>
+
+            <form id="mail-form" action={FORMSPREE_ENDPOINT} method="POST" class="mx-auto mt-6 max-w-md">
               <!-- ハニーポット（スパム対策） -->
               <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+              <div class="flex flex-col gap-2.5 sm:flex-row">
+                <input
+                  id="name-input"
+                  type="text"
+                  name="お名前"
+                  required
+                  autocomplete="name"
+                  placeholder="お名前"
+                  class="w-full flex-1 rounded-full border border-mist px-5 py-3 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy"
+                />
+                <input
+                  id="company-input"
+                  type="text"
+                  name="会社名"
+                  required
+                  autocomplete="organization"
+                  placeholder="会社名"
+                  class="w-full flex-1 rounded-full border border-mist px-5 py-3 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy"
+                />
+              </div>
               <input
                 id="mail-input"
                 type="email"
                 name="email"
                 required
+                autocomplete="email"
                 placeholder="メールアドレス"
-                class="w-full flex-1 rounded-full border border-mist px-5 py-3 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy"
+                class="mt-2.5 w-full rounded-full border border-mist px-5 py-3 text-sm focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy"
               />
-              <button type="submit" class="btn-outline shrink-0 !px-6 !py-3 text-sm">
-                結果をメールで受け取る
+              <button type="submit" class="btn-pink mt-3 w-full">
+                無料で詳細レポートを受け取る
               </button>
             </form>
-            <p id="mail-done" class="mt-3 hidden text-sm font-bold leading-relaxed text-navy" role="status"></p>
-            <p id="mail-error" class="mt-2 hidden text-xs text-pink" role="alert"></p>
+            <p id="mail-done" class="mx-auto mt-4 hidden max-w-md text-center text-sm font-bold leading-relaxed text-navy" role="status"></p>
+            <p id="mail-error" class="mt-2 hidden text-center text-xs text-pink" role="alert"></p>
+            <p id="mail-note" class="mt-4 text-center text-xs leading-relaxed text-gray">
+              1営業日以内に、ご入力のメールアドレスへお送りします。<br class="hidden sm:block" />
+              無料・契約不要／しつこい営業電話はいたしません。
+            </p>
+          </div>
+
+          <!-- 副CTA：レポートを待たずに今すぐ相談したい人向け -->
+          <div class="mt-6 rounded-xl border border-mist bg-paper p-6 text-center md:p-7">
+            <p class="text-sm font-bold text-navy">レポートを待たずに、今すぐ相談したい方へ</p>
+            <a id="cta-consult" href="/contact/" class="btn-navy mt-4 w-full sm:w-auto">
+              無料相談（オンライン30分）を予約する
+            </a>
+            <div class="mt-4">
+              <a id="cta-secondary" href="/renewal/" class="text-sm font-bold text-navy underline underline-offset-4 hover:text-pink"></a>
+            </div>
           </div>
 
           <div class="mt-6 text-center">
@@ -309,9 +347,10 @@ const checkSteps = [
     function renderResult(data) {
       lastResult = data;
       if (percentTimer) clearInterval(percentTimer);
-      // 副CTA（メール受取）を初期状態に戻す（再診断時）
+      // レポート申込フォームを初期状態に戻す（再診断時）
       $('mail-form').classList.remove('hidden');
       $('mail-form').reset();
+      $('mail-note').classList.remove('hidden');
       $('mail-done').classList.add('hidden');
       $('mail-error').classList.add('hidden');
       $('result-url').textContent = data.url;
@@ -345,7 +384,7 @@ const checkSteps = [
       data.axes.forEach((ax, i) => {
         const row = document.createElement('div');
         row.className = 'rounded-xl border border-mist bg-paper p-4 md:p-5';
-        // 根拠チップは全項目そのまま表示（ティザーは「気づき」側のみ）
+        // 根拠チップは全項目そのまま表示（ゲートは「どう直すか」＝詳細レポート側のみ）
         const evList = ax.evidence || [];
         const okCount = evList.filter(function (e) { return e.ok; }).length;
         const ngCount = evList.length - okCount;
@@ -381,58 +420,57 @@ const checkSteps = [
         });
       });
 
-      // 気づき：約半分を公開し、残りはロック（ぼかし＋鍵）＝無料相談へのゲート
+      // 気づき：指摘（＝何が問題か）は全件公開。ゲートは「どう直すか」＝詳細レポート側に置く。
       const fEl = $('findings');
       fEl.innerHTML = '';
       const findingsList = data.findings || [];
-      const unlockCount = Math.max(1, Math.ceil(findingsList.length / 2));
-      const totalIssues = findingsList.length + Math.max(0, data.remainingCount || 0);
-      $('findings-count').textContent =
-        totalIssues > unlockCount ? '全' + totalIssues + '件中 ' + unlockCount + '件を表示中' : '';
-      const lockSvg =
-        '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="9" height="6" rx="1.5"/><path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6"/></svg>';
-      findingsList.forEach((f, idx) => {
+      const remaining = Math.max(0, data.remainingCount || 0);
+      $('findings-count').textContent = findingsList.length ? findingsList.length + '件' : '';
+      findingsList.forEach((f) => {
         // 後方互換：文字列でもオブジェクト{text,evidence}でも受ける
         const text = typeof f === 'string' ? f : f.text;
         const evidence = typeof f === 'string' ? '' : f.evidence;
         const li = document.createElement('li');
-        if (idx < unlockCount) {
-          li.className = 'flex gap-3 rounded-lg border border-mist bg-paper p-4 text-sm leading-relaxed text-ink';
-          const ev = evidence
-            ? '<span class="mt-1.5 block text-xs text-gray">根拠：' + esc(evidence) + '</span>'
-            : '';
-          li.innerHTML =
-            '<span class="mt-0.5 shrink-0 text-pink">●</span><span>' + esc(text) + ev + '</span>';
-        } else {
-          li.className = 'relative overflow-hidden rounded-lg border border-mist bg-paper p-4 text-sm leading-relaxed';
-          li.innerHTML =
-            '<div class="flex gap-3 select-none blur-[6px]" aria-hidden="true">' +
-            '<span class="mt-0.5 shrink-0 text-pink">●</span><span class="text-ink">' + esc(text) + '</span></div>' +
-            '<div class="absolute inset-0 flex items-center justify-center gap-1.5 bg-white/40 text-xs font-bold text-navy">' +
-            lockSvg + '無料相談で開示</div>';
-        }
+        li.className = 'flex gap-3 rounded-lg border border-mist bg-paper p-4 text-sm leading-relaxed text-ink';
+        const ev = evidence
+          ? '<span class="mt-1.5 block text-xs text-gray">根拠：' + esc(evidence) + '</span>'
+          : '';
+        li.innerHTML =
+          '<span class="mt-0.5 shrink-0 text-pink">●</span><span>' + esc(text) + ev + '</span>';
         fEl.appendChild(li);
       });
+      // 表示しきれなかった指摘がある場合は、レポートで全件渡すことを伝える
+      if (remaining > 0) {
+        const more = document.createElement('li');
+        more.className =
+          'flex items-center justify-center gap-2 rounded-lg border border-dashed border-navy/25 bg-navy/[0.03] p-4 text-xs font-bold text-navy';
+        more.innerHTML =
+          '<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="2.5" width="11" height="9" rx="1.5"/><path d="M1.5 4l5.5 3.5L12.5 4"/></svg>' +
+          'ほかに' + remaining + '件の指摘があります。詳細レポートに全件記載します';
+        fEl.appendChild(more);
+      }
 
-      // ゲート出口：主CTAは無料相談（スコア・URLを引き継ぐ）。副はスコア別のサービス案内。
+      // ゲート出口：主CTAは詳細レポート（メール取得）。副は無料相談＋スコア別のサービス案内。
       const gh = $('gate-headline');
       const gd = $('gate-desc');
       const sub = $('cta-secondary');
       if (data.total < 65) {
         gh.textContent = 'この課題は、更新では直りません。';
-        gd.textContent = '減点の多くはサイトの土台（構造・スマホ対応・速度）にあります。ロックされた項目と「どこから直すか」を、無料相談でお見せします。';
+        gd.textContent =
+          '減点の多くはサイトの土台（構造・スマホ対応・速度）にあります。「どこから、どう直すか」をまとめた詳細レポートを無料でお送りします。';
         sub.textContent = 'リニューアル（¥198,000〜）の内容を見る';
         sub.href = '/renewal/';
       } else {
         gh.textContent = '土台は良好。運用で伸ばせます。';
-        gd.textContent = '作り直しは不要です。ロックされた項目と「何から伸ばすか」を、無料相談でお見せします。';
+        gd.textContent =
+          '作り直しは不要です。「何から、どう伸ばすか」をまとめた詳細レポートを無料でお送りします。';
         sub.textContent = 'Web運用（月¥9,800〜）の内容を見る';
         sub.href = '/care/';
       }
 
-      // 主CTA：スコア・URLを相談フォームに引き継ぐ
+      // 副CTA（今すぐ相談）：スコア・URLを相談フォームに引き継ぐ
       const params = new URLSearchParams({ url: data.url, score: String(data.total) });
-      $('cta-primary').href = '/contact/?' + params.toString();
+      $('cta-consult').href = '/contact/?' + params.toString();
 
       // リビール（上から順に出す）
       document.querySelectorAll('.reveal').forEach((el) => {
@@ -496,7 +534,9 @@ const checkSteps = [
       show('input');
     });
 
-    // ── 副CTA：結果をメールで受け取る（Formspreeでリード取得）──
+    // ── 主CTA：詳細レポートの申込（Formspreeでリード取得）──
+    // レポートは担当者が手動で作成して返信するため、診断結果の全文を通知に含めておく
+    // （担当者が診断をやり直さなくてもレポートを書ける状態にする）。
     const mailForm = $('mail-form');
     mailForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -505,12 +545,30 @@ const checkSteps = [
       const email = $('mail-input').value.trim();
       if (!email) return;
 
-      const fd = new FormData(mailForm); // email と _gotcha を含む
-      fd.append('種別', 'Web診断 結果メール希望');
-      fd.append('_subject', '【plugdo】Web診断 結果メールのご希望');
+      const btn = mailForm.querySelector('button[type="submit"]');
+      const btnLabel = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = '送信中…';
+
+      const fd = new FormData(mailForm); // お名前・会社名・email・_gotcha を含む
+      fd.append('種別', 'Web診断 詳細レポート希望');
+      fd.append('_subject', '【plugdo】Web診断 詳細レポートのご依頼');
       if (lastResult) {
         fd.append('診断URL', lastResult.url);
         fd.append('総合スコア', String(lastResult.total) + '点');
+        fd.append(
+          '7軸スコア',
+          (lastResult.axes || []).map((a) => a.label + ' ' + a.score).join(' / ')
+        );
+        fd.append(
+          '指摘一覧',
+          (lastResult.findings || [])
+            .map((f, i) => String(i + 1) + '. ' + (typeof f === 'string' ? f : f.text))
+            .join('\n')
+        );
+        if (lastResult.remainingCount) {
+          fd.append('未表示の指摘数', String(lastResult.remainingCount) + '件');
+        }
       }
       try {
         const res = await fetch(mailForm.action, {
@@ -520,9 +578,10 @@ const checkSteps = [
         });
         if (res.ok) {
           mailForm.classList.add('hidden');
+          $('mail-note').classList.add('hidden');
           const done = $('mail-done');
           done.textContent =
-            'ありがとうございます。担当者より、診断結果と改善のヒントをメールでお送りします。';
+            'ありがとうございます。1営業日以内に、担当者より詳細レポートをメールでお送りします。';
           done.classList.remove('hidden');
         } else {
           errP.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
@@ -531,6 +590,9 @@ const checkSteps = [
       } catch {
         errP.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
         errP.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = btnLabel;
       }
     });
   })();

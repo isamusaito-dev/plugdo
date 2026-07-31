@@ -467,7 +467,7 @@ const SYSTEM_PROMPT = `あなたは辛口のプロのUI/UXレビュアーです�
 - 優れたサイト（最初の画面で対象と強みが明確、行動ボタン複数、顔写真つきお客様の声、実績数値あり）→ clarity 80 / impression 78 / credibility 76
 
 【出力】次のJSONのみ。前置き・マークダウン・コードフェンス禁止。
-findings は3〜5点（見つかる限り多く挙げる）。必ず「問題の指摘」までに留め、「どう直すか」は絶対に書かない（＝無料相談へのゲート）。
+findings は3〜5点（見つかる限り多く挙げる）。必ず「問題の指摘」までに留め、「どう直すか」は絶対に書かない（＝詳細レポートへのゲート）。
 各 finding には axis（clarity / impression / credibility のいずれか）と、そのサイトの具体的根拠 evidence を必ず付ける。`;
 
 const QUAL_SCHEMA = {
