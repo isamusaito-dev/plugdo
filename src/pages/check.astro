@@ -1,7 +1,17 @@
 ---
+import fs from 'node:fs';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+
+// レポート贈呈バナー。public/ に置かれていれば表示する。
+// 未配置でも壊れないよう、ビルド時に実在を確認してから描画する。
+// 差し替えるときは同じ名前で上書きすれば、この分岐はそのまま使える。
+const bannerCandidates = ['/report-banner.webp', '/report-banner.jpg', '/report-banner.png'];
+const reportBanner =
+  bannerCandidates.find((p) =>
+    fs.existsSync(new URL(`../../public${p}`, import.meta.url))
+  ) ?? null;
 
 const breadcrumbLd = {
   '@context': 'https://schema.org',
@@ -187,6 +197,21 @@ const checkSteps = [
               <p id="gate-headline" class="text-center text-lg font-black leading-relaxed text-navy"></p>
               <p id="gate-desc" class="mt-3 text-center text-sm leading-relaxed text-ink"></p>
             </div>
+
+            <!-- 何が届くのかを一目で伝えるバナー（public/report-banner.* を置くと表示される） -->
+            {
+              reportBanner && (
+                <div class="mx-auto mt-6 max-w-lg overflow-hidden rounded-xl border border-pink/15 bg-paper">
+                  <img
+                    src={reportBanner}
+                    alt="無料診断レポートを贈呈。改善ポイントと優先順位がわかる、あなたのサイト専用のレポートをお届けします。"
+                    class="block h-auto w-full"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              )
+            }
 
             <!-- レポートに含まれる内容 -->
             <ul class="mx-auto mt-6 max-w-md space-y-2.5 rounded-xl bg-paper/70 p-5">
