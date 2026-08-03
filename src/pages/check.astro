@@ -77,6 +77,55 @@ const checkSteps = [
         <p class="mt-6 text-xs text-gray">
           ＊ プロのWebデザイナーが設計した診断ロジック。入力されたURLは診断のみに利用します。
         </p>
+
+        <!-- 診断すると何がもらえるのかを入口で先に見せ、URL入力の動機を上げる -->
+        {
+          reportBanner && (
+            <div class="mt-12 rounded-2xl border border-pink/25 bg-paper p-6 md:p-8">
+              <p class="inline-flex items-center gap-1.5 rounded-full bg-pink px-3.5 py-1 text-xs font-bold text-paper">
+                <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2.5" y="8" width="15" height="9.5" rx="1.5" /><path d="M1.5 8h17M10 8v9.5" />
+                  <path d="M10 8S8.2 3.5 6.2 3.5a2 2 0 0 0 0 4.5M10 8s1.8-4.5 3.8-4.5a2 2 0 0 1 0 4.5" />
+                </svg>
+                診断された方へ
+              </p>
+              <h2 class="mt-3 text-xl font-black leading-snug text-navy md:text-2xl">
+                無料の「診断改善レポート」を<span class="text-pink">プレゼント</span>
+              </h2>
+              <p class="mt-3 text-sm leading-relaxed text-ink">
+                スコアだけでなく、<strong class="font-bold text-navy">どこから・どう直すか</strong>まで。
+                あなたのサイト専用のレポートを、ご希望の方にお送りします。
+              </p>
+
+              <img
+                src={reportBanner}
+                alt="無料の診断改善レポートを贈呈。改善ポイントと優先順位がわかる、あなたのサイト専用のレポートをお届けします。"
+                class="mx-auto mt-6 block h-auto w-full max-w-xl rounded-xl"
+                loading="lazy"
+                decoding="async"
+              />
+
+              <ul class="mx-auto mt-6 max-w-md space-y-2 text-left">
+                {
+                  [
+                    '見つかった指摘の内容（全件）',
+                    'それぞれ、どう直すかの具体的な手順',
+                    'どこから手をつけるべきかの優先順位',
+                  ].map((item) => (
+                    <li class="flex items-start gap-2.5 text-sm leading-relaxed text-ink">
+                      <svg class="mt-1 shrink-0" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#1F9D6B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" /></svg>
+                      <span>{item}</span>
+                    </li>
+                  ))
+                }
+              </ul>
+
+              <p class="mt-6 text-xs leading-relaxed text-gray">
+                まずは上のフォームから診断してください。結果画面からお申し込みいただけます。
+              </p>
+            </div>
+          )
+        }
       </div>
     </div>
   </section>
