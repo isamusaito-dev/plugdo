@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Web診断レポート｜株式会社サンプル様（58点）</title>
+<!--
+  Plugdo 診断レポート PDF版サンプル（58点ケース）
+
+  用途：メール本文はプレーンテキストで送り、このレポートをPDFにして添付する。
+        HTMLメール版と違い配信制約がないため、実サイトのスクリーンショットと
+        モダンなレイアウトが使える。
+
+  PDFの作り方：
+        このファイルをChromeで開く → 印刷 → 送信先「PDFに保存」
+        用紙A4／余白なし／「背景のグラフィック」にチェック
+
+  画像：  scripts/capture-site.sh で撮影したものを sample-assets/captures/ に配置。
+        差し替えるときは同名で上書きすれば、この雛形はそのまま使える。
+-->
+<style>
+  @page { size: A4; margin: 0; }
+
+  :root {
+    --navy:#103366; --navy-d:#0B2549; --pink:#E43172; --gold:#C8A951;
+    --good:#1F9D6B; --ink:#333; --gray:#797979; --mist:#EBEEF2; --line:#E3E8F0;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin:0; background:#8b93a1;
+    font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic',Meiryo,sans-serif;
+    color:var(--ink); -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+
+  .page {
+    width:210mm; min-height:297mm; margin:0 auto 10mm; background:#fff;
+    padding:16mm 15mm; position:relative; overflow:hidden;
+  }
+  @media print {
+    body { background:#fff; }
+    .page { margin:0; page-break-after:always; box-shadow:none; }
+    .page:last-child { page-break-after:auto; }
+  }
+  @media screen {
+    .page { box-shadow:0 6px 30px rgba(0,0,0,.22); }
+  }
+
+  /* ── 共通パーツ ── */
+  .brand { font-size:19px; font-weight:800; letter-spacing:-.5px; color:var(--navy); line-height:1; }
+  .brand i { color:var(--pink); font-style:normal; }
+  .kicker { font-size:9.5px; font-weight:700; letter-spacing:2px; color:var(--gray); }
+  .head {
+    display:flex; align-items:flex-end; justify-content:space-between;
+    border-bottom:2px solid var(--navy); padding-bottom:9px; margin-bottom:20px;
+  }
+  h2.sec {
+    font-size:16px; font-weight:800; color:var(--navy); margin:0 0 3px;
+    display:flex; align-items:center; gap:8px;
+  }
+  h2.sec::before {
+    content:''; width:4px; height:17px; background:var(--pink); border-radius:2px; flex:none;
+  }
+  .sec-note { font-size:10.5px; color:var(--gray); line-height:1.75; margin:0 0 14px 12px; }
+  .foot {
+    position:absolute; left:15mm; right:15mm; bottom:9mm;
+    display:flex; justify-content:space-between;
+    font-size:8.5px; color:#a3aab6; border-top:1px solid var(--line); padding-top:6px;
+  }
+
+  /* ── 表紙 ── */
+  .cover-shot {
+    position:relative; border-radius:8px; overflow:hidden;
+    border:1px solid var(--line); box-shadow:0 10px 34px rgba(16,51,102,.18);
+  }
+  /* 表紙の帯として使うため上端を見せて切り抜く（全景は2ページ目で見せる） */
+  .cover-shot img { width:100%; height:74mm; object-fit:cover; object-position:top center; display:block; }
+  .cover-shot::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(11,37,73,0) 45%, rgba(11,37,73,.82) 100%);
+  }
+  .cover-url {
+    position:absolute; left:16px; bottom:13px; z-index:2;
+    color:#fff; font-size:12px; font-weight:700; letter-spacing:.3px;
+  }
+  .cover-url span { display:block; font-size:8.5px; font-weight:400; opacity:.7; letter-spacing:1.5px; margin-bottom:2px; }
+
+  .score-row { display:flex; gap:18px; align-items:stretch; margin-top:18px; }
+  .score-box {
+    width:196px; flex:none; background:#F7F9FC; border-radius:10px;
+    padding:16px 10px 14px; text-align:center;
+  }
+  .band-box { flex:1; display:flex; flex-direction:column; justify-content:center; }
+  .band-lead { font-size:15px; font-weight:800; color:var(--navy); margin:0 0 8px; line-height:1.5; }
+  .band-body { font-size:11.5px; line-height:2; margin:0; }
+
+  /* ── スクショの注釈 ── */
+  .annot { position:relative; border-radius:7px; overflow:hidden; border:1px solid var(--line); }
+  .annot img { width:100%; display:block; }
+  .pin {
+    position:absolute; width:21px; height:21px; border-radius:50%;
+    background:var(--pink); color:#fff; font-size:11px; font-weight:800;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 0 0 3px rgba(228,49,114,.28), 0 2px 6px rgba(0,0,0,.3);
+    transform:translate(-50%,-50%);
+  }
+  .pin-box {
+    position:absolute; transform:translate(-50%,-50%);
+    border:2px dashed var(--pink); border-radius:6px;
+    background:rgba(228,49,114,.09);
+  }
+  .pin-list { margin:11px 0 0; padding:0; list-style:none; }
+  .pin-list li {
+    display:flex; gap:8px; align-items:flex-start;
+    font-size:10.5px; line-height:1.7; margin-bottom:6px;
+  }
+  .pin-no {
+    width:17px; height:17px; border-radius:50%; background:var(--pink); color:#fff;
+    font-size:9.5px; font-weight:800; display:flex; align-items:center; justify-content:center;
+    flex:none; margin-top:1px;
+  }
+
+  /* ── スマホ枠 ── */
+  .device-row { display:flex; gap:16px; align-items:flex-start; }
+  .phone {
+    width:168px; flex:none; border:7px solid #23272E; border-radius:20px;
+    overflow:hidden; background:#23272E; box-shadow:0 8px 22px rgba(0,0,0,.22);
+  }
+  .phone .notch { height:11px; background:#23272E; position:relative; }
+  .phone .notch::after {
+    content:''; position:absolute; left:50%; top:2px; transform:translateX(-50%);
+    width:46px; height:5px; background:#000; border-radius:3px;
+  }
+  .phone img { width:100%; display:block; }
+  .verdict {
+    flex:1; background:#FDF2F6; border-radius:9px; padding:15px 17px;
+    border-left:3px solid var(--pink);
+  }
+  .verdict h3 { margin:0 0 8px; font-size:13px; font-weight:800; color:var(--navy); line-height:1.6; }
+  .verdict p { margin:0 0 9px; font-size:11px; line-height:1.95; }
+  .verdict p:last-child { margin-bottom:0; }
+
+  /* ── 7軸 ── */
+  .axis { margin-bottom:9px; }
+  .axis-hd { display:flex; justify-content:space-between; align-items:baseline; font-size:11px; }
+  .axis-nm { color:var(--ink); }
+  .axis-nm.top { font-weight:800; color:var(--navy); }
+  .badge {
+    display:inline-block; background:var(--pink); color:#fff; font-size:8px; font-weight:800;
+    padding:1px 6px; border-radius:8px; margin-left:5px; vertical-align:1px;
+  }
+  .axis-sc { font-weight:800; font-size:12px; }
+  .track { height:6px; background:var(--mist); border-radius:3px; margin-top:4px; overflow:hidden; }
+  .fill { height:100%; border-radius:3px; }
+
+  /* ── 優先3つ ── */
+  .fix { border:1px solid var(--line); border-radius:9px; padding:14px 16px; margin-bottom:11px; }
+  .fix.one { background:#FDF2F6; border-color:#F5C9DA; }
+  .fix-hd { display:flex; gap:9px; align-items:flex-start; margin-bottom:10px; }
+  .fix-no {
+    width:22px; height:22px; border-radius:50%; color:#fff; font-size:12px; font-weight:800;
+    display:flex; align-items:center; justify-content:center; flex:none; background:var(--navy);
+  }
+  .fix.one .fix-no { background:var(--pink); }
+  .fix-ttl { font-size:12.5px; font-weight:800; color:var(--navy); line-height:1.6; margin:0; }
+  .lbl { font-size:9px; font-weight:800; letter-spacing:.6px; color:var(--pink); margin:0 0 3px; }
+  .fix.one .lbl { color:var(--pink); }
+  .fix:not(.one) .lbl { color:var(--navy); }
+  .txt { font-size:10.5px; line-height:1.95; margin:0 0 10px; }
+  .tags { display:flex; gap:6px; }
+  .tag {
+    background:#fff; border:1px solid var(--line); border-radius:4px;
+    padding:3px 9px; font-size:9px; color:var(--gray);
+  }
+  .tag b { color:var(--navy); }
+  .tag b.g { color:var(--good); }
+
+  /* ── 残りの指摘 ── */
+  .rest { border:1px solid var(--line); border-radius:9px; padding:13px 17px; }
+  .rest li { font-size:10.5px; line-height:1.9; margin-bottom:5px; }
+  .rest li:last-child { margin-bottom:0; }
+  .rest ul { margin:0; padding-left:16px; }
+  .rest ul li::marker { color:var(--pink); }
+
+  /* ── 改善後の見込み ── */
+  .proj { display:flex; gap:9px; margin-top:11px; }
+  .proj-c {
+    flex:1; background:#F1FAF6; border:1px solid #CBE9DB; border-radius:8px;
+    padding:11px 8px; text-align:center;
+  }
+  .proj-c .nm { font-size:9px; color:var(--gray); line-height:1.4; margin-bottom:5px; }
+  .proj-c .vv { font-size:14px; font-weight:800; color:var(--good); line-height:1; }
+  .proj-c .vv s { color:#b9c0cb; font-size:11px; font-weight:400; margin-right:3px; }
+
+  /* ── CTA ── */
+  .cta { background:var(--navy); border-radius:11px; padding:22px 24px; color:#fff; }
+  .cta h3 { margin:0 0 9px; font-size:15px; font-weight:800; line-height:1.6; }
+  .cta p { margin:0; font-size:11px; line-height:1.95; color:#c3d2e6; }
+  .price {
+    display:flex; justify-content:space-between; align-items:center;
+    background:#1B4176; border-radius:7px; padding:13px 16px; margin:14px 0 13px;
+  }
+  .price .l { font-size:10.5px; color:#c3d2e6; }
+  .price .l span { display:block; font-size:9px; color:#8fa6c4; margin-top:3px; }
+  .price .r { font-size:19px; font-weight:800; }
+  .price .r small { font-size:11px; font-weight:400; }
+  .btn {
+    display:block; background:var(--pink); color:#fff; text-align:center;
+    padding:13px; border-radius:7px; font-size:12.5px; font-weight:800; text-decoration:none;
+  }
+  .cta .fine { margin-top:10px; font-size:9.5px; color:#8fa6c4; text-align:center; line-height:1.7; }
+
+  .sign { margin-top:20px; border-top:1px solid var(--line); padding-top:14px; }
+  .sign .nm { font-size:12px; font-weight:800; color:var(--navy); margin:0 0 4px; }
+  .sign p { margin:0; font-size:10px; color:var(--gray); line-height:1.85; }
+  .disc { margin-top:12px; font-size:8.5px; color:#a3aab6; line-height:1.8; }
+</style>
+</head>
+<body>
+
+<!-- ══════════ 1ページ目：表紙 ══════════ -->
+<section class="page">
+  <div class="head">
+    <div>
+      <div class="brand">plugd<i>o</i></div>
+    </div>
+    <div class="kicker">WEB CHECK REPORT</div>
+  </div>
+
+  <p style="margin:0 0 3px;font-size:13px;font-weight:800;color:var(--navy);line-height:1.7;">
+    株式会社サンプル<br />齋藤 勇 様
+  </p>
+  <p style="margin:9px 0 18px;font-size:11px;line-height:1.95;">
+    このたびは無料Web診断をご利用いただきありがとうございます。<br />
+    実際に御社サイトを拝見し、<strong style="color:var(--navy);">どこから、どう直すか</strong>をまとめました。
+  </p>
+
+  <!-- サイトのスクリーンショット -->
+  <div class="cover-shot">
+    <img src="sample-assets/captures/desktop.png" alt="株式会社サンプル様のサイト（PC表示）" />
+    <div class="cover-url">
+      <span>DIAGNOSED SITE</span>
+      example-corp.co.jp
+    </div>
+  </div>
+
+  <!-- スコア -->
+  <div class="score-row">
+    <div class="score-box">
+      <svg viewBox="0 0 140 140" style="width:118px;height:118px;transform:rotate(-90deg);">
+        <circle cx="70" cy="70" r="54" fill="none" stroke="#E3E8F0" stroke-width="13" />
+        <circle cx="70" cy="70" r="54" fill="none" stroke="#C8A951" stroke-width="13"
+                stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="142.5" />
+      </svg>
+      <div style="margin-top:-79px;margin-bottom:34px;">
+        <div style="font-size:38px;font-weight:800;color:var(--navy);line-height:1;letter-spacing:-1.5px;">58</div>
+        <div style="font-size:9.5px;font-weight:700;color:var(--gray);margin-top:2px;">/ 100点</div>
+      </div>
+      <div style="font-size:9px;color:var(--gray);letter-spacing:1px;">総合スコア</div>
+    </div>
+
+    <div class="band-box">
+      <p class="band-lead">平均的な状態です。<br />直したぶんだけ、結果が出やすい。</p>
+      <p class="band-body">
+        大きく作り込まれた部分と、手つかずの部分がはっきり分かれています。
+        特に次のページでお見せする<strong style="color:var(--pink);">スマホでの見え方</strong>は、
+        いま問い合わせを取りこぼしている可能性が高い箇所です。<br />
+        全部を直す必要はありません。効果の大きい3つに絞ってご説明します。
+      </p>
+    </div>
+  </div>
+
+  <!-- 7軸の内訳 -->
+  <h2 class="sec" style="margin-top:20px;">7つの視点でみると</h2>
+  <p class="sec-note">
+    点数が低い順ではなく、<strong>直したときの効果が大きい順</strong>に手をつけるのが近道です。
+    そのため最優先はスマホ対応（38点）ではなく、問い合わせのしやすさ（41点）になります。
+  </p>
+
+  <div class="axis">
+    <div class="axis-hd"><span class="axis-nm">第一印象・信頼感</span><span class="axis-sc" style="color:var(--gold)">52</span></div>
+    <div class="track"><div class="fill" style="width:52%;background:var(--gold)"></div></div>
+  </div>
+  <div class="axis">
+    <div class="axis-hd"><span class="axis-nm">伝わりやすさ</span><span class="axis-sc" style="color:var(--gold)">64</span></div>
+    <div class="track"><div class="fill" style="width:64%;background:var(--gold)"></div></div>
+  </div>
+  <div class="axis">
+    <div class="axis-hd"><span class="axis-nm top">問い合わせのしやすさ<span class="badge">最優先</span></span><span class="axis-sc" style="color:var(--pink)">41</span></div>
+    <div class="track"><div class="fill" style="width:41%;background:var(--pink)"></div></div>
+  </div>
+  <div class="axis">
+    <div class="axis-hd"><span class="axis-nm">スマホ対応</span><span class="axis-sc" style="color:var(--pink)">38</span></div>
+    <div class="track"><div class="fill" style="width:38%;background:var(--pink)"></div></div>
+  </div>
+  <div class="axis">
+    <div class="axis-hd"><span class="axis-nm">見つけてもらえるか</span><span class="axis-sc" style="color:var(--gold)">55</span></div>
+    <div class="track"><div class="fill" style="width:55%;background:var(--gold)"></div></div>
+  </div>
+  <div class="axis">
+    <div class="axis-hd"><span class="axis-nm">信用の証拠</span><span class="axis-sc" style="color:var(--pink)">45</span></div>
+    <div class="track"><div class="fill" style="width:45%;background:var(--pink)"></div></div>
+  </div>
+  <div class="axis">
+    <div class="axis-hd"><span class="axis-nm">表示の速さ</span><span class="axis-sc" style="color:var(--good)">78</span></div>
+    <div class="track"><div class="fill" style="width:78%;background:var(--good)"></div></div>
+  </div>
+
+  <div class="foot"><span>Plugdo Web診断レポート</span><span>1 / 4</span></div>
+</section>
+
+<!-- ══════════ 2ページ目：いま、こう見えています ══════════ -->
+<section class="page">
+  <div class="head">
+    <div class="brand">plugd<i>o</i></div>
+    <div class="kicker">WEB CHECK REPORT</div>
+  </div>
+
+  <h2 class="sec">いま、こう見えています</h2>
+  <p class="sec-note">
+    診断は自動ですが、このページは実際の表示を撮影して確認したものです。
+  </p>
+
+  <!-- PC表示＋注釈 -->
+  <div class="annot">
+    <img src="sample-assets/captures/desktop.png" alt="PC表示と指摘箇所" />
+    <!-- ① 見出しが抽象的 -->
+    <div class="pin-box" style="left:33%;top:24%;width:38%;height:9%;"></div>
+    <div class="pin" style="left:15.5%;top:24%;">1</div>
+    <!-- ② 最初の画面に行動ボタンが無い -->
+    <div class="pin-box" style="left:70%;top:34%;width:24%;height:11%;"></div>
+    <div class="pin" style="left:57.5%;top:34%;">2</div>
+    <!-- ③ 更新が止まって見える -->
+    <div class="pin-box" style="left:28%;top:91%;width:34%;height:7%;"></div>
+    <div class="pin" style="left:10.5%;top:91%;">3</div>
+  </div>
+
+  <ul class="pin-list">
+    <li><span class="pin-no">1</span><span><strong>「未来をつくる、確かな技術」</strong>だけでは、何を扱う会社かが読み取れません。初めての方は数秒で判断して離れます。</span></li>
+    <li><span class="pin-no">2</span><span>最初の画面に<strong>問い合わせボタンがありません</strong>。ナビゲーションの文字リンクはありますが、行動を促す形にはなっていません。</span></li>
+    <li><span class="pin-no">3</span><span>お知らせの最終更新が<strong>2021年4月</strong>。「今も営業しているのか」という不安につながります。</span></li>
+  </ul>
+
+  <!-- スマホ表示 -->
+  <h2 class="sec" style="margin-top:15px;">スマートフォンでは、こうなります</h2>
+  <p class="sec-note">実際にスマホ幅で表示したものです。</p>
+
+  <div class="device-row">
+    <div class="phone">
+      <div class="notch"></div>
+      <img src="sample-assets/captures/mobile.png" alt="スマホ表示" />
+    </div>
+
+    <div class="verdict">
+      <h3>PC版がそのまま縮小され、文字が読めない状態です</h3>
+      <p>
+        スマホ用の基本設定（viewport）が入っていないため、
+        PC用の横幅900pxの画面が、そのまま手のひらサイズに縮められています。
+        拡大しないと本文が読めません。
+      </p>
+      <p>
+        いまサイトを見る方の多くはスマホです。
+        <strong style="color:var(--navy);">せっかく興味を持って開いた方が、読む前に離れている</strong>
+        可能性が高い状態です。
+      </p>
+      <p style="font-size:10px;color:var(--gray);">
+        ※ 左は実際の表示をそのまま撮影したものです（加工していません）
+      </p>
+    </div>
+  </div>
+
+  <div class="foot"><span>Plugdo Web診断レポート</span><span>2 / 4</span></div>
+</section>
+
+<!-- ══════════ 3ページ目：スコア詳細と優先順位 ══════════ -->
+<section class="page">
+  <div class="head">
+    <div class="brand">plugd<i>o</i></div>
+    <div class="kicker">WEB CHECK REPORT</div>
+  </div>
+
+  <h2 class="sec">まず直したい3つ</h2>
+  <p class="sec-note">
+    この順番で手をつけるのがおすすめです。3つとも、いま取りこぼしている問い合わせに直結する箇所です。
+  </p>
+
+  <div class="fix one">
+    <div class="fix-hd">
+      <div class="fix-no">1</div>
+      <p class="fix-ttl">最初の画面に、問い合わせボタンを置く</p>
+    </div>
+    <p class="lbl">なぜ問題か</p>
+    <p class="txt">
+      読んで納得した直後に押す先がないと、その気持ちは次のページで冷めてしまいます。
+      御社サイトは事業内容がしっかり書かれているぶん、この一点で機会を逃しています。
+    </p>
+    <p class="lbl">どう直すか</p>
+    <p class="txt">
+      最初の画面・事業内容の直後・ページ末尾の3箇所に、同じボタンを置きます。
+      文言は「送信」ではなく<strong style="color:var(--navy);">「無料で相談する」</strong>のように、
+      押した先で何が起きるかが分かる言葉にしてください。
+    </p>
+    <div class="tags"><span class="tag">難易度：<b>要制作</b></span><span class="tag">効果：<b class="g">即日</b></span></div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hd">
+      <div class="fix-no">2</div>
+      <p class="fix-ttl">スマホで読める状態にする</p>
+    </div>
+    <p class="lbl">なぜ問題か</p>
+    <p class="txt">
+      2ページ目のとおり、PC版がそのまま縮小されて表示されています。
+      閲覧の大半がスマホである以上、影響が最も直接的に出ます。
+    </p>
+    <p class="lbl">どう直すか</p>
+    <p class="txt">
+      まず viewport の設定を1行追加します。ただしこれは入口で、
+      御社サイトはレイアウト自体がPC幅（900px固定）を前提に作られているため、
+      <strong style="color:var(--navy);">設定だけでは崩れが残ります</strong>。スマホ幅での組み直しが必要です。
+    </p>
+    <div class="tags"><span class="tag">難易度：<b>要制作</b></span><span class="tag">効果：<b class="g">即日</b></span></div>
+  </div>
+
+  <div class="fix">
+    <div class="fix-hd">
+      <div class="fix-no">3</div>
+      <p class="fix-ttl">最初の見出しで、何屋かを伝える</p>
+    </div>
+    <p class="lbl">なぜ問題か</p>
+    <p class="txt">
+      現在の見出しは「未来をつくる、確かな技術」で、何を扱う会社かが読み取れません。
+      「精密加工」という強みが、下までスクロールしないと現れない状態です。
+    </p>
+    <p class="lbl">どう直すか</p>
+    <p class="txt">
+      「誰の・どんな悩みを・どう解決するか」を1文で置きます。
+      たとえば「小ロットの精密金属加工を、1個から承ります」のように、
+      抽象語を<strong style="color:var(--navy);">具体的な事実</strong>に置き換えてください。文言の修正だけで済みます。
+    </p>
+    <div class="tags"><span class="tag">難易度：<b class="g">自力可</b></span><span class="tag">効果：<b class="g">即日</b></span></div>
+  </div>
+
+  <div class="foot"><span>Plugdo Web診断レポート</span><span>3 / 4</span></div>
+</section>
+
+<!-- ══════════ 4ページ目：残りの指摘とご提案 ══════════ -->
+<section class="page">
+  <div class="head">
+    <div class="brand">plugd<i>o</i></div>
+    <div class="kicker">WEB CHECK REPORT</div>
+  </div>
+
+  <h2 class="sec">直すと、こうなります</h2>
+  <p class="sec-note">上の3つを直した場合の、診断ロジック上の再計算値です。</p>
+
+  <div class="proj">
+    <div class="proj-c">
+      <div class="nm">問い合わせの<br />しやすさ</div>
+      <div class="vv"><s>41</s>→ 79</div>
+    </div>
+    <div class="proj-c">
+      <div class="nm">スマホ対応</div>
+      <div class="vv"><s>38</s>→ 92</div>
+    </div>
+    <div class="proj-c">
+      <div class="nm">伝わりやすさ</div>
+      <div class="vv"><s>64</s>→ 82</div>
+    </div>
+    <div class="proj-c" style="background:#F7F9FC;border-color:var(--line);">
+      <div class="nm">総合</div>
+      <div class="vv" style="color:var(--navy)"><s>58</s>→ 79</div>
+    </div>
+  </div>
+  <p class="disc" style="margin-top:9px;">
+    ※ 同じ採点基準で計算し直した数値です。問い合わせ件数を保証するものではありません。
+  </p>
+
+  <h2 class="sec" style="margin-top:24px;">そのほかに見つかった点（全4件）</h2>
+  <p class="sec-note">いずれも上の3つを直したあとで問題ありません。</p>
+
+  <div class="rest">
+    <ul>
+      <li>お客様の声・事例が見当たらず、初めての人が安心しにくいです</li>
+      <li>実績（年数・件数など）が数字で示されていません</li>
+      <li>検索結果に出る説明文（meta description）が設定されていません</li>
+      <li>よくある質問（Q&amp;A）が無く、AI検索に引用されにくい状態です</li>
+    </ul>
+  </div>
+
+  <h2 class="sec" style="margin-top:24px;">ご提案</h2>
+
+  <div class="cta">
+    <h3>この課題は、更新では直りません。</h3>
+    <p>
+      今回の減点は、文言や画像の差し替えでは届かない部分（構造・スマホ対応）に集中しています。
+      特にレイアウトが900px固定で組まれているため、部分的な修正を重ねるより、
+      土台から作り直したほうが結果的に早く・安くなるケースです。
+    </p>
+
+    <div class="price">
+      <div class="l">リニューアル<span>5ページ構成・スマホ対応・基本SEOを含みます</span></div>
+      <div class="r">¥198,000<small>〜</small></div>
+    </div>
+
+    <a class="btn" href="https://plugdo.jp/contact/">無料相談を予約する（オンライン30分）</a>
+    <p class="fine">
+      このレポートへのご質問だけでも構いません。売り込みはいたしません。<br />
+      https://plugdo.jp/contact/
+    </p>
+  </div>
+
+  <div class="sign">
+    <p class="nm">Plugdo（株式会社ハンチス）</p>
+    <p>
+      担当：齋藤 勇<br />
+      全国対応・オンライン完結／https://plugdo.jp
+    </p>
+    <p class="disc">
+      本レポートは、plugdo.jp のWeb診断にお申し込みいただいた方にお送りしています。<br />
+      記載の内容は{診断日}時点のサイトを対象としています。
+    </p>
+  </div>
+
+  <div class="foot"><span>Plugdo Web診断レポート</span><span>4 / 4</span></div>
+</section>
+
+</body>
+</html>

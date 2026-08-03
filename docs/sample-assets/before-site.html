@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<title>株式会社サンプル</title>
+<!--
+  診断レポートのサンプル用ダミーサイト（架空の企業）。
+  実在企業のサイトを欠点付きで例示するのを避けるために用意している。
+
+  意図的に総合58点相当の問題を持たせてある：
+  - viewport 未設定（スマホで崩れる）        → スマホ対応 38点
+  - 最初の画面に問い合わせボタンなし          → 問い合わせのしやすさ 41点
+  - 見出しが抽象的で何屋か分からない          → 伝わりやすさ 64点
+  - meta description 未設定                  → 見つけてもらえるか 55点
+  - お客様の声・実績数値なし                  → 信用の証拠 45点
+-->
+<style>
+  body { margin:0; font-family:"MS PGothic","Hiragino Kaku Gothic ProN",sans-serif; font-size:13px; color:#333; background:#fff; }
+  .wrap { width:900px; margin:0 auto; }
+  .top { background:#1a3a6b; color:#fff; padding:10px 14px; overflow:hidden; }
+  .top .name { float:left; font-size:19px; font-weight:bold; letter-spacing:1px; }
+  .top .tel { float:right; font-size:12px; text-align:right; line-height:1.5; }
+  .nav { background:#e8eaed; border-bottom:2px solid #1a3a6b; }
+  .nav table { border-collapse:collapse; }
+  .nav td { padding:9px 22px; font-size:12px; border-right:1px solid #c9ced6; white-space:nowrap; }
+  .nav a { color:#1a3a6b; text-decoration:none; }
+  .hero { position:relative; height:280px; background:linear-gradient(160deg,#6f8bb0,#3c5a80); overflow:hidden; }
+  .hero .cap { position:absolute; left:44px; top:96px; color:#fff; }
+  .hero h1 { margin:0; font-size:32px; letter-spacing:3px; text-shadow:0 2px 5px rgba(0,0,0,.35); font-weight:bold; }
+  .hero p { margin:12px 0 0; font-size:13px; letter-spacing:2px; opacity:.9; }
+  .hero .deco { position:absolute; right:-40px; bottom:-60px; width:300px; height:300px; border-radius:50%; background:rgba(255,255,255,.08); }
+  .band { background:#f4f5f7; border-bottom:1px solid #dcdfe4; padding:7px 14px; font-size:11px; color:#666; }
+  .main { padding:22px 14px 34px; overflow:hidden; }
+  .col-l { float:left; width:600px; }
+  .col-r { float:right; width:255px; }
+  h2 { font-size:15px; color:#1a3a6b; border-left:5px solid #1a3a6b; padding-left:9px; margin:0 0 12px; }
+  .lead { line-height:2; font-size:13px; margin:0 0 22px; }
+  .biz { width:100%; border-collapse:collapse; margin-bottom:22px; }
+  .biz td { border:1px solid #d6dae0; padding:11px; vertical-align:top; font-size:12px; line-height:1.8; }
+  .biz .th { background:#eef0f3; width:104px; font-weight:bold; color:#1a3a6b; }
+  .news { border:1px solid #d6dae0; padding:12px; }
+  .news dl { margin:0; font-size:12px; line-height:1.9; }
+  .news dt { color:#888; }
+  .news dd { margin:0 0 9px; padding-bottom:9px; border-bottom:1px dotted #d6dae0; }
+  .side { border:1px solid #d6dae0; margin-bottom:14px; }
+  .side .hd { background:#1a3a6b; color:#fff; padding:7px 11px; font-size:12px; font-weight:bold; }
+  .side .bd { padding:11px; font-size:12px; line-height:1.9; }
+  .foot { background:#1a3a6b; color:#c3d0e2; padding:16px 14px; font-size:11px; line-height:1.9; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div class="name">株式会社サンプル</div>
+    <div class="tel">お問い合わせ：03-1234-5678<br />受付 平日9:00-18:00</div>
+  </div>
+
+  <div class="nav">
+    <table><tr>
+      <td><a href="#">ホーム</a></td>
+      <td><a href="#">会社案内</a></td>
+      <td><a href="#">事業内容</a></td>
+      <td><a href="#">製品情報</a></td>
+      <td><a href="#">採用情報</a></td>
+      <td><a href="#">お問い合わせ</a></td>
+    </tr></table>
+  </div>
+
+  <div class="hero">
+    <div class="deco"></div>
+    <div class="cap">
+      <h1>未来をつくる、確かな技術</h1>
+      <p>SINCE 1985　－　信頼と実績の株式会社サンプル</p>
+    </div>
+  </div>
+
+  <div class="band">ホーム ＞ トップページ</div>
+
+  <div class="main">
+    <div class="col-l">
+      <h2>ごあいさつ</h2>
+      <p class="lead">
+        弊社は創業以来、お客様第一主義を掲げ、高品質な製品とサービスの提供に努めてまいりました。
+        時代の変化に対応しながら、常に最適なソリューションをご提案いたします。
+        今後とも変わらぬご愛顧を賜りますようお願い申し上げます。
+      </p>
+
+      <h2>事業内容</h2>
+      <table class="biz">
+        <tr><td class="th">精密加工</td><td>各種金属部品の精密加工を承ります。小ロットから対応可能です。</td></tr>
+        <tr><td class="th">設計・開発</td><td>お客様のご要望に応じた設計・開発をトータルでサポートいたします。</td></tr>
+        <tr><td class="th">品質管理</td><td>徹底した品質管理体制で、安定した品質をお届けします。</td></tr>
+      </table>
+
+      <h2>お知らせ</h2>
+      <div class="news">
+        <dl>
+          <dt>2021.04.01</dt><dd>ホームページをリニューアルいたしました</dd>
+          <dt>2020.12.28</dt><dd>年末年始の休業についてのお知らせ</dd>
+          <dt>2020.08.11</dt><dd>夏季休業のお知らせ</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="col-r">
+      <div class="side">
+        <div class="hd">会社概要</div>
+        <div class="bd">
+          株式会社サンプル<br />
+          東京都○○区○○ 1-2-3<br />
+          TEL：03-1234-5678<br />
+          FAX：03-1234-5679
+        </div>
+      </div>
+      <div class="side">
+        <div class="hd">取扱製品</div>
+        <div class="bd">
+          ・精密機械部品<br />
+          ・治具、金型<br />
+          ・各種装置
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    Copyright &copy; 株式会社サンプル All Rights Reserved.
+  </div>
+
+</div>
+</body>
+</html>
