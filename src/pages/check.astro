@@ -132,6 +132,29 @@ const checkSteps = [
   <section id="screen-result" class="hidden">
     <div class="container-pd py-16 md:py-20">
       <div class="mx-auto max-w-3xl">
+        <!-- 結果を見る前に「レポートがもらえる」ことを先に伝え、下のCVまで意識を持たせる -->
+        <div class="reveal mb-8 overflow-hidden rounded-2xl border border-pink/25 bg-pink/[0.06]" data-reveal="0">
+          <a href="#report-form" class="flex items-center gap-3 px-5 py-4 no-underline md:justify-center md:gap-4">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-pink text-paper" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2.5" y="8" width="15" height="9.5" rx="1.5" /><path d="M1.5 8h17M10 8v9.5" />
+                <path d="M10 8S8.2 3.5 6.2 3.5a2 2 0 0 0 0 4.5M10 8s1.8-4.5 3.8-4.5a2 2 0 0 1 0 4.5" />
+              </svg>
+            </span>
+            <span class="flex-1 md:flex-none">
+              <span class="block text-sm font-black leading-snug text-navy md:text-base">
+                無料の「診断改善レポート」をプレゼント
+              </span>
+              <span class="mt-0.5 block text-xs leading-snug text-gray">
+                この結果をもとに、どこからどう直すかをまとめてお送りします
+              </span>
+            </span>
+            <span class="shrink-0 text-pink" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h12M9 3l5 5-5 5" /></svg>
+            </span>
+          </a>
+        </div>
+
         <p class="reveal text-center text-sm text-gray" data-reveal="0">
           診断結果：<span id="result-url" class="break-all font-bold text-navy"></span>
         </p>
@@ -169,10 +192,20 @@ const checkSteps = [
           <p class="mt-1.5 text-xs leading-relaxed text-gray">
             各項目は、あなたのサイトを実際にチェックした結果です（<span class="font-bold" style="color:#1F9D6B">✓</span>＝できている／<span class="font-bold text-pink">✕</span>＝もったいない）。
           </p>
-          <div id="axes" class="mt-5 space-y-3"></div>
-          <div class="mt-4 flex items-center justify-center gap-2 rounded-xl border border-navy/10 bg-navy/[0.03] px-4 py-3 text-center text-xs font-bold text-navy">
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="2.5" width="11" height="9" rx="1.5"/><path d="M1.5 4l5.5 3.5L12.5 4"/></svg>
-            各項目を「どう直すか」は、無料レポートでお送りします
+          <!-- CVまでのスクロールを短くするため2カラムに並べる（スマホは1カラム） -->
+          <div id="axes" class="mt-5 grid gap-3 md:grid-cols-2"></div>
+
+          <!-- ゲートの予告。ここを弱くすると下のフォームまで意識が続かない -->
+          <div class="mt-6 rounded-2xl border-2 border-dashed border-pink/40 bg-pink/[0.06] px-5 py-5 text-center">
+            <p class="flex items-center justify-center gap-2 text-base font-black leading-snug text-navy md:text-lg">
+              <span class="text-pink" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3.5" width="16" height="13" rx="2"/><path d="M2.5 5.5l7.5 5 7.5-5"/></svg>
+              </span>
+              各項目を「どう直すか」は、<span class="text-pink">無料レポート</span>でお送りします
+            </p>
+            <a href="#report-form" class="btn-pink mt-4 !px-7 !py-3 text-sm">
+              無料レポートを受け取る
+            </a>
           </div>
         </div>
 
@@ -182,7 +215,7 @@ const checkSteps = [
              NOTE: レポートは自動送信ではなく、Formspree のリード通知を見て担当者が手動で作成・返信する運用。
                    そのため「1営業日以内」と明示している。将来的に自動生成・自動送信へ移行する場合は
                    この文言と運用フローをあわせて見直すこと。 -->
-        <div class="reveal mt-12" data-reveal="3">
+        <div id="report-form" class="reveal mt-12 scroll-mt-24" data-reveal="3">
           <div class="card border-pink/30 bg-pink/5 p-7 md:p-9">
             <!-- 見つかった件数（中身は伏せる） -->
             <div class="text-center">
