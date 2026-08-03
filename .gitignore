@@ -27,3 +27,6 @@ yarn-error.log*
 
 # Cloudflare Wrangler local cache
 .wrangler/
+
+# 実在企業向けの診断レポート作業ディレクトリ（公開リポジトリに含めない）
+work/
