@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Web診断レポート｜株式会社サンプル様（58点）</title>
+<!--
+  Plugdo 診断レポート HTMLメール版サンプル（docs/plugdo-診断レポート作成キット.md のテキスト版と同じ58点ケース）
+
+  メール配信を前提にした制約：
+  - レイアウトは table のみ（flex / grid はGmail・Outlookで崩れる）
+  - スタイルは原則インライン（<style> はクライアントによって除去される）
+  - 画像なし（画像ブロックされても意味が通る／ロゴも文字で表現）
+  - 最大幅600px（Outlookのプレビューペイン幅）
+  - Webフォント不使用（メールでは読み込まれない）
+
+  ブラウザで開いてそのまま印刷→PDF保存すれば、添付用レポートとしても使える。
+-->
+<style>
+  /* スマホ幅での微調整。非対応クライアントでも崩れないよう、なくても成立する指定のみ。 */
+  @media screen and (max-width: 600px) {
+    .sp-pad { padding-left: 20px !important; padding-right: 20px !important; }
+    .sp-score { font-size: 64px !important; }
+    .sp-stack { display: block !important; width: 100% !important; }
+  }
+  @media print {
+    .no-print { display: none !important; }
+    body { background: #ffffff !important; }
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background-color:#EBEEF2;font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic',Meiryo,sans-serif;-webkit-font-smoothing:antialiased;">
+
+<!-- プリヘッダー（受信箱の一覧に出る一文。本文には表示されない） -->
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">
+  総合58点。まず直したい3つと、その直し方をまとめました。
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EBEEF2;">
+<tr>
+<td align="center" style="padding:24px 12px;">
+
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background-color:#ffffff;border-radius:14px;overflow:hidden;">
+
+    <!-- ══ ヘッダー ══ -->
+    <tr>
+      <td style="background-color:#103366;padding:20px 32px;" class="sp-pad">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td align="left" style="font-size:22px;font-weight:bold;letter-spacing:-0.5px;color:#ffffff;line-height:1;">
+            plugd<span style="color:#E43172;">o</span>
+          </td>
+          <td align="right" style="font-size:11px;font-weight:bold;letter-spacing:1.5px;color:#8fa6c4;line-height:1;">
+            WEB CHECK REPORT
+          </td>
+        </tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- ══ 宛名 ══ -->
+    <tr>
+      <td style="padding:32px 32px 0 32px;" class="sp-pad">
+        <p style="margin:0;font-size:15px;font-weight:bold;color:#103366;line-height:1.7;">
+          株式会社サンプル<br />齋藤 勇 様
+        </p>
+        <p style="margin:14px 0 0 0;font-size:14px;color:#333333;line-height:1.9;">
+          このたびは無料Web診断をご利用いただきありがとうございます。<br />
+          診断結果をもとに、<strong style="color:#103366;">どこから、どう直すか</strong>をまとめました。
+        </p>
+      </td>
+    </tr>
+
+    <!-- ══ スコア ══ -->
+    <tr>
+      <td style="padding:28px 32px 0 32px;" class="sp-pad">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F7F9FC;border-radius:12px;">
+        <tr>
+          <td align="center" style="padding:26px 24px 24px 24px;">
+            <p style="margin:0;font-size:11px;font-weight:bold;letter-spacing:1px;color:#797979;line-height:1;">
+              診断したサイト
+            </p>
+            <p style="margin:7px 0 0 0;font-size:13px;font-weight:bold;color:#103366;line-height:1.5;word-break:break-all;">
+              example-corp.co.jp
+            </p>
+
+            <!-- 総合点 -->
+            <p style="margin:18px 0 0 0;font-size:76px;font-weight:bold;color:#C8A951;line-height:0.9;letter-spacing:-3px;" class="sp-score">
+              58
+            </p>
+            <p style="margin:6px 0 0 0;font-size:12px;font-weight:bold;color:#797979;line-height:1;">
+              / 100点
+            </p>
+
+            <!-- 点数帯コメント -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;">
+            <tr>
+              <td style="border-top:1px solid #E3E8F0;padding-top:18px;">
+                <p style="margin:0;font-size:13px;color:#333333;line-height:1.9;text-align:left;">
+                  平均的な状態です。裏を返せば、<strong style="color:#103366;">直したぶんだけ結果が出やすい状態</strong>でもあります。特に下の3点は、いま問い合わせを取りこぼしている可能性が高い箇所です。
+                </p>
+              </td>
+            </tr>
+            </table>
+          </td>
+        </tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- ══ 7軸スコア ══ -->
+    <tr>
+      <td style="padding:34px 32px 0 32px;" class="sp-pad">
+        <p style="margin:0 0 4px 0;font-size:16px;font-weight:bold;color:#103366;line-height:1.5;">
+          7つの視点でみると
+        </p>
+        <p style="margin:0 0 16px 0;font-size:12px;color:#797979;line-height:1.7;">
+          点数が低い順ではなく、<strong>改善したときの効果が大きい順</strong>に直すのが近道です。
+        </p>
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+
+          <!-- 第一印象・信頼感 52 -->
+          <tr><td style="padding-bottom:13px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="font-size:13px;color:#333333;line-height:1.4;">第一印象・信頼感</td>
+                <td align="right" style="font-size:13px;font-weight:bold;color:#C8A951;line-height:1.4;">52</td>
+              </tr>
+              <tr><td colspan="2" style="padding-top:6px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EBEEF2;border-radius:4px;">
+                  <tr><td width="52%" style="background-color:#C8A951;border-radius:4px;font-size:0;line-height:0;height:7px;">&nbsp;</td><td width="48%" style="font-size:0;line-height:0;height:7px;">&nbsp;</td></tr>
+                </table>
+              </td></tr>
+            </table>
+          </td></tr>
+
+          <!-- 伝わりやすさ 64 -->
+          <tr><td style="padding-bottom:13px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="font-size:13px;color:#333333;line-height:1.4;">伝わりやすさ</td>
+                <td align="right" style="font-size:13px;font-weight:bold;color:#C8A951;line-height:1.4;">64</td>
+              </tr>
+              <tr><td colspan="2" style="padding-top:6px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EBEEF2;border-radius:4px;">
+                  <tr><td width="64%" style="background-color:#C8A951;border-radius:4px;font-size:0;line-height:0;height:7px;">&nbsp;</td><td width="36%" style="font-size:0;line-height:0;height:7px;">&nbsp;</td></tr>
+                </table>
+              </td></tr>
+            </table>
+          </td></tr>
+
+          <!-- 問い合わせのしやすさ 41 -->
+          <tr><td style="padding-bottom:13px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="font-size:13px;font-weight:bold;color:#103366;line-height:1.4;">
+                  問い合わせのしやすさ
+                  <span style="display:inline-block;background-color:#E43172;color:#ffffff;font-size:10px;font-weight:bold;padding:1px 7px;border-radius:9px;margin-left:5px;">最優先</span>
+                </td>
+                <td align="right" style="font-size:13px;font-weight:bold;color:#E43172;line-height:1.4;">41</td>
+              </tr>
+              <tr><td colspan="2" style="padding-top:6px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EBEEF2;border-radius:4px;">
+                  <tr><td width="41%" style="background-color:#E43172;border-radius:4px;font-size:0;line-height:0;height:7px;">&nbsp;</td><td width="59%" style="font-size:0;line-height:0;height:7px;">&nbsp;</td></tr>
+                </table>
+              </td></tr>
+            </table>
+          </td></tr>
+
+          <!-- スマホ対応 38 -->
+          <tr><td style="padding-bottom:13px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="font-size:13px;color:#333333;line-height:1.4;">スマホ対応</td>
+                <td align="right" style="font-size:13px;font-weight:bold;color:#E43172;line-height:1.4;">38</td>
+              </tr>
+              <tr><td colspan="2" style="padding-top:6px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EBEEF2;border-radius:4px;">
+                  <tr><td width="38%" style="background-color:#E43172;border-radius:4px;font-size:0;line-height:0;height:7px;">&nbsp;</td><td width="62%" style="font-size:0;line-height:0;height:7px;">&nbsp;</td></tr>
+                </table>
+              </td></tr>
+            </table>
+          </td></tr>
+
+          <!-- 見つけてもらえるか 55 -->
+          <tr><td style="padding-bottom:13px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="font-size:13px;color:#333333;line-height:1.4;">見つけてもらえるか</td>
+                <td align="right" style="font-size:13px;font-weight:bold;color:#C8A951;line-height:1.4;">55</td>
+              </tr>
+              <tr><td colspan="2" style="padding-top:6px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EBEEF2;border-radius:4px;">
+                  <tr><td width="55%" style="background-color:#C8A951;border-radius:4px;font-size:0;line-height:0;height:7px;">&nbsp;</td><td width="45%" style="font-size:0;line-height:0;height:7px;">&nbsp;</td></tr>
+                </table>
+              </td></tr>
+            </table>
+          </td></tr>
+
+          <!-- 信用の証拠 45 -->
+          <tr><td style="padding-bottom:13px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="font-size:13px;color:#333333;line-height:1.4;">信用の証拠</td>
+                <td align="right" style="font-size:13px;font-weight:bold;color:#E43172;line-height:1.4;">45</td>
+              </tr>
+              <tr><td colspan="2" style="padding-top:6px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EBEEF2;border-radius:4px;">
+                  <tr><td width="45%" style="background-color:#E43172;border-radius:4px;font-size:0;line-height:0;height:7px;">&nbsp;</td><td width="55%" style="font-size:0;line-height:0;height:7px;">&nbsp;</td></tr>
+                </table>
+              </td></tr>
+            </table>
+          </td></tr>
+
+          <!-- 表示の速さ 78 -->
+          <tr><td>
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="font-size:13px;color:#333333;line-height:1.4;">表示の速さ</td>
+                <td align="right" style="font-size:13px;font-weight:bold;color:#1F9D6B;line-height:1.4;">78</td>
+              </tr>
+              <tr><td colspan="2" style="padding-top:6px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EBEEF2;border-radius:4px;">
+                  <tr><td width="78%" style="background-color:#1F9D6B;border-radius:4px;font-size:0;line-height:0;height:7px;">&nbsp;</td><td width="22%" style="font-size:0;line-height:0;height:7px;">&nbsp;</td></tr>
+                </table>
+              </td></tr>
+            </table>
+          </td></tr>
+
+        </table>
+      </td>
+    </tr>
+
+    <!-- ══ 区切り ══ -->
+    <tr><td style="padding:32px 32px 0 32px;" class="sp-pad">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td style="border-top:2px solid #103366;font-size:0;line-height:0;">&nbsp;</td>
+      </tr></table>
+    </td></tr>
+
+    <!-- ══ まず直したい3つ ══ -->
+    <tr>
+      <td style="padding:22px 32px 0 32px;" class="sp-pad">
+        <p style="margin:0 0 4px 0;font-size:18px;font-weight:bold;color:#103366;line-height:1.5;">
+          まず直したい3つ
+        </p>
+        <p style="margin:0 0 20px 0;font-size:12px;color:#797979;line-height:1.7;">
+          この順番で手をつけるのがおすすめです。
+        </p>
+
+        <!-- 【1】 -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#FDF2F6;border-radius:10px;margin-bottom:14px;">
+        <tr><td style="padding:20px 22px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td width="30" valign="top" style="width:30px;">
+              <div style="width:24px;height:24px;background-color:#E43172;border-radius:12px;color:#ffffff;font-size:13px;font-weight:bold;text-align:center;line-height:24px;">1</div>
+            </td>
+            <td valign="top" style="padding-left:10px;">
+              <p style="margin:0;font-size:14px;font-weight:bold;color:#103366;line-height:1.6;">
+                最初の画面に問い合わせボタンがなく、行動につながりにくい状態です
+              </p>
+            </td>
+          </tr>
+          </table>
+
+          <p style="margin:15px 0 0 0;font-size:11px;font-weight:bold;letter-spacing:0.5px;color:#E43172;line-height:1;">なぜ問題か</p>
+          <p style="margin:6px 0 0 0;font-size:13px;color:#333333;line-height:1.9;">
+            読んで納得した直後に押す先がないと、その熱量は次のページで冷めてしまいます。御社サイトはサービス紹介の内容がしっかり書かれているぶん、この一点で機会を逃しています。
+          </p>
+
+          <p style="margin:14px 0 0 0;font-size:11px;font-weight:bold;letter-spacing:0.5px;color:#E43172;line-height:1;">どう直すか</p>
+          <p style="margin:6px 0 0 0;font-size:13px;color:#333333;line-height:1.9;">
+            最初の画面・サービス説明の直後・ページ末尾の3箇所に、同じボタンを置きます。文言は「送信」ではなく<strong style="color:#103366;">「無料で相談する」</strong>のように、押した先で何が起きるかが分かる言葉にしてください。
+          </p>
+
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:14px;">
+          <tr>
+            <td style="background-color:#ffffff;border-radius:5px;padding:5px 11px;font-size:11px;color:#797979;">難易度：<strong style="color:#103366;">要制作</strong></td>
+            <td style="width:6px;font-size:0;">&nbsp;</td>
+            <td style="background-color:#ffffff;border-radius:5px;padding:5px 11px;font-size:11px;color:#797979;">効果：<strong style="color:#1F9D6B;">即日</strong></td>
+          </tr>
+          </table>
+        </td></tr>
+        </table>
+
+        <!-- 【2】 -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F7F9FC;border-radius:10px;margin-bottom:14px;">
+        <tr><td style="padding:20px 22px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td width="30" valign="top" style="width:30px;">
+              <div style="width:24px;height:24px;background-color:#103366;border-radius:12px;color:#ffffff;font-size:13px;font-weight:bold;text-align:center;line-height:24px;">2</div>
+            </td>
+            <td valign="top" style="padding-left:10px;">
+              <p style="margin:0;font-size:14px;font-weight:bold;color:#103366;line-height:1.6;">
+                スマホ表示の基本設定（viewport）が無く、崩れている可能性があります
+              </p>
+            </td>
+          </tr>
+          </table>
+
+          <p style="margin:15px 0 0 0;font-size:11px;font-weight:bold;letter-spacing:0.5px;color:#103366;line-height:1;">なぜ問題か</p>
+          <p style="margin:6px 0 0 0;font-size:13px;color:#333333;line-height:1.9;">
+            PC版がそのまま縮小表示されるため、拡大しないと読めません。閲覧の大半がスマホである以上、影響が最も直接的に出ます。
+          </p>
+
+          <p style="margin:14px 0 0 0;font-size:11px;font-weight:bold;letter-spacing:0.5px;color:#103366;line-height:1;">どう直すか</p>
+          <p style="margin:6px 0 0 0;font-size:13px;color:#333333;line-height:1.9;">
+            まず viewport の設定を1行追加します。ただしこれは入口で、御社サイトはレイアウト自体がPC幅を前提に作られているため、<strong style="color:#103366;">設定だけでは崩れが残ります</strong>。スマホ幅での組み直しが必要です。
+          </p>
+
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:14px;">
+          <tr>
+            <td style="background-color:#ffffff;border-radius:5px;padding:5px 11px;font-size:11px;color:#797979;">難易度：<strong style="color:#103366;">要制作</strong></td>
+            <td style="width:6px;font-size:0;">&nbsp;</td>
+            <td style="background-color:#ffffff;border-radius:5px;padding:5px 11px;font-size:11px;color:#797979;">効果：<strong style="color:#1F9D6B;">即日</strong></td>
+          </tr>
+          </table>
+        </td></tr>
+        </table>
+
+        <!-- 【3】 -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F7F9FC;border-radius:10px;">
+        <tr><td style="padding:20px 22px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td width="30" valign="top" style="width:30px;">
+              <div style="width:24px;height:24px;background-color:#103366;border-radius:12px;color:#ffffff;font-size:13px;font-weight:bold;text-align:center;line-height:24px;">3</div>
+            </td>
+            <td valign="top" style="padding-left:10px;">
+              <p style="margin:0;font-size:14px;font-weight:bold;color:#103366;line-height:1.6;">
+                何の会社かが最初の画面で伝わりにくい状態です
+              </p>
+            </td>
+          </tr>
+          </table>
+
+          <p style="margin:15px 0 0 0;font-size:11px;font-weight:bold;letter-spacing:0.5px;color:#103366;line-height:1;">なぜ問題か</p>
+          <p style="margin:6px 0 0 0;font-size:13px;color:#333333;line-height:1.9;">
+            初めて訪れた人は数秒で「自分向けか」を判断して離脱します。現在の見出しは<span style="background-color:#EBEEF2;padding:1px 5px;border-radius:3px;">「未来をつくる、確かな技術」</span>となっており、何を扱う会社かが読み取れません。
+          </p>
+
+          <p style="margin:14px 0 0 0;font-size:11px;font-weight:bold;letter-spacing:0.5px;color:#103366;line-height:1;">どう直すか</p>
+          <p style="margin:6px 0 0 0;font-size:13px;color:#333333;line-height:1.9;">
+            「誰の・どんな悩みを・どう解決するか」を1文で置きます。「確かな」「最適な」といった抽象語は、<strong style="color:#103366;">数字か具体的な事実</strong>に置き換えてください。
+          </p>
+
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:14px;">
+          <tr>
+            <td style="background-color:#ffffff;border-radius:5px;padding:5px 11px;font-size:11px;color:#797979;">難易度：<strong style="color:#1F9D6B;">自力可</strong></td>
+            <td style="width:6px;font-size:0;">&nbsp;</td>
+            <td style="background-color:#ffffff;border-radius:5px;padding:5px 11px;font-size:11px;color:#797979;">効果：<strong style="color:#1F9D6B;">即日</strong></td>
+          </tr>
+          </table>
+        </td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- ══ そのほかの指摘 ══ -->
+    <tr>
+      <td style="padding:30px 32px 0 32px;" class="sp-pad">
+        <p style="margin:0 0 4px 0;font-size:15px;font-weight:bold;color:#103366;line-height:1.5;">
+          そのほかに見つかった点（全4件）
+        </p>
+        <p style="margin:0 0 14px 0;font-size:12px;color:#797979;line-height:1.7;">
+          いずれも上の3つを直したあとで問題ありません。
+        </p>
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E3E8F0;border-radius:10px;">
+        <tr><td style="padding:16px 20px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr><td valign="top" style="padding-bottom:9px;font-size:13px;color:#333333;line-height:1.8;">
+              <span style="color:#E43172;">●</span>&nbsp; お客様の声・事例が見当たらず、初めての人が安心しにくいです
+            </td></tr>
+            <tr><td valign="top" style="padding-bottom:9px;font-size:13px;color:#333333;line-height:1.8;">
+              <span style="color:#E43172;">●</span>&nbsp; 実績（年数・件数など）が数字で示されていません
+            </td></tr>
+            <tr><td valign="top" style="padding-bottom:9px;font-size:13px;color:#333333;line-height:1.8;">
+              <span style="color:#E43172;">●</span>&nbsp; 検索結果に出る説明文が設定されていません
+            </td></tr>
+            <tr><td valign="top" style="font-size:13px;color:#333333;line-height:1.8;">
+              <span style="color:#E43172;">●</span>&nbsp; よくある質問（Q&amp;A）が無く、AI検索に引用されにくい状態です
+            </td></tr>
+          </table>
+        </td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- ══ CTA（65点未満＝リニューアル案内） ══ -->
+    <tr>
+      <td style="padding:30px 32px 0 32px;" class="sp-pad">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#103366;border-radius:12px;">
+        <tr><td style="padding:28px 26px;">
+          <p style="margin:0;font-size:16px;font-weight:bold;color:#ffffff;line-height:1.7;">
+            この課題は、更新では直りません。
+          </p>
+          <p style="margin:12px 0 0 0;font-size:13px;color:#c8d5e6;line-height:1.9;">
+            今回の減点は、文言や画像の差し替えでは届かない部分（構造・スマホ対応）に集中しています。部分的な修正を重ねるより、土台から作り直したほうが結果的に早く・安くなるケースです。
+          </p>
+
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;background-color:#1b4176;border-radius:8px;">
+          <tr><td style="padding:16px 18px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="font-size:12px;color:#c8d5e6;line-height:1.6;">リニューアル</td>
+              <td align="right" style="font-size:19px;font-weight:bold;color:#ffffff;line-height:1.2;">¥198,000<span style="font-size:12px;">〜</span></td>
+            </tr>
+            </table>
+            <p style="margin:7px 0 0 0;font-size:11px;color:#8fa6c4;line-height:1.7;">
+              5ページ構成・スマホ対応・基本SEOを含みます
+            </p>
+          </td></tr>
+          </table>
+
+          <!-- ボタン（bulletproof：Outlookでも潰れない書き方） -->
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;">
+          <tr><td align="center" bgcolor="#E43172" style="background-color:#E43172;border-radius:8px;">
+            <a href="https://plugdo.jp/contact/" target="_blank"
+               style="display:block;padding:15px 20px;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;line-height:1.2;">
+              無料相談を予約する（オンライン30分）
+            </a>
+          </td></tr>
+          </table>
+
+          <p style="margin:12px 0 0 0;font-size:11px;color:#8fa6c4;line-height:1.7;text-align:center;">
+            このレポートへのご質問だけでも構いません。売り込みはいたしません。
+          </p>
+        </td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- ══ 結び ══ -->
+    <tr>
+      <td style="padding:26px 32px 0 32px;" class="sp-pad">
+        <p style="margin:0;font-size:13px;color:#333333;line-height:1.9;">
+          「うちの場合はどうすれば」といったご相談も、このメールへの返信で承ります。<br />
+          どうぞお気軽にご返信ください。
+        </p>
+      </td>
+    </tr>
+
+    <!-- ══ フッター ══ -->
+    <tr>
+      <td style="padding:26px 32px 34px 32px;" class="sp-pad">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr><td style="border-top:1px solid #E3E8F0;padding-top:20px;">
+          <p style="margin:0;font-size:13px;font-weight:bold;color:#103366;line-height:1.6;">
+            Plugdo（株式会社ハンチス）
+          </p>
+          <p style="margin:5px 0 0 0;font-size:12px;color:#797979;line-height:1.9;">
+            担当：齋藤 勇<br />
+            全国対応・オンライン完結<br />
+            <a href="https://plugdo.jp/" target="_blank" style="color:#103366;text-decoration:underline;">https://plugdo.jp</a>
+          </p>
+          <p style="margin:14px 0 0 0;font-size:11px;color:#a8a8a8;line-height:1.7;">
+            このメールは、plugdo.jp のWeb診断で詳細レポートをご希望いただいた方にお送りしています。
+          </p>
+        </td></tr>
+        </table>
+      </td>
+    </tr>
+
+  </table>
+
+  <p class="no-print" style="margin:16px 0 0 0;font-size:11px;color:#8a94a3;line-height:1.7;text-align:center;">
+    ※ これは docs/plugdo-診断レポート作成キット.md のテキスト版と同じ58点ケースのデザイン版サンプルです
+  </p>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
