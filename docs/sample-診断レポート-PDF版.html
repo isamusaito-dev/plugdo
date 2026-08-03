@@ -90,6 +90,17 @@
     width:196px; flex:none; background:#F7F9FC; border-radius:10px;
     padding:16px 10px 14px; text-align:center;
   }
+  /* ゲージの数字は絶対配置で中央に固定する。
+     負のマージンで重ねる書き方だと、桁数やフォントの差で「/100点」がリングに乗る。 */
+  .gauge { position:relative; width:118px; height:118px; margin:0 auto; }
+  .gauge svg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); }
+  .gauge-num {
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .gauge-num .n { font-size:35px; font-weight:800; color:var(--navy); letter-spacing:-1.5px; line-height:1; }
+  .gauge-num .d { font-size:9.5px; font-weight:700; color:var(--gray); margin-top:3px; line-height:1; }
+  .score-cap { font-size:9px; color:var(--gray); letter-spacing:1px; margin-top:11px; }
   .band-box { flex:1; display:flex; flex-direction:column; justify-content:center; }
   .band-lead { font-size:15px; font-weight:800; color:var(--navy); margin:0 0 8px; line-height:1.5; }
   .band-body { font-size:11.5px; line-height:2; margin:0; }
@@ -187,8 +198,13 @@
   .proj-c {
     flex:1; background:#F1FAF6; border:1px solid #CBE9DB; border-radius:8px;
     padding:11px 8px; text-align:center;
+    display:flex; flex-direction:column; justify-content:space-between;
   }
-  .proj-c .nm { font-size:9px; color:var(--gray); line-height:1.4; margin-bottom:5px; }
+  /* ラベルが1行のものと2行のものが混在しても数値の高さが揃うよう、2行分を確保する */
+  .proj-c .nm {
+    font-size:9px; color:var(--gray); line-height:1.4; margin-bottom:5px;
+    min-height:2.8em; display:flex; align-items:center; justify-content:center;
+  }
   .proj-c .vv { font-size:14px; font-weight:800; color:var(--good); line-height:1; }
   .proj-c .vv s { color:#b9c0cb; font-size:11px; font-weight:400; margin-right:3px; }
 
@@ -247,16 +263,15 @@
   <!-- スコア -->
   <div class="score-row">
     <div class="score-box">
-      <svg viewBox="0 0 140 140" style="width:118px;height:118px;transform:rotate(-90deg);">
-        <circle cx="70" cy="70" r="54" fill="none" stroke="#E3E8F0" stroke-width="13" />
-        <circle cx="70" cy="70" r="54" fill="none" stroke="#C8A951" stroke-width="13"
-                stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="142.5" />
-      </svg>
-      <div style="margin-top:-79px;margin-bottom:34px;">
-        <div style="font-size:38px;font-weight:800;color:var(--navy);line-height:1;letter-spacing:-1.5px;">58</div>
-        <div style="font-size:9.5px;font-weight:700;color:var(--gray);margin-top:2px;">/ 100点</div>
+      <div class="gauge">
+        <svg viewBox="0 0 140 140">
+          <circle cx="70" cy="70" r="54" fill="none" stroke="#E3E8F0" stroke-width="13" />
+          <circle cx="70" cy="70" r="54" fill="none" stroke="#C8A951" stroke-width="13"
+                  stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="142.5" />
+        </svg>
+        <div class="gauge-num"><div class="n">58</div><div class="d">/ 100点</div></div>
       </div>
-      <div style="font-size:9px;color:var(--gray);letter-spacing:1px;">総合スコア</div>
+      <div class="score-cap">総合スコア</div>
     </div>
 
     <div class="band-box">
