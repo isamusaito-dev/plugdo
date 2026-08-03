@@ -37,6 +37,26 @@ COLORS = {"red": "#E43172", "yellow": "#C8A951", "green": "#1F9D6B"}
 TARGETS = {"mobile": 100, "contact": 100, "findability": 90, "credibility": 85,
            "speed": 90, "clarity": 75, "impression": 85}
 
+# 軸ごとのアイコン（線画・currentColorで着色。外部ファイルに依存しない）
+_S = ('viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" '
+      'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"')
+AXIS_ICONS = {
+    # 第一印象：人
+    "impression": f'<svg {_S}><circle cx="12" cy="8" r="3.4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>',
+    # 伝わりやすさ：文書
+    "clarity": f'<svg {_S}><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h4"/></svg>',
+    # 問い合わせ：封筒
+    "contact": f'<svg {_S}><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>',
+    # スマホ対応：スマートフォン
+    "mobile": f'<svg {_S}><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/></svg>',
+    # 見つけてもらえるか：虫眼鏡
+    "findability": f'<svg {_S}><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>',
+    # 信用の証拠：盾
+    "credibility": f'<svg {_S}><path d="M12 2.5l7.5 3v6c0 4.6-3.1 8.6-7.5 10-4.4-1.4-7.5-5.4-7.5-10v-6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>',
+    # 表示の速さ：メーター
+    "speed": f'<svg {_S}><path d="M3.8 17a9 9 0 1 1 16.4 0"/><path d="M12 17l4-5"/><circle cx="12" cy="17" r="1.3"/></svg>',
+}
+
 
 def band_text(total):
     """点数帯コメント（check.ts の bandMessage と同じ区切り）。"""
@@ -117,7 +137,25 @@ def pick_priorities(data, snips):
             break
         if x not in top:
             top.append(x)
-    return top, impact, scores
+
+    # 優先順位表用：全7軸を、改善したときの点数の伸び順に並べる
+    by_axis = {}
+    for x in found:
+        by_axis.setdefault(x["axis"], x)
+    ranked = []
+    for a, w in weights.items():
+        gain = round(w * (max(scores[a], TARGETS.get(a, scores[a])) - scores[a]) / 100)
+        item = by_axis.get(a)
+        ranked.append({
+            "axis": a,
+            "title": item["title"] if item else f"{snips['axisLabels'][a]}の改善",
+            "score": scores[a],
+            "impact": impact[a],
+            "gain": gain,
+            "pri": "高" if impact[a] >= 8 else "中" if impact[a] >= 4 else "低",
+        })
+    ranked.sort(key=lambda x: -x["impact"])
+    return top, impact, scores, ranked
 
 
 def project(scores, top, weights):
@@ -135,7 +173,7 @@ def project(scores, top, weights):
     return after, changed, total_before, total_after
 
 
-def build_html(data, company, name, top, impact, scores, snips, shots):
+def build_html(data, company, name, top, impact, scores, ranked, snips, shots):
     weights, labels = snips["axisWeights"], snips["axisLabels"]
     total = data["total"]
     lead, body = band_text(total)
@@ -145,19 +183,35 @@ def build_html(data, company, name, top, impact, scores, snips, shots):
     today = datetime.now().strftime("%Y年%-m月%-d日")
     domain = re.sub(r"^https?://", "", data["url"]).rstrip("/")
 
-    # 7軸バー（診断画面と同じ並び順で出す）
+    # 7軸バー（診断画面と同じ並び順・アイコン付き）
     axis_rows = ""
     top_axis = top[0]["axis"] if top else None
     for a in data["axes"]:
         c = COLORS[a["color"]]
         badge = '<span class="badge">最優先</span>' if a["key"] == top_axis else ""
-        cls = ' class="axis-nm top"' if a["key"] == top_axis else ""
+        cls = "axis-nm top" if a["key"] == top_axis else "axis-nm"
+        icon = AXIS_ICONS.get(a["key"], "")
         axis_rows += (
-            f'  <div class="axis"><div class="axis-hd"><span{cls}>{esc(a["label"])}{badge}</span>'
+            f'  <div class="axis"><div class="axis-hd">'
+            f'<span class="axis-ic">{icon}</span>'
+            f'<span class="{cls}">{esc(a["label"])}{badge}</span>'
             f'<span class="axis-sc" style="color:{c}">{a["score"]}</span></div>'
             f'<div class="track"><div class="fill" style="width:{a["score"]}%;background:{c}"></div></div></div>\n')
 
-    # まず直したい3つ
+    # 優先順位の一覧（全7軸）
+    prows = ""
+    for i, r in enumerate(ranked, 1):
+        one = " one" if i == 1 else ""
+        pcls = {"高": "h", "中": "m", "低": "l"}[r["pri"]]
+        gain = f'+{r["gain"]}' if r["gain"] > 0 else "—"
+        prows += (
+            f'    <div class="prow"><div class="pno{one}">{i}</div>'
+            f'<span class="ptitle">{esc(r["title"])}'
+            f'<span class="paxis">{esc(labels[r["axis"]])}（現在 {r["score"]}点）</span></span>'
+            f'<span class="pri {pcls}">{r["pri"]}</span>'
+            f'<span class="gain">{gain}</span></div>\n')
+
+    # 具体的な改善アクション（上位3つ・アイコン付き）
     fixes = ""
     for i, t in enumerate(top, 1):
         one = " one" if i == 1 else ""
@@ -165,14 +219,19 @@ def build_html(data, company, name, top, impact, scores, snips, shots):
         if t.get("generic"):
             note = ('\n    <!-- ★要確認: これは軸単位の汎用文です。実際のサイトを見て、'
                     '固有の見出しや文言を引用した内容に書き換えてください -->')
+        icon = AXIS_ICONS.get(t["axis"], "")
+        dg = ' class="g"' if t["difficulty"] == "自力可" else ""
         fixes += f"""
-  <div class="fix{one}">{note}
-    <div class="fix-hd"><div class="fix-no">{i}</div><p class="fix-ttl">{esc(t["title"])}</p></div>
-    <p class="lbl">なぜ問題か</p>
-    <p class="txt">{esc(t["why"])}</p>
-    <p class="lbl">どう直すか</p>
-    <p class="txt">{esc(t["how"])}</p>
-    <div class="tags"><span class="tag">難易度：<b{' class="g"' if t["difficulty"] == "自力可" else ""}>{esc(t["difficulty"])}</b></span><span class="tag">効果：<b class="g">{esc(t["effect"])}</b></span></div>
+  <div class="acard{one}">{note}
+    <div class="aic">{icon}</div>
+    <div class="abody">
+      <p class="attl">{esc(t["title"])}</p>
+      <p class="lbl">なぜ問題か</p>
+      <p class="txt">{esc(t["why"])}</p>
+      <p class="lbl">どう直すか</p>
+      <p class="txt">{esc(t["how"])}</p>
+      <div class="tags"><span class="tag">難易度：<b{dg}>{esc(t["difficulty"])}</b></span><span class="tag">効果：<b class="g">{esc(t["effect"])}</b></span></div>
+    </div>
   </div>
 """
 
@@ -189,13 +248,21 @@ def build_html(data, company, name, top, impact, scores, snips, shots):
     rest_note = (f'<p class="disc" style="margin-top:8px;">※ このほかに{remaining}件の軽微な指摘があります。'
                  f'ご希望があればお伝えします。</p>' if remaining else "")
 
-    # 改善後の見込み
-    proj = ""
-    for a in changed:
-        proj += (f'    <div class="proj-c"><div class="nm">{esc(labels[a])}</div>'
-                 f'<div class="vv"><s>{scores[a]}</s>→ {after[a]}</div></div>\n')
-    proj += (f'    <div class="proj-c" style="background:#F7F9FC;border-color:var(--line);">'
-             f'<div class="nm">総合</div><div class="vv" style="color:var(--navy)"><s>{tb}</s>→ {ta}</div></div>\n')
+    # 改善後のスコア推移（棒グラフ）。全項目を直した場合を上限の目安として並べる
+    all_after = {k: max(scores[k], TARGETS.get(k, scores[k])) for k in weights}
+    t_all = round(sum(all_after[k] * weights[k] for k in weights) / 100)
+    bars = [("現在", tb, "#AAB7CC"), ("上位3つを改善", ta, "#103366")]
+    # 上位3つでほぼ上限に届く場合、同じ高さの棒が並ぶだけなので3本目は出さない
+    if t_all - ta >= 2:
+        bars.append(("すべて改善", t_all, "#E43172"))
+    else:
+        bars[1] = ("改善後", ta, "#E43172")
+    chart_bars, chart_labels = "", ""
+    for label, val, col in bars:
+        h = max(6, round(val / 100 * 86))   # グラフ領域の高さに合わせる
+        chart_bars += (f'    <div class="bar-wrap"><div class="bar-v" style="color:{col}">{val}</div>'
+                       f'<div class="bar" style="height:{h}px;background:{col}"></div></div>\n')
+        chart_labels += f'    <div class="bar-l">{esc(label)}</div>\n'
 
     # スコア別のご提案
     if total < 65:
@@ -221,10 +288,12 @@ def build_html(data, company, name, top, impact, scores, snips, shots):
             .replace("{{BAND_LEAD}}", esc(lead))
             .replace("{{BAND_BODY}}", esc(body))
             .replace("{{AXIS_ROWS}}", axis_rows)
+            .replace("{{PRIORITY_ROWS}}", prows)
             .replace("{{FIXES}}", fixes)
             .replace("{{REST}}", rest_html)
             .replace("{{REST_NOTE}}", rest_note)
-            .replace("{{PROJ}}", proj)
+            .replace("{{CHART_BARS}}", chart_bars)
+            .replace("{{CHART_LABELS}}", chart_labels)
             .replace("{{CTA_H}}", esc(cta_h))
             .replace("{{CTA_P}}", esc(cta_p))
             .replace("{{CTA_NAME}}", esc(cta_name))
@@ -256,7 +325,8 @@ def main():
     print(f"    総合 {data['total']}点 ／ 指摘 {len(data.get('findings', []))}件")
 
     print("2/5 スクリーンショット撮影中…")
-    r = run([os.path.join(ROOT, "scripts/capture-site.sh"), url, outdir])
+    env = {**os.environ, "MOBILE_H": "1125"}  # 枠の高さが隣の解説と揃う比率
+    r = run([os.path.join(ROOT, "scripts/capture-site.sh"), url, outdir], env=env)
     if r.returncode != 0:
         print("    ★ 撮影に失敗しました:", r.stderr[:200])
     for f in ("desktop.png", "mobile.png"):
@@ -266,14 +336,14 @@ def main():
 
     print("3/5 優先順位を算出中…")
     snips = json.load(open(SNIPPETS_PATH, encoding="utf-8"))
-    top, impact, scores = pick_priorities(data, snips)
+    top, impact, scores, ranked = pick_priorities(data, snips)
     for i, t in enumerate(top, 1):
         mark = "（汎用文・要加筆）" if t.get("generic") else ""
         print(f"    {i}. [{snips['axisLabels'][t['axis']]} {scores[t['axis']]}点 / "
               f"インパクト{t['impact']:.1f}] {t['title']}{mark}")
 
     print("4/5 レポートを組み立て中…")
-    html = build_html(data, args.company, args.name, top, impact, scores, snips,
+    html = build_html(data, args.company, args.name, top, impact, scores, ranked, snips,
                       {"desktop": "desktop.png", "mobile": "mobile.png"})
     report = os.path.join(outdir, "report.html")
     open(report, "w", encoding="utf-8").write(html)
