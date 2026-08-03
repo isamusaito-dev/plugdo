@@ -90,7 +90,7 @@ const checkSteps = [
           <div id="loading-bar" class="h-full w-0 rounded-full bg-pink transition-[width] duration-300 ease-out"></div>
         </div>
 
-        <ul class="scan-area relative mx-auto mt-10 max-w-sm space-y-4 text-left">
+        <ul class="mx-auto mt-10 max-w-sm space-y-4 text-left">
           {
             checkSteps.map((step, i) => (
               <li
@@ -107,8 +107,6 @@ const checkSteps = [
               </li>
             ))
           }
-          <!-- スキャンライン（近未来演出。reduced-motion時は非表示） -->
-          <li class="scan-line pointer-events-none absolute inset-x-[-16px] top-0 !mt-0 h-9 rounded-lg" aria-hidden="true"></li>
         </ul>
 
         <!-- チェック完了後〜結果表示までの待ち時間を埋める -->
@@ -607,22 +605,5 @@ const checkSteps = [
   .reveal.is-in {
     opacity: 1;
     transform: translateY(0);
-  }
-
-  /* ── 診断中のスキャンライン（近未来演出・ブランド色のみ） ── */
-  .scan-line {
-    display: none;
-    background: rgba(228, 49, 114, 0.06);
-    border-top: 1.5px solid rgba(228, 49, 114, 0.45);
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .scan-line {
-      display: block;
-      animation: scan-sweep 2.6s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
-    }
-  }
-  @keyframes scan-sweep {
-    0%   { transform: translateY(0); }
-    100% { transform: translateY(19rem); }
   }
 </style>
