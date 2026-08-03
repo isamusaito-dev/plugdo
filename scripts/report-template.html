@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<title>Web診断レポート｜{{COMPANY}}様（{{TOTAL}}点）</title>
+<!--
+  scripts/make-report.py が生成した下書き。
+
+  ★ そのまま送らないこと。次の3点を必ず手で仕上げる：
+     1. 実際のサイトを開き、指摘が事実か確認する（自動診断には誤検知がある）
+     2. 改善文を、そのサイト固有の内容に書き換える（汎用の型のままにしない）
+     3. 2ページ目の注釈（枠と番号）を実際の画面に合わせて配置する
+
+  PDF化： Chromeで開く → 印刷 → PDFに保存／A4・余白なし・背景のグラフィックにチェック
+  崩れ確認： ./scripts/check-report.py <このファイル> --pdf
+-->
+<style>
+
+  @page { size:A4; margin:0; }
+  :root{--navy:#103366;--pink:#E43172;--gold:#C8A951;--good:#1F9D6B;--ink:#333;--gray:#797979;--mist:#EBEEF2;--line:#E3E8F0;}
+  *{box-sizing:border-box}
+  body{margin:0;background:#8b93a1;font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic',Meiryo,sans-serif;color:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .page{width:210mm;min-height:297mm;margin:0 auto 10mm;background:#fff;padding:16mm 15mm;position:relative;overflow:hidden}
+  @media print{body{background:#fff}.page{margin:0;page-break-after:always}.page:last-child{page-break-after:auto}}
+  @media screen{.page{box-shadow:0 6px 30px rgba(0,0,0,.22)}}
+
+  .brand{font-size:19px;font-weight:800;letter-spacing:-.5px;color:var(--navy);line-height:1}
+  .brand i{color:var(--pink);font-style:normal}
+  .kicker{font-size:9.5px;font-weight:700;letter-spacing:2px;color:var(--gray)}
+  .head{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:2px solid var(--navy);padding-bottom:9px;margin-bottom:20px}
+  h2.sec{font-size:16px;font-weight:800;color:var(--navy);margin:0 0 3px;display:flex;align-items:center;gap:8px}
+  h2.sec::before{content:'';width:4px;height:17px;background:var(--pink);border-radius:2px;flex:none}
+  .sec-note{font-size:10.5px;color:var(--gray);line-height:1.75;margin:0 0 14px 12px}
+  .foot{position:absolute;left:15mm;right:15mm;bottom:9mm;display:flex;justify-content:space-between;font-size:8.5px;color:#a3aab6;border-top:1px solid var(--line);padding-top:6px}
+
+  .cover-shot{position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--line);box-shadow:0 10px 34px rgba(16,51,102,.18)}
+  .cover-shot img{width:100%;height:70mm;object-fit:cover;object-position:top center;display:block}
+  .cover-shot::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,37,73,0) 50%,rgba(11,37,73,.82) 100%)}
+  .cover-url{position:absolute;left:16px;bottom:13px;z-index:2;color:#fff;font-size:12px;font-weight:700}
+  .cover-url span{display:block;font-size:8.5px;font-weight:400;opacity:.7;letter-spacing:1.5px;margin-bottom:2px}
+
+  .score-row{display:flex;gap:18px;align-items:stretch;margin-top:16px}
+  .score-box{width:190px;flex:none;background:#F7F9FC;border-radius:10px;padding:15px 10px 13px;text-align:center}
+  /* ゲージの数字は絶対配置で中央に固定する（負のマージンだとリングに重なる） */
+  .gauge{position:relative;width:112px;height:112px;margin:0 auto}
+  .gauge svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+  .gauge-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .gauge-num .n{font-size:33px;font-weight:800;color:var(--navy);letter-spacing:-1.5px;line-height:1}
+  .gauge-num .d{font-size:9px;font-weight:700;color:var(--gray);margin-top:3px;line-height:1}
+  .score-cap{font-size:9px;color:var(--gray);letter-spacing:1px;margin-top:11px}
+  .band-box{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .band-lead{font-size:14.5px;font-weight:800;color:var(--navy);margin:0 0 8px;line-height:1.55}
+  .band-body{font-size:11px;line-height:1.95;margin:0}
+
+  /* 対象サイトが縦長のため、A4に収まるよう幅を絞る（注釈は％指定なので位置は保たれる） */
+  .annot{position:relative;border-radius:7px;overflow:hidden;border:1px solid var(--line);max-width:76%;margin:0 auto}
+  .annot img{width:100%;display:block}
+  .pin{position:absolute;width:21px;height:21px;border-radius:50%;background:var(--pink);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px rgba(228,49,114,.28),0 2px 6px rgba(0,0,0,.3);transform:translate(-50%,-50%)}
+  .pin-box{position:absolute;transform:translate(-50%,-50%);border:2px dashed var(--pink);border-radius:6px;background:rgba(228,49,114,.09)}
+  .pin-list{margin:11px 0 0;padding:0;list-style:none}
+  .pin-list li{display:flex;gap:8px;align-items:flex-start;font-size:10.5px;line-height:1.7;margin-bottom:3px}
+  .pin-no{width:17px;height:17px;border-radius:50%;background:var(--pink);color:#fff;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
+
+  .device-row{display:flex;gap:16px;align-items:flex-start}
+  .phone{width:150px;flex:none;border:7px solid #23272E;border-radius:20px;overflow:hidden;background:#23272E;box-shadow:0 8px 22px rgba(0,0,0,.22)}
+  .phone .notch{height:11px;background:#23272E;position:relative}
+  .phone .notch::after{content:'';position:absolute;left:50%;top:2px;transform:translateX(-50%);width:44px;height:5px;background:#000;border-radius:3px}
+  .phone img{width:100%;display:block}
+  .verdict{flex:1;background:#FDF2F6;border-radius:9px;padding:14px 16px;border-left:3px solid var(--pink)}
+  .verdict h3{margin:0 0 8px;font-size:12.5px;font-weight:800;color:var(--navy);line-height:1.6}
+  .verdict p{margin:0 0 8px;font-size:10.5px;line-height:1.9}
+  .verdict p:last-child{margin-bottom:0}
+
+  .axis{margin-bottom:9px}
+  .axis-hd{display:flex;justify-content:space-between;align-items:baseline;font-size:11px}
+  .axis-nm.top{font-weight:800;color:var(--navy)}
+  .badge{display:inline-block;background:var(--pink);color:#fff;font-size:8px;font-weight:800;padding:1px 6px;border-radius:8px;margin-left:5px;vertical-align:1px}
+  .axis-sc{font-weight:800;font-size:12px}
+  .track{height:6px;background:var(--mist);border-radius:3px;margin-top:4px;overflow:hidden}
+  .fill{height:100%;border-radius:3px}
+
+  .fix{border:1px solid var(--line);border-radius:9px;padding:14px 16px;margin-bottom:10px}
+  .fix.one{background:#FDF2F6;border-color:#F5C9DA}
+  .fix-hd{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px}
+  .fix-no{width:22px;height:22px;border-radius:50%;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;background:var(--navy)}
+  .fix.one .fix-no{background:var(--pink)}
+  .fix-ttl{font-size:12.5px;font-weight:800;color:var(--navy);line-height:1.6;margin:0}
+  .lbl{font-size:9px;font-weight:800;letter-spacing:.6px;margin:0 0 3px;color:var(--navy)}
+  .fix.one .lbl{color:var(--pink)}
+  .txt{font-size:10.5px;line-height:1.9;margin:0 0 9px}
+  .tags{display:flex;gap:6px}
+  .tag{background:#fff;border:1px solid var(--line);border-radius:4px;padding:3px 9px;font-size:9px;color:var(--gray)}
+  .tag b{color:var(--navy)} .tag b.g{color:var(--good)}
+
+  .rest{border:1px solid var(--line);border-radius:9px;padding:13px 17px}
+  .rest ul{margin:0;padding-left:16px}
+  .rest li{font-size:10.5px;line-height:1.85;margin-bottom:6px}
+  .rest li:last-child{margin-bottom:0}
+  .rest li::marker{color:var(--pink)}
+  .rest b{color:var(--navy)}
+
+  .proj{display:flex;gap:8px;margin-top:10px}
+  .proj-c{flex:1;background:#F1FAF6;border:1px solid #CBE9DB;border-radius:8px;padding:10px 6px;text-align:center;
+          display:flex;flex-direction:column;justify-content:space-between}
+  /* ラベルが1行/2行で混在しても数値の高さが揃うよう、2行分を確保する */
+  .proj-c .nm{font-size:8.5px;color:var(--gray);line-height:1.4;margin-bottom:5px;min-height:2.8em;
+              display:flex;align-items:center;justify-content:center}
+  .proj-c .vv{font-size:13.5px;font-weight:800;color:var(--good);line-height:1}
+  .proj-c .vv s{color:#b9c0cb;font-size:10.5px;font-weight:400;margin-right:3px}
+
+  .cta{background:var(--navy);border-radius:11px;padding:20px 22px;color:#fff}
+  .cta h3{margin:0 0 8px;font-size:14.5px;font-weight:800;line-height:1.6}
+  .cta p{margin:0;font-size:10.5px;line-height:1.9;color:#c3d2e6}
+  .price{display:flex;justify-content:space-between;align-items:center;background:#1B4176;border-radius:7px;padding:12px 15px;margin:13px 0 12px}
+  .price .l{font-size:10px;color:#c3d2e6}
+  .price .l span{display:block;font-size:8.5px;color:#8fa6c4;margin-top:3px}
+  .price .r{font-size:18px;font-weight:800}
+  .price .r small{font-size:10.5px;font-weight:400}
+  .btn{display:block;background:var(--pink);color:#fff;text-align:center;padding:12px;border-radius:7px;font-size:12px;font-weight:800;text-decoration:none}
+  .cta .fine{margin-top:9px;font-size:9px;color:#8fa6c4;text-align:center;line-height:1.7}
+
+  .sign{margin-top:18px;border-top:1px solid var(--line);padding-top:13px}
+  .sign .nm{font-size:12px;font-weight:800;color:var(--navy);margin:0 0 4px}
+  .sign p{margin:0;font-size:10px;color:var(--gray);line-height:1.85}
+  .disc{margin-top:10px;font-size:8.5px;color:#a3aab6;line-height:1.75}
+</style>
+</head>
+<body>
+
+<!-- ═══ 1 ═══ -->
+<section class="page">
+  <div class="head"><div class="brand">plugd<i>o</i></div><div class="kicker">WEB CHECK REPORT</div></div>
+
+  <p style="margin:0 0 3px;font-size:13px;font-weight:800;color:var(--navy);line-height:1.7;">
+    {{COMPANY}}<br />{{NAME}} 様
+  </p>
+  <p style="margin:9px 0 16px;font-size:11px;line-height:1.9;">
+    このたびは無料Web診断をご利用いただきありがとうございます。<br />
+    実際に御社サイトを拝見し、<strong style="color:var(--navy);">どこから、どう直すか</strong>をまとめました。
+  </p>
+
+  <div class="cover-shot">
+    <img src="{{DESKTOP}}" alt="{{COMPANY}}様のサイト（PC表示）" />
+    <div class="cover-url"><span>DIAGNOSED SITE</span>{{DOMAIN}}</div>
+  </div>
+
+  <div class="score-row">
+    <div class="score-box">
+      <div class="gauge">
+        <svg viewBox="0 0 140 140">
+          <circle cx="70" cy="70" r="54" fill="none" stroke="#E3E8F0" stroke-width="13" />
+          <circle cx="70" cy="70" r="54" fill="none" stroke="{{GAUGE_COLOR}}" stroke-width="13"
+                  stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="{{GAUGE_DASH}}" />
+        </svg>
+        <div class="gauge-num"><div class="n">{{TOTAL}}</div><div class="d">/ 100点</div></div>
+      </div>
+      <div class="score-cap">総合スコア</div>
+    </div>
+
+    <div class="band-box">
+      <!-- ★要確認: この2行は点数帯の定型文。実際のサイトの良い点に触れて書き換えると効果が上がる -->
+      <p class="band-lead">{{BAND_LEAD}}</p>
+      <p class="band-body">{{BAND_BODY}}</p>
+    </div>
+  </div>
+
+  <h2 class="sec" style="margin-top:18px;">7つの視点でみると</h2>
+  <p class="sec-note">
+    点数が低い順ではなく、<strong>直したときの効果が大きい順</strong>に手をつけるのが近道です。
+  </p>
+
+{{AXIS_ROWS}}
+  <div class="foot"><span>Plugdo Web診断レポート｜{{COMPANY}}様</span><span>1 / 4</span></div>
+</section>
+
+<!-- ═══ 2 ═══ -->
+<section class="page">
+  <div class="head"><div class="brand">plugd<i>o</i></div><div class="kicker">WEB CHECK REPORT</div></div>
+
+  <h2 class="sec">いま、こう見えています</h2>
+  <p class="sec-note">診断は自動ですが、このページは実際の表示を撮影して確認したものです。</p>
+
+  <div class="annot">
+    <img src="{{DESKTOP}}" alt="PC表示と指摘箇所" />
+    <!-- ★要確認: 注釈は手で配置する。位置はすべて画像に対する％。
+         ・枠は指摘箇所を囲み、番号の丸は「枠の外側の空白」に置く（本文を隠さないため）
+         ・「無いもの」を枠で囲まない。実際にあるものを囲んで不十分だと説明する
+         ・3つまで。増やすと粗探しの印象になる
+         対象サイトが縦長でA4に収まらない場合は .annot に max-width:76%;margin:0 auto; を付ける
+    <div class="pin-box" style="left:50%;top:20%;width:30%;height:5%;"></div>
+    <div class="pin" style="left:33%;top:20%;">1</div>
+    -->
+  </div>
+
+  <ul class="pin-list">
+    <!-- ★要確認: 上の注釈と番号を対応させて書く
+    <li><span class="pin-no">1</span><span>ここに指摘を書く</span></li>
+    -->
+  </ul>
+
+  <h2 class="sec" style="margin-top:15px;">スマートフォンでは、こうなります</h2>
+  <p class="sec-note">実際にスマホ幅で表示したものです。</p>
+
+  <div class="device-row">
+    <div class="phone"><div class="notch"></div><img src="{{MOBILE}}" alt="スマホ表示" /></div>
+    <div class="verdict">
+      <!-- ★要確認: スマホ表示の状態に合わせて書き換える。
+           viewport が無い場合は「PC版がそのまま縮小され、文字が読めない」
+           viewport はあるが崩れる場合は「要素がはみ出す／押しにくい」など -->
+      <h3>スマートフォンでの見え方</h3>
+      <p>
+        左が実際の表示です。ここに、何が起きているかを1〜2文で書きます。
+      </p>
+      <p>
+        続けて、それが商売にどう響くかを書きます。
+        <strong style="color:var(--navy);">せっかく見に来た方が、伝わる前に離れている</strong>——
+        という形にすると伝わりやすくなります。
+      </p>
+      <p style="font-size:9.5px;color:var(--gray);">
+        ※ 左は実際の表示をそのまま撮影したものです（加工していません）
+      </p>
+    </div>
+  </div>
+
+  <div class="foot"><span>Plugdo Web診断レポート｜{{COMPANY}}様</span><span>2 / 4</span></div>
+</section>
+
+<!-- ═══ 3 ═══ -->
+<section class="page">
+  <div class="head"><div class="brand">plugd<i>o</i></div><div class="kicker">WEB CHECK REPORT</div></div>
+
+  <h2 class="sec">まず直したい3つ</h2>
+  <p class="sec-note">この順番で手をつけるのがおすすめです。</p>
+{{FIXES}}
+  <div class="foot"><span>Plugdo Web診断レポート｜{{COMPANY}}様</span><span>3 / 4</span></div>
+</section>
+
+<!-- ═══ 4 ═══ -->
+<section class="page">
+  <div class="head"><div class="brand">plugd<i>o</i></div><div class="kicker">WEB CHECK REPORT</div></div>
+
+  <h2 class="sec">直すと、こうなります</h2>
+  <p class="sec-note">上の3つを直した場合の、診断ロジック上の再計算値です。</p>
+
+  <div class="proj">
+{{PROJ}}  </div>
+  <p class="disc" style="margin-top:8px;">
+    ※ 同じ採点基準で計算し直した目安の数値です。問い合わせ件数を保証するものではありません。
+  </p>
+
+  <h2 class="sec" style="margin-top:20px;">そのほかに見つかった点</h2>
+  <p class="sec-note">いずれも上の3つを直したあとで問題ありません。</p>
+
+  <div class="rest">
+    <ul>
+{{REST}}    </ul>
+  </div>
+  {{REST_NOTE}}
+
+  <h2 class="sec" style="margin-top:20px;">ご提案</h2>
+
+  <div class="cta">
+    <h3>{{CTA_H}}</h3>
+    <p>{{CTA_P}}</p>
+
+    <div class="price">
+      <div class="l">{{CTA_NAME}}<span>{{CTA_SUB}}</span></div>
+      <div class="r">{{CTA_PRICE}}<small>〜</small></div>
+    </div>
+
+    <a class="btn" href="https://plugdo.jp/contact/">無料相談を予約する（オンライン30分）</a>
+    <p class="fine">
+      このレポートへのご質問だけでも構いません。売り込みはいたしません。<br />
+      https://plugdo.jp/contact/
+    </p>
+  </div>
+
+  <div class="sign">
+    <p class="nm">Plugdo（株式会社ハンチス）</p>
+    <p>担当：齋藤 勇<br />全国対応・オンライン完結／https://plugdo.jp</p>
+    <p class="disc">
+      本レポートは、plugdo.jp のWeb診断にお申し込みいただいた方にお送りしています。<br />
+      記載の内容は{{DATE}}時点のサイトを対象としています。
+    </p>
+  </div>
+
+  <div class="foot"><span>Plugdo Web診断レポート｜{{COMPANY}}様</span><span>4 / 4</span></div>
+</section>
+
+</body>
+</html>
