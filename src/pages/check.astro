@@ -244,15 +244,17 @@ const checkSteps = [
           <!-- CVまでのスクロールを短くするため2カラムに並べる（スマホは1カラム） -->
           <div id="axes" class="mt-5 grid gap-3 md:grid-cols-2"></div>
 
-          <!-- ゲートの予告。ここを弱くすると下のフォームまで意識が続かない -->
-          <div class="mt-6 rounded-2xl border-2 border-dashed border-pink/40 bg-pink/[0.06] px-5 py-5 text-center">
-            <p class="flex items-center justify-center gap-2 text-base font-black leading-snug text-navy md:text-lg">
-              <span class="text-pink" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3.5" width="16" height="13" rx="2"/><path d="M2.5 5.5l7.5 5 7.5-5"/></svg>
-              </span>
-              各項目を「どう直すか」は、<span class="text-pink">無料レポート</span>でお送りします
+          <!-- ゲートの予告。ここを弱くすると下のフォームまで意識が続かない。
+               見出しは flex にしないこと。インラインの span が独立した行になり、
+               スマホで単語の途中で改行されて読みにくくなる。 -->
+          <div class="mt-6 rounded-2xl border border-pink/25 bg-pink/[0.06] px-5 py-6 text-center">
+            <span class="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-pink text-paper" aria-hidden="true">
+              <svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3.5" width="16" height="13" rx="2"/><path d="M2.5 5.5l7.5 5 7.5-5"/></svg>
+            </span>
+            <p class="mt-3.5 text-base font-black leading-relaxed text-navy md:text-lg">
+              各項目を「どう直すか」は、<br class="sm:hidden" /><span class="text-pink">無料レポート</span>でお送りします
             </p>
-            <a href="#report-form" class="btn-pink mt-4 !px-7 !py-3 text-sm">
+            <a href="#report-form" class="btn-pink mt-5 !px-7 !py-3 text-sm">
               無料レポートを受け取る
             </a>
           </div>
