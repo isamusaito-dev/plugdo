@@ -166,31 +166,35 @@ const checkSteps = [
           </div>
         </div>
 
-        <!-- 気づき（指摘は全件公開。「どう直すか」は詳細レポート側でゲート） -->
-        <div class="reveal mt-12" data-reveal="3">
-          <div class="flex items-baseline justify-between gap-3">
-            <h3 class="text-lg font-black text-navy">見つかった“もったいない”ポイント</h3>
-            <p id="findings-count" class="text-xs font-bold text-pink"></p>
-          </div>
-          <ul id="findings" class="mt-5 space-y-3"></ul>
-        </div>
-
         <!-- ゲート＋CTA（主：詳細レポートのメール送付＝リード取得／副：今すぐ無料相談）
+             指摘の「中身」は画面に出さず、件数だけ示してレポートへ引く。
+             全部見せると受け取る理由が無くなるため、ここが実質のCV導線。
              NOTE: レポートは自動送信ではなく、Formspree のリード通知を見て担当者が手動で作成・返信する運用。
                    そのため「1営業日以内」と明示している。将来的に自動生成・自動送信へ移行する場合は
                    この文言と運用フローをあわせて見直すこと。 -->
-        <div class="reveal mt-12" data-reveal="4">
+        <div class="reveal mt-12" data-reveal="3">
           <div class="card border-pink/30 bg-pink/5 p-7 md:p-9">
-            <p id="gate-headline" class="text-center text-lg font-black leading-relaxed text-navy"></p>
-            <p id="gate-desc" class="mt-3 text-center text-sm leading-relaxed text-ink"></p>
+            <!-- 見つかった件数（中身は伏せる） -->
+            <div class="text-center">
+              <p class="text-sm font-bold text-navy">このサイトで見つかった「もったいない」ポイント</p>
+              <p class="mt-3 flex items-baseline justify-center gap-1">
+                <span id="issue-count" class="font-display text-6xl font-black leading-none text-pink [font-variant-numeric:tabular-nums]">0</span>
+                <span class="text-xl font-black text-navy">件</span>
+              </p>
+            </div>
+
+            <div class="mx-auto mt-7 max-w-md border-t border-pink/20 pt-6">
+              <p id="gate-headline" class="text-center text-lg font-black leading-relaxed text-navy"></p>
+              <p id="gate-desc" class="mt-3 text-center text-sm leading-relaxed text-ink"></p>
+            </div>
 
             <!-- レポートに含まれる内容 -->
             <ul class="mx-auto mt-6 max-w-md space-y-2.5 rounded-xl bg-paper/70 p-5">
               {
                 [
-                  '7つの視点それぞれの、具体的な改善方法',
+                  '見つかった指摘の内容（全件）',
+                  'それぞれ、どう直すかの具体的な手順',
                   'どこから手をつけるべきかの優先順位',
-                  '見つかった指摘の全件リスト',
                 ].map((item) => (
                   <li class="flex items-start gap-2.5 text-sm leading-relaxed text-ink">
                     <svg class="mt-1 shrink-0" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#1F9D6B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" /></svg>
@@ -418,35 +422,19 @@ const checkSteps = [
         });
       });
 
-      // 気づき：指摘（＝何が問題か）は全件公開。ゲートは「どう直すか」＝詳細レポート側に置く。
-      const fEl = $('findings');
-      fEl.innerHTML = '';
-      const findingsList = data.findings || [];
-      const remaining = Math.max(0, data.remainingCount || 0);
-      $('findings-count').textContent = findingsList.length ? findingsList.length + '件' : '';
-      findingsList.forEach((f) => {
-        // 後方互換：文字列でもオブジェクト{text,evidence}でも受ける
-        const text = typeof f === 'string' ? f : f.text;
-        const evidence = typeof f === 'string' ? '' : f.evidence;
-        const li = document.createElement('li');
-        li.className = 'flex gap-3 rounded-lg border border-mist bg-paper p-4 text-sm leading-relaxed text-ink';
-        const ev = evidence
-          ? '<span class="mt-1.5 block text-xs text-gray">根拠：' + esc(evidence) + '</span>'
-          : '';
-        li.innerHTML =
-          '<span class="mt-0.5 shrink-0 text-pink">●</span><span>' + esc(text) + ev + '</span>';
-        fEl.appendChild(li);
-      });
-      // 表示しきれなかった指摘がある場合は、レポートで全件渡すことを伝える
-      if (remaining > 0) {
-        const more = document.createElement('li');
-        more.className =
-          'flex items-center justify-center gap-2 rounded-lg border border-dashed border-navy/25 bg-navy/[0.03] p-4 text-xs font-bold text-navy';
-        more.innerHTML =
-          '<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="2.5" width="11" height="9" rx="1.5"/><path d="M1.5 4l5.5 3.5L12.5 4"/></svg>' +
-          'ほかに' + remaining + '件の指摘があります。詳細レポートに全件記載します';
-        fEl.appendChild(more);
+      // 指摘の中身は画面に出さず、件数だけカウントアップで見せる（中身はレポートでゲート）
+      const issueTotal =
+        (data.findings || []).length + Math.max(0, data.remainingCount || 0);
+      const icEl = $('issue-count');
+      let icStart = null;
+      function icTick(ts) {
+        if (!icStart) icStart = ts;
+        const p = Math.min((ts - icStart) / 900, 1);
+        icEl.textContent = String(Math.round(issueTotal * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) requestAnimationFrame(icTick);
       }
+      icEl.textContent = '0';
+      requestAnimationFrame(icTick);
 
       // ゲート出口：主CTAは詳細レポート（メール取得）。副は無料相談＋スコア別のサービス案内。
       const gh = $('gate-headline');
