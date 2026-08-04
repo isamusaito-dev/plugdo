@@ -133,7 +133,12 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID;
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${GA_ID}');
+            // URLに ?ga_debug=1 を付けたときだけ DebugView に流す（計測の動作確認用）。
+            // 通常のアクセスには影響しない。なお debug_mode でも通常レポートには
+            // 計上されるため、確認は必要な回数にとどめること。
+            var gaDebug = false;
+            try { gaDebug = new URLSearchParams(location.search).has('ga_debug'); } catch (e) {}
+            gtag('config', '${GA_ID}', gaDebug ? { debug_mode: true } : {});
           `} />
         </>
       )
