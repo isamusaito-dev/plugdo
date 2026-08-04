@@ -500,10 +500,27 @@ const checkSteps = [
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    // ── GA4 計測 ───────────────────────────────────────────────
+    // このページのCVは fetch 送信（画面遷移なし）のため、GA4の自動計測では拾えない。
+    // 節目ごとに手動でイベントを送る。gtag が無い環境（ローカル等）では何もしない。
+    function track(name, params) {
+      if (typeof window.gtag !== 'function') return;
+      try {
+        window.gtag('event', name, params || {});
+      } catch (_) {
+        /* 計測の失敗で本来の動作を止めない */
+      }
+    }
+
     const colorHex = { red: '#E43172', yellow: '#C8A951', green: '#1F9D6B' };
 
     // ── JavaScriptで描画するサイト（SPA）向けの表示 ──
     function renderSpa(data) {
+      // 採点できなかったケース。件数が多ければ診断ロジック側の対応を検討する材料になる
+      track('check_spa', { checked_url: data.url, framework: data.framework || 'unknown' });
+      // SPAはスコアが出ないため、前回の診断結果を引きずらないよう明示的に消す
+      lastResult = null;
+      lastCheckedUrl = data.url;
       $('spa-url').textContent = data.url;
       $('spa-framework').textContent = data.framework || 'JavaScriptの仕組み';
       $('spa-length').textContent = (data.bodyTextLength || 0) + '文字';
@@ -512,6 +529,7 @@ const checkSteps = [
       document.querySelectorAll('#screen-spa .reveal').forEach((el) => el.classList.add('is-in'));
     }
     let lastResult = null; // 副CTA（メール受取）に引き継ぐ最新の診断結果
+    let lastCheckedUrl = ''; // 直近に診断したURL（SPA判定時はスコアが無いため別に持つ）
 
     // ── 診断中アニメ：チェック項目を順に点灯＋％カウンター ──
     let stepTimers = [];
@@ -573,7 +591,14 @@ const checkSteps = [
     // ── 結果レンダリング ──
     function renderResult(data) {
       lastResult = data;
+      lastCheckedUrl = data.url;
       if (percentTimer) clearInterval(percentTimer);
+      // 結果まで到達（診断の完了率、スコア別のCV率を見るため）
+      track('check_complete', {
+        checked_url: data.url,
+        score: data.total,
+        score_band: data.total >= 65 ? '65以上' : '65未満',
+      });
       // レポート申込フォームを初期状態に戻す（再診断時）
       $('report-form-body').classList.remove('hidden');
       $('mail-form').reset();
@@ -708,6 +733,7 @@ const checkSteps = [
       $('loading-url').textContent = url;
       show('loading');
       runLoadingAnimation();
+      track('check_start', { checked_url: url }); // 診断の実行（母数）
       analyzeStart = Date.now();
 
       try {
@@ -748,9 +774,27 @@ const checkSteps = [
 
     ['retry', 'spa-retry'].forEach((id) => {
       $(id).addEventListener('click', () => {
+        track('check_retry');
         $('url-input').value = '';
         show('input');
       });
+    });
+
+    // 副CV：無料相談へ遷移。遷移先が別ページなので、クリック時点で記録する
+    [
+      ['cta-consult', 'result'],   // 通常の結果画面から
+      ['spa-cta', 'spa'],          // SPA判定の画面から
+    ].forEach(([id, from]) => {
+      const el = $(id);
+      if (el) {
+        el.addEventListener('click', () => {
+          track('consult_click', {
+            from: from,
+            checked_url: lastCheckedUrl,
+            score: lastResult ? lastResult.total : null, // SPA判定時はスコアなし
+          });
+        });
+      }
     });
 
     // ── 主CTA：詳細レポートの申込（Formspreeでリード取得）──
@@ -796,6 +840,13 @@ const checkSteps = [
           headers: { Accept: 'application/json' },
         });
         if (res.ok) {
+          // ★ このページの本命CV。GA4側で「キーイベント」に指定して使う。
+          //    送信成功時のみ送る（押しただけでは計測しない）。
+          track('generate_lead', {
+            form_name: 'diagnosis_report',
+            checked_url: lastResult ? lastResult.url : '',
+            score: lastResult ? lastResult.total : null,
+          });
           $('report-form-body').classList.add('hidden');
           $('mail-note').classList.add('hidden');
           const done = $('mail-done');
@@ -803,6 +854,7 @@ const checkSteps = [
             'ありがとうございます。1営業日以内に、担当者より詳細レポートをメールでお送りします。';
           done.classList.remove('hidden');
         } else {
+          track('form_error', { form_name: 'diagnosis_report', status: res.status });
           errP.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
           errP.classList.remove('hidden');
         }
