@@ -178,6 +178,105 @@ const checkSteps = [
   </section>
 
   <!-- ══ 画面③ 結果 ══ -->
+  <!-- ══ 画面③-B JavaScriptで描画するサイト（SPA）だった場合 ══
+       中身がHTMLに無いサイトを通常採点すると、実在する要素まで「無い」と判定され
+       事実と違うスコアが出る。採点は出さず、HTMLが空であること自体を課題として伝える。 -->
+  <section id="screen-spa" class="hidden">
+    <div class="container-pd py-16 md:py-20">
+      <div class="mx-auto max-w-3xl">
+        <p class="text-center text-sm text-gray">
+          診断結果：<span id="spa-url" class="break-all font-bold text-navy"></span>
+        </p>
+
+        <div class="mt-6 rounded-2xl border border-navy/10 bg-navy/[0.03] px-6 py-8 text-center md:px-10">
+          <span class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-navy text-paper" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12s-3.5 6.5-9.5 6.5S2.5 12 2.5 12z" />
+              <circle cx="12" cy="12" r="2.6" /><path d="M3.5 3.5l17 17" />
+            </svg>
+          </span>
+          <h2 class="mt-4 text-xl font-black leading-snug text-navy md:text-2xl">
+            このサイトは、検索エンジンやAIから<br class="hidden sm:block" />
+            <span class="text-pink">中身が見えない状態</span>です
+          </h2>
+          <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-ink">
+            <span id="spa-framework" class="font-bold text-navy"></span>で作られており、
+            ページの中身がすべてJavaScriptで表示される作りになっています。
+            そのため、最初に配信されるHTMLには本文が
+            <span id="spa-length" class="font-bold text-pink"></span>しか入っていません。
+          </p>
+          <p class="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-ink">
+            画面上は正しく表示されているため、人の目には問題なく見えます。
+            採点は、実態と食い違う結果になるため今回は行いません。
+          </p>
+        </div>
+
+        <!-- 誰にどう見えるか -->
+        <div class="mt-10">
+          <h3 class="text-lg font-black text-navy">相手によって、見え方が変わります</h3>
+          <div class="mt-4 grid gap-3 md:grid-cols-3">
+            <div class="rounded-xl border border-mist bg-paper p-5">
+              <p class="text-sm font-black text-navy">サイトを見に来た人</p>
+              <p class="mt-2 inline-block rounded-full bg-good/10 px-2.5 py-0.5 text-xs font-bold" style="color:#1F9D6B">問題なし</p>
+              <p class="mt-3 text-xs leading-relaxed text-gray">
+                ブラウザがJavaScriptを実行するので、いつもどおり表示されます。
+              </p>
+            </div>
+            <div class="rounded-xl border border-mist bg-paper p-5">
+              <p class="text-sm font-black text-navy">Google検索</p>
+              <p class="mt-2 inline-block rounded-full bg-gold/15 px-2.5 py-0.5 text-xs font-bold text-gold">遅れる</p>
+              <p class="mt-3 text-xs leading-relaxed text-gray">
+                JavaScriptを実行しますが、後回しの順番待ちに入るため、
+                内容の反映が遅れます。
+              </p>
+            </div>
+            <div class="rounded-xl border border-pink/30 bg-pink/5 p-5">
+              <p class="text-sm font-black text-navy">AI検索</p>
+              <p class="mt-2 inline-block rounded-full bg-pink/15 px-2.5 py-0.5 text-xs font-bold text-pink">見えない</p>
+              <p class="mt-3 text-xs leading-relaxed text-ink">
+                ChatGPTなどのクローラーはJavaScriptを実行しません。
+                <strong class="font-bold text-navy">中身の無いページとして扱われ</strong>、
+                回答に引用されません。
+              </p>
+            </div>
+          </div>
+          <p class="mt-4 text-xs leading-relaxed text-gray">
+            ＊ AI経由で会社を調べる人が増えているため、今後この差は広がります。
+          </p>
+        </div>
+
+        <!-- CV -->
+        <div class="mt-10">
+          <div class="rounded-xl border border-pink/30 bg-pink/5 p-7 shadow-[0_2px_16px_rgba(16,51,102,0.06)] md:p-9">
+            <p class="text-center text-lg font-black leading-relaxed text-navy">
+              作り直さずに、直せる場合があります。
+            </p>
+            <p class="mx-auto mt-3 max-w-md text-center text-sm leading-relaxed text-ink">
+              今の見た目のまま、HTMLに中身が入る形へ変える方法があります。
+              どの方法が使えるかはサイトの作りによって変わるため、
+              個別に確認してご案内します。
+            </p>
+            <div class="mt-7 text-center">
+              <a id="spa-cta" href="/contact/" class="btn-pink w-full sm:w-auto">
+                無料で個別に相談する（オンライン30分）
+              </a>
+              <p class="mt-4 text-xs leading-relaxed text-gray">
+                無料・契約不要／しつこい営業電話はいたしません。
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6 text-center">
+            <button id="spa-retry" class="text-sm font-bold text-navy underline underline-offset-4 hover:text-pink">
+              別のサイトを診断する
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 画面③ 結果 ══ -->
   <section id="screen-result" class="hidden">
     <div class="container-pd py-16 md:py-20">
       <div class="mx-auto max-w-3xl">
@@ -394,6 +493,7 @@ const checkSteps = [
       input: $('screen-input'),
       loading: $('screen-loading'),
       result: $('screen-result'),
+      spa: $('screen-spa'),
     };
     const show = (name) => {
       Object.entries(screens).forEach(([k, el]) => el.classList.toggle('hidden', k !== name));
@@ -401,6 +501,16 @@ const checkSteps = [
     };
 
     const colorHex = { red: '#E43172', yellow: '#C8A951', green: '#1F9D6B' };
+
+    // ── JavaScriptで描画するサイト（SPA）向けの表示 ──
+    function renderSpa(data) {
+      $('spa-url').textContent = data.url;
+      $('spa-framework').textContent = data.framework || 'JavaScriptの仕組み';
+      $('spa-length').textContent = (data.bodyTextLength || 0) + '文字';
+      // 相談フォームに、通常診断と同じくURLを引き継ぐ
+      $('spa-cta').href = '/contact/?' + new URLSearchParams({ url: data.url, type: 'spa' }).toString();
+      document.querySelectorAll('#screen-spa .reveal').forEach((el) => el.classList.add('is-in'));
+    }
     let lastResult = null; // 副CTA（メール受取）に引き継ぐ最新の診断結果
 
     // ── 診断中アニメ：チェック項目を順に点灯＋％カウンター ──
@@ -617,6 +727,12 @@ const checkSteps = [
             show('input');
             return;
           }
+          // JavaScriptで描画するサイトは採点せず、専用の説明画面を出す
+          if (data.mode === 'spa') {
+            renderSpa(data);
+            show('spa');
+            return;
+          }
           renderResult(data);
           show('result');
         }, wait);
@@ -630,9 +746,11 @@ const checkSteps = [
       }
     });
 
-    $('retry').addEventListener('click', () => {
-      $('url-input').value = '';
-      show('input');
+    ['retry', 'spa-retry'].forEach((id) => {
+      $(id).addEventListener('click', () => {
+        $('url-input').value = '';
+        show('input');
+      });
     });
 
     // ── 主CTA：詳細レポートの申込（Formspreeでリード取得）──

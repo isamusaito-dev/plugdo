@@ -262,6 +262,39 @@ interface DetResult {
   issues: string[];
 }
 
+/**
+ * JavaScriptで描画するサイト（SPA）かを判定する。
+ *
+ * 判定条件は2つとも満たす場合のみ：
+ *   1. script/style/noscript を除いた本文が極端に少ない（250文字未満）
+ *   2. 主要フレームワークのハイドレーション用マーカーがHTMLにある
+ *
+ * 片方だけでは判定しない。SSR済みのNuxt/Nextはマーカーを持つが本文もあるため、
+ * 通常どおり採点させる必要がある。逆に本文が少ないだけの小規模サイトを
+ * SPA扱いすると、それはそれで誤診になる。
+ */
+function detectSpa(html: string): { framework: string; textLength: number } | null {
+  const stripped = html
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<noscript[\s\S]*?<\/noscript>/gi, ' ');
+  const textLength = stripTags(stripped).length;
+  if (textLength >= 250) return null;
+
+  const markers: [RegExp, string][] = [
+    [/__NUXT__|<div id="__nuxt"/i, 'Nuxt'],
+    [/__NEXT_DATA__|<div id="__next"/i, 'Next.js'],
+    [/data-reactroot|<div id="root"[^>]*>\s*<\/div>/i, 'React'],
+    [/<div id="app"[^>]*>\s*<\/div>|__VUE__/i, 'Vue'],
+    [/ng-version=|<app-root/i, 'Angular'],
+    [/<div id="svelte"|__SVELTEKIT/i, 'SvelteKit'],
+  ];
+  for (const [re, framework] of markers) {
+    if (re.test(html)) return { framework, textLength };
+  }
+  return null;
+}
+
 function deterministicScore(x: Extracted): DetResult {
   const issues: string[] = [];
 
@@ -614,6 +647,23 @@ export async function onRequestPost(context: EventContext): Promise<Response> {
     html = full.slice(0, 600000); // トップページのみ対象（巨大サイト対策）
   } catch {
     return json({ error: 'サイトを読み込めませんでした。URLをご確認ください。' }, 502);
+  }
+
+  // ── SPA（JavaScriptで描画するサイト）の判定 ─────────────────
+  // HTMLに中身が無いサイトを通常採点すると、実際には存在する要素まで
+  // 「無い」と判定してしまい、事実と違うスコアが出る（Nuxt/Next等で発生）。
+  // 採点は返さず、「HTMLが空であること」自体を課題として返す。
+  // ※ これは検出漏れより誤検知を避ける方を優先した判定。
+  //    本文が極端に少ない場合に限るため、SSR済みのNuxt/Nextは通常どおり採点される。
+  const spa = detectSpa(html);
+  if (spa) {
+    return json({
+      mode: 'spa',
+      url: target.href,
+      title: (html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || '').trim(),
+      framework: spa.framework,
+      bodyTextLength: spa.textLength,
+    });
   }
 
   const x = extract(html, target.protocol === 'https:', htmlChars);
