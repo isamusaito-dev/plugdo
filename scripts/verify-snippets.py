@@ -60,7 +60,16 @@ def main():
             print(f"   {msg} — {k}")
         print()
 
-    if not missing and not extra and not broken:
+    # 軸ごとの汎用文（axisFallback）が7軸すべて揃っているか。
+    # 欠けると、その軸に改善余地があってもレポートから丸ごと抜け落ちる。
+    fb_missing = [data["axisLabels"][a] for a in weights if a not in data.get("axisFallback", {})]
+    if fb_missing:
+        print(f"★ axisFallback が無い軸 {len(fb_missing)}件（該当軸がレポートから抜け落ちます）")
+        for a in fb_missing:
+            print(f"   {a}")
+        print()
+
+    if not missing and not extra and not broken and not fb_missing:
         print("一致しています。")
         sys.exit(0)
     sys.exit(1)

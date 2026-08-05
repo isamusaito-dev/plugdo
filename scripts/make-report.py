@@ -29,8 +29,26 @@ import sys
 from datetime import datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TEMPLATE_PATH = os.path.join(ROOT, "scripts/report-template.html")
+# アクションのページはPython側で組み立てるため、ロゴはテンプレートから取り出して共有する
+def _logo_html():
+    t = open(TEMPLATE_PATH, encoding="utf-8").read()
+    m = re.search(r'<span class="brand".*?</span>', t, re.S)
+    return m.group(0) if m else ""
+
 SNIPPETS_PATH = os.path.join(ROOT, "scripts/report-snippets.json")
 API = "https://plugdo.jp/api/check"
+
+# 無料相談の予約先。TimeRex等に変えるときはここだけ書き換える。
+BOOKING_URL = "https://plugdo.jp/contact/"
+
+# スマホ撮影の幅。
+#   viewport あり … 実機と同じ iPhone 17 相当の幅で撮る（980pxだとタブレット表示になってしまう）
+#   viewport なし … 実機は980px相当で描画してから縮小するため、その挙動を再現する
+MOBILE_W_PHONE = 402      # iPhone 17 の論理幅
+MOBILE_W_NO_VIEWPORT = 980
+
+ACTIONS_PER_PAGE = 3      # 1ページに載せる改善アクションの数
 
 COLORS = {"red": "#E43172", "yellow": "#C8A951", "green": "#1F9D6B"}
 # 改善後の見込み値（診断ロジック上おおむね到達しうる水準。あくまで目安）
@@ -155,7 +173,26 @@ def pick_priorities(data, snips):
             "pri": "高" if impact[a] >= 8 else "中" if impact[a] >= 4 else "低",
         })
     ranked.sort(key=lambda x: -x["impact"])
-    return top, impact, scores, ranked
+
+    # 改善アクションは全項目ぶん用意する（軸ごとに1件、インパクト順）。
+    # ただし目標値に達している軸（gain 0）は「直すところがない」ので載せない。
+    # axisFallback は7軸すべて用意すること。欠けるとその軸が丸ごと抜け落ちる。
+    all_actions = []
+    for r in ranked:
+        if r["gain"] <= 0:
+            continue
+        item = by_axis.get(r["axis"])
+        if not item:
+            fb = snips["axisFallback"].get(r["axis"])
+            if not fb:
+                sys.stderr.write(
+                    f"[警告] 軸「{snips['axisLabels'][r['axis']]}」に改善余地があるのに"
+                    f"文例がありません（report-snippets.json の axisFallback に追加してください）\n")
+                continue
+            item = {**fb, "axis": r["axis"], "finding": "", "generic": True}
+        all_actions.append(item)
+
+    return top, impact, scores, ranked, all_actions
 
 
 def project(scores, top, weights):
@@ -173,7 +210,8 @@ def project(scores, top, weights):
     return after, changed, total_before, total_after
 
 
-def build_html(data, company, name, top, impact, scores, ranked, snips, shots):
+def build_html(data, company, name, top, impact, scores, ranked, all_actions, snips, shots):
+    LOGO_HTML = _logo_html()
     weights, labels = snips["axisWeights"], snips["axisLabels"]
     total = data["total"]
     lead, body = band_text(total)
@@ -211,21 +249,20 @@ def build_html(data, company, name, top, impact, scores, ranked, snips, shots):
             f'<span class="pri {pcls}">{r["pri"]}</span>'
             f'<span class="gain">{gain}</span></div>\n')
 
-    # 具体的な改善アクション（上位3つ・アイコン付き）
-    fixes = ""
-    for i, t in enumerate(top, 1):
-        one = " one" if i == 1 else ""
+    # 具体的な改善アクション（全項目）。件数が案件で変わるためページを分けて生成する。
+    def action_card(t, rank):
+        one = " one" if rank == 1 else ""
         note = ""
         if t.get("generic"):
             note = ('\n    <!-- ★要確認: これは軸単位の汎用文です。実際のサイトを見て、'
                     '固有の見出しや文言を引用した内容に書き換えてください -->')
         icon = AXIS_ICONS.get(t["axis"], "")
         dg = ' class="g"' if t["difficulty"] == "自力可" else ""
-        fixes += f"""
+        return f"""
   <div class="acard{one}">{note}
     <div class="aic">{icon}</div>
     <div class="abody">
-      <p class="attl">{esc(t["title"])}</p>
+      <p class="attl"><span class="ano">{rank}</span>{esc(t["title"])}</p>
       <p class="lbl">なぜ問題か</p>
       <p class="txt">{esc(t["why"])}</p>
       <p class="lbl">どう直すか</p>
@@ -233,6 +270,29 @@ def build_html(data, company, name, top, impact, scores, ranked, snips, shots):
       <div class="tags"><span class="tag">難易度：<b{dg}>{esc(t["difficulty"])}</b></span><span class="tag">効果：<b class="g">{esc(t["effect"])}</b></span></div>
     </div>
   </div>
+"""
+
+    head_html = ('<div class="head">' + LOGO_HTML
+                 + '<div class="kicker">WEB CHECK REPORT</div></div>')
+    chunks = [all_actions[i:i + ACTIONS_PER_PAGE]
+              for i in range(0, len(all_actions), ACTIONS_PER_PAGE)]
+    action_pages = ""
+    for pi, chunk in enumerate(chunks):
+        cont = "（つづき）" if pi else ""
+        note = ("上位から順に、なぜ問題かと、どう直すかをまとめました。"
+                if pi == 0 else "前ページからの続きです。")
+        cards = "".join(action_card(t, pi * ACTIONS_PER_PAGE + j + 1)
+                        for j, t in enumerate(chunk))
+        action_pages += f"""<!-- ═══ 改善アクション {pi + 1} ═══ -->
+<section class="page">
+  {head_html}
+
+  <h2 class="sec">具体的な改善アクション{cont}</h2>
+  <p class="sec-note">{note}</p>
+{cards}
+  <div class="foot"><span>Plugdo Web診断レポート｜{esc(company)}様</span><span>{{{{PAGE_NO}}}}</span></div>
+</section>
+
 """
 
     # そのほかの指摘（上位3つで扱ったもの以外）
@@ -272,11 +332,12 @@ def build_html(data, company, name, top, impact, scores, ranked, snips, shots):
         cta_name, cta_sub, cta_price, cta_url = "リニューアル", "5ページ構成・スマホ対応・基本SEOを含みます", "¥198,000", "https://plugdo.jp/renewal/"
     else:
         cta_h = "土台は良好です。運用で伸ばせます。"
-        cta_p = ("作り直しは必要ありません。上の3点を直したうえで、更新を止めずに続けることがいちばん効果的です。")
+        cta_p = ("作り直しは必要ありません。優先度の高いものから直したうえで、"
+                 "更新を止めずに続けることがいちばん効果的です。")
         cta_name, cta_sub, cta_price, cta_url = "Web運用", "最低契約期間なし・いつでも解約できます", "月¥9,800", "https://plugdo.jp/care/"
 
-    tpl = open(os.path.join(ROOT, "scripts/report-template.html"), encoding="utf-8").read()
-    return (tpl
+    tpl = open(TEMPLATE_PATH, encoding="utf-8").read()
+    html = (tpl
             .replace("{{COMPANY}}", esc(company))
             .replace("{{NAME}}", esc(name))
             .replace("{{DOMAIN}}", esc(domain))
@@ -289,7 +350,9 @@ def build_html(data, company, name, top, impact, scores, ranked, snips, shots):
             .replace("{{BAND_BODY}}", esc(body))
             .replace("{{AXIS_ROWS}}", axis_rows)
             .replace("{{PRIORITY_ROWS}}", prows)
-            .replace("{{FIXES}}", fixes)
+            .replace("{{ACTION_PAGES}}", action_pages)
+            .replace("{{BOOKING_URL}}", BOOKING_URL)
+            .replace("{{BOOKING_URL_TEXT}}", BOOKING_URL)
             .replace("{{REST}}", rest_html)
             .replace("{{REST_NOTE}}", rest_note)
             .replace("{{CHART_BARS}}", chart_bars)
@@ -301,6 +364,19 @@ def build_html(data, company, name, top, impact, scores, ranked, snips, shots):
             .replace("{{CTA_PRICE}}", esc(cta_price))
             .replace("{{CTA_URL}}", esc(cta_url))
             .replace("{{DATE}}", today))
+
+    return number_pages(html)
+
+
+def number_pages(html):
+    """{{PAGE_NO}} を「n / 総数」に置き換える。アクションのページ数が案件で変わるため、
+    テンプレートに固定値を書かず、組み立て後にまとめて採番する。"""
+    total = html.count("{{PAGE_NO}}")
+    out, i = html, 0
+    while "{{PAGE_NO}}" in out:
+        i += 1
+        out = out.replace("{{PAGE_NO}}", f"{i} / {total}", 1)
+    return out
 
 
 def main():
@@ -325,7 +401,18 @@ def main():
     print(f"    総合 {data['total']}点 ／ 指摘 {len(data.get('findings', []))}件")
 
     print("2/5 スクリーンショット撮影中…")
-    env = {**os.environ, "MOBILE_H": "1125"}  # 枠の高さが隣の解説と揃う比率
+    # viewport の有無で撮影幅を変える（上の定数のコメント参照）
+    has_viewport = any(
+        e.get("ok")
+        for a in data.get("axes", [])
+        for e in a.get("evidence", [])
+        if "viewport" in e.get("label", "")
+    )
+    mobile_w = MOBILE_W_PHONE if has_viewport else MOBILE_W_NO_VIEWPORT
+    print(f"    スマホ撮影幅: {mobile_w}px"
+          f"（viewport {'あり→実機と同じ幅' if has_viewport else 'なし→縮小表示を再現'}）")
+    env = {**os.environ, "MOBILE_W": str(mobile_w),
+           "MOBILE_H": str(round(mobile_w * 1.15))}  # 枠の高さが隣の解説と揃う比率
     r = run([os.path.join(ROOT, "scripts/capture-site.sh"), url, outdir], env=env)
     if r.returncode != 0:
         print("    ★ 撮影に失敗しました:", r.stderr[:200])
@@ -336,14 +423,14 @@ def main():
 
     print("3/5 優先順位を算出中…")
     snips = json.load(open(SNIPPETS_PATH, encoding="utf-8"))
-    top, impact, scores, ranked = pick_priorities(data, snips)
+    top, impact, scores, ranked, all_actions = pick_priorities(data, snips)
     for i, t in enumerate(top, 1):
         mark = "（汎用文・要加筆）" if t.get("generic") else ""
         print(f"    {i}. [{snips['axisLabels'][t['axis']]} {scores[t['axis']]}点 / "
               f"インパクト{t['impact']:.1f}] {t['title']}{mark}")
 
     print("4/5 レポートを組み立て中…")
-    html = build_html(data, args.company, args.name, top, impact, scores, ranked, snips,
+    html = build_html(data, args.company, args.name, top, impact, scores, ranked, all_actions, snips,
                       {"desktop": "desktop.png", "mobile": "mobile.png"})
     report = os.path.join(outdir, "report.html")
     open(report, "w", encoding="utf-8").write(html)
