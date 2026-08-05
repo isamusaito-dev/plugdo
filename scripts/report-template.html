@@ -149,20 +149,31 @@
   .rest li:last-child{margin-bottom:0}
   .rest li::marker{color:var(--pink)}
 
-  .cta{background:var(--navy);border-radius:11px;padding:19px 21px;color:#fff}
-  .cta h3{margin:0 0 8px;font-size:14.5px;font-weight:800;line-height:1.6}
-  .cta p{margin:0;font-size:10.5px;line-height:1.9;color:#c3d2e6}
+  .cta{background:var(--navy);border-radius:13px;padding:30px 30px 26px;color:#fff}
+  .cta h3{margin:0 0 11px;font-size:16.5px;font-weight:800;line-height:1.55}
+  .cta p{margin:0;font-size:10.5px;line-height:1.95;color:#c3d2e6}
+
+  /* 無料相談で受け取れるもの。値段を出さないぶん、ここで中身を具体的に示す */
+  .offer{background:#1B4176;border-radius:9px;padding:17px 19px;margin:19px 0}
+  .offer .ttl{font-size:10px;font-weight:800;color:#fff;margin:0 0 11px;letter-spacing:.03em}
+  .offer .it{display:table;width:100%;margin-bottom:11px}
+  .offer .it:last-child{margin-bottom:0}
+  .offer .ck{display:table-cell;width:17px;vertical-align:top;color:var(--pink);
+             font-size:11px;font-weight:800;line-height:1.7}
+  .offer .tx{display:table-cell;vertical-align:top;font-size:10px;line-height:1.7;color:#c3d2e6}
+  .offer .tx b{display:block;color:#fff;font-weight:700;font-size:10.5px;margin-bottom:2px}
   .price{display:flex;justify-content:space-between;align-items:center;background:#1B4176;border-radius:7px;
          padding:11px 15px;margin:12px 0 11px}
   .price .l{font-size:10px;color:#c3d2e6}
   .price .l span{display:block;font-size:8.5px;color:#8fa6c4;margin-top:3px}
   .price .r{font-size:18px;font-weight:800}
   .price .r small{font-size:10.5px;font-weight:400}
-  .btn{display:block;background:var(--pink);color:#fff;text-align:center;padding:11px;border-radius:7px;
-       font-size:12px;font-weight:800;text-decoration:none}
-  .cta .fine{margin-top:9px;font-size:9px;color:#8fa6c4;text-align:center;line-height:1.7}
+  .btn{display:block;background:var(--pink);color:#fff;text-align:center;padding:16px;border-radius:8px;
+       font-size:13.5px;font-weight:800;text-decoration:none;letter-spacing:.02em}
+  .btn small{display:block;font-size:9.5px;font-weight:400;opacity:.9;margin-top:4px;letter-spacing:0}
+  .cta .fine{margin-top:13px;font-size:9px;color:#8fa6c4;text-align:center;line-height:1.8}
 
-  .sign{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+  .sign{margin-top:26px;border-top:1px solid var(--line);padding-top:16px}
   .sign .nm{font-size:12px;font-weight:800;color:var(--navy);margin:0 0 4px}
   .sign p{margin:0;font-size:10px;color:var(--gray);line-height:1.85}
   .disc{margin-top:9px;font-size:8.5px;color:#a3aab6;line-height:1.75}
@@ -313,13 +324,33 @@
   </div>
   {{REST_NOTE}}
 
-  <h2 class="sec" style="margin-top:19px;">ご提案</h2>
+  <h2 class="sec" style="margin-top:28px;">ご提案</h2>
 
   <div class="cta">
     <h3>{{CTA_H}}</h3>
     <p>{{CTA_P}}</p>
 
-    <a class="btn" href="{{BOOKING_URL}}">無料相談を予約する（オンライン30分）</a>
+    <div class="offer">
+      <p class="ttl">30分の無料相談で、この3つをお持ち帰りいただけます</p>
+      <div class="it">
+        <div class="ck">✓</div>
+        <div class="tx"><b>どこから手をつけるかの順番</b>
+          このレポートの内容を、御社の状況とご予算に合わせて並べ直します。</div>
+      </div>
+      <div class="it">
+        <div class="ck">✓</div>
+        <div class="tx"><b>費用と期間の目安</b>
+          それぞれ、いくらぐらいで・どのくらいの期間で直せるかをその場でお伝えします。</div>
+      </div>
+      <div class="it">
+        <div class="ck">✓</div>
+        <div class="tx"><b>ご自身で直せる分の手順</b>
+          お金をかけずに直せるところは、やり方をそのままお渡しします。</div>
+      </div>
+    </div>
+
+    <a class="btn" href="{{BOOKING_URL}}">無料相談を予約する
+      <small>オンライン30分／カメラなしでも構いません</small></a>
     <p class="fine">
       このレポートへのご質問だけでも構いません。売り込みはいたしません。<br />
       {{BOOKING_URL_TEXT}}

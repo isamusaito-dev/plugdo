@@ -40,7 +40,7 @@ SNIPPETS_PATH = os.path.join(ROOT, "scripts/report-snippets.json")
 API = "https://plugdo.jp/api/check"
 
 # 無料相談の予約先。TimeRex等に変えるときはここだけ書き換える。
-BOOKING_URL = "https://plugdo.jp/contact/"
+BOOKING_URL = "https://timerex.net/s/isamu.saito_dfbe/ef50fe59"
 
 # スマホ撮影の幅。
 #   viewport あり … 実機と同じ iPhone 17 相当の幅で撮る（980pxだとタブレット表示になってしまう）
