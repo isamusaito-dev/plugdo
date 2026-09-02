@@ -1,6 +1,6 @@
 ---
 import fs from 'node:fs';
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
 
@@ -841,9 +841,9 @@ const checkSteps = [
           headers: { Accept: 'application/json' },
         });
         if (res.ok) {
-          // 送信成功 → /thanks/ へ遷移する。
+          // 送信成功 → /check/thanks/ へ遷移する。
           // ページ内で完了を出さずURLを変えているのは、Meta広告のコンバージョンを
-          // 「URLに /thanks/ を含む」で計測できるようにするため。
+          // 「URLに /check/thanks/ を含む」で計測できるようにするため。
           //
           // 遷移前にGA4のイベントを送る。gtagはsendBeaconで飛ばすので画面遷移には
           // 強いが、gtagが処理する前に遷移すると落ちることがある。そのため
@@ -856,7 +856,7 @@ const checkSteps = [
           var goThanks = function () {
             if (jumped) return;
             jumped = true;
-            window.location.href = '/thanks/';
+            window.location.href = '/check/thanks/';
           };
           // ★ このページの本命CV。GA4側で「キーイベント」に指定して使う。
           //    送信成功時のみ送る（押しただけでは計測しない）。

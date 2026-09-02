@@ -1,9 +1,9 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { BOOKING_URL, COMPANY } from '../lib/site';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { BOOKING_URL, COMPANY } from '../../lib/site';
 
 // 診断レポートの申し込み完了ページ。
-// Meta広告のコンバージョン計測はこのURL（/thanks/）を条件にする。
+// Meta広告のコンバージョン計測はこのURL（/check/thanks/）を条件にする。
 // noindex にしているのは、検索から直接来て偽のコンバージョンが立つのを避けるため。
 
 const steps = [
@@ -120,7 +120,7 @@ const steps = [
 </BaseLayout>
 
 <script is:inline>
-  // Meta広告のコンバージョン。URL条件（/thanks/）でも拾えるが、
+  // Meta広告のコンバージョン。URL条件（/check/thanks/）でも拾えるが、
   // 標準イベントで送っておくと広告側の最適化に使える。
   if (typeof window.fbq === 'function') {
     window.fbq('track', 'Lead', { content_name: 'diagnosis_report' });

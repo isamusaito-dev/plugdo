@@ -13,8 +13,8 @@ export default defineConfig({
     tailwind(),
     sitemap({
       // noindex のページはサイトマップにも載せない
-      // （/thanks/ は広告のコンバージョン計測用で、検索から来られると困る）
-      filter: (page) => !page.includes('/cases/') && !page.includes('/thanks/'),
+      // （/check/thanks/ は広告のコンバージョン計測用で、検索から来られると困る）
+      filter: (page) => !page.includes('/cases/') && !page.includes('/check/thanks/'),
     }),
   ],
 });
