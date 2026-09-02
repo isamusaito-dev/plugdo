@@ -833,6 +833,7 @@ const checkSteps = [
           fd.append('未表示の指摘数', String(lastResult.remainingCount) + '件');
         }
       }
+      let redirecting = false;
       try {
         const res = await fetch(mailForm.action, {
           method: 'POST',
@@ -840,19 +841,39 @@ const checkSteps = [
           headers: { Accept: 'application/json' },
         });
         if (res.ok) {
+          // 送信成功 → /thanks/ へ遷移する。
+          // ページ内で完了を出さずURLを変えているのは、Meta広告のコンバージョンを
+          // 「URLに /thanks/ を含む」で計測できるようにするため。
+          //
+          // 遷移前にGA4のイベントを送る。gtagはsendBeaconで飛ばすので画面遷移には
+          // 強いが、gtagが処理する前に遷移すると落ちることがある。そのため
+          // event_callback を待ち、返ってこない場合も 800ms で必ず遷移させる。
+          // 遷移までの最大0.8秒のあいだ、ボタンは押せないままにしておく
+          // （二重送信を防ぐ）。finally で戻さないよう redirecting を立てる。
+          redirecting = true;
+          btn.textContent = '送信しました';
+          var jumped = false;
+          var goThanks = function () {
+            if (jumped) return;
+            jumped = true;
+            window.location.href = '/thanks/';
+          };
           // ★ このページの本命CV。GA4側で「キーイベント」に指定して使う。
           //    送信成功時のみ送る（押しただけでは計測しない）。
-          track('generate_lead', {
-            form_name: 'diagnosis_report',
-            checked_url: lastResult ? lastResult.url : '',
-            score: lastResult ? lastResult.total : null,
-          });
-          $('report-form-body').classList.add('hidden');
-          $('mail-note').classList.add('hidden');
-          const done = $('mail-done');
-          done.textContent =
-            'ありがとうございます。1営業日以内に、担当者より詳細レポートをメールでお送りします。';
-          done.classList.remove('hidden');
+          if (typeof window.gtag === 'function') {
+            try {
+              window.gtag('event', 'generate_lead', {
+                form_name: 'diagnosis_report',
+                checked_url: lastResult ? lastResult.url : '',
+                score: lastResult ? lastResult.total : null,
+                event_callback: goThanks,
+              });
+            } catch (_) {}
+            setTimeout(goThanks, 800);
+          } else {
+            goThanks();
+          }
+          return;
         } else {
           track('form_error', { form_name: 'diagnosis_report', status: res.status });
           errP.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
@@ -862,8 +883,10 @@ const checkSteps = [
         errP.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
         errP.classList.remove('hidden');
       } finally {
-        btn.disabled = false;
-        btn.textContent = btnLabel;
+        if (!redirecting) {
+          btn.disabled = false;
+          btn.textContent = btnLabel;
+        }
       }
     });
   })();

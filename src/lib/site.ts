@@ -32,6 +32,9 @@ export const COMPANY = {
 } as const;
 
 /** OGP のデフォルト画像（public/ogp-default.png は 1200x630） */
+/** 無料相談の予約ページ（TimeRex）。レポートPDF側は scripts/make-report.py の BOOKING_URL。 */
+export const BOOKING_URL = 'https://timerex.net/s/isamu.saito_dfbe/ef50fe59';
+
 export const OG_IMAGE_DEFAULT = '/ogp-default.png';
 export const OG_IMAGE_WIDTH = 1200;
 export const OG_IMAGE_HEIGHT = 630;
