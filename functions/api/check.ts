@@ -65,6 +65,10 @@ function normalizeUrl(input: string): URL | null {
 
 const stripTags = (html: string): string =>
   html
+    // HTMLコメントを先に消す。これをしないと <!--<h1>…</h1>--> の "-->" が
+    // 本文として残り、「画面にコメントの痕跡が出ている」と誤検知される。
+    // （下の <[^>]+> は "<!--<h1 …>" までしか食べないため、"-->" が生き残る）
+    .replace(/<!--[\s\S]*?-->/g, ' ')
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
     .replace(/<[^>]+>/g, ' ')
@@ -528,7 +532,19 @@ const QUAL_SCHEMA = {
 };
 
 async function qualitativeScore(x: Extracted, apiKey: string): Promise<QualResult | null> {
+  // 今日の日付を必ず渡す。渡さないとモデルが自分の学習時点を基準にしてしまい、
+  // 当月を指す「【2026年9月最新】」のような表記を「未来の日付」と誤判定する。
+  const today = new Date().toLocaleDateString('ja-JP', {
+    timeZone: 'Asia/Tokyo',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
   const userMessage = `次のサイトを評価してください。
+
+【今日の日付】${today}
+　※この日付を基準に判断すること。これより前の日付は「未来の日付」ではない。
 
 【タイトル】${x.title || '(なし)'}
 【検索結果に出る説明文】${x.metaDescription || '(なし)'}
