@@ -32,16 +32,38 @@ fi
 
 mkdir -p "$OUTDIR"
 
+# 撮影ウィンドウの最低の高さ。
+# これより低いと、サイトによっては本文が描画される前に撮影が終わり、
+# ヘッダーだけの真っ白な画像になる（実測：高さ462pxで白紙、700px以上で正常）。
+# そのため必ずこの高さ以上で撮り、必要な高さに上から切り出す。
+MIN_SHOT_H=900
+
 shot() { # shot <出力パス> <幅> <高さ>
+  local out="$1" w="$2" h="$3" shot_h="$3"
+  if [ "$h" -lt "$MIN_SHOT_H" ]; then shot_h="$MIN_SHOT_H"; fi
+
   "$CHROME" \
     --headless=new \
     --disable-gpu \
     --hide-scrollbars \
     --force-device-scale-factor=2 \
     --virtual-time-budget=8000 \
-    --window-size="$2,$3" \
-    --screenshot="$1" \
+    --window-size="$w,$shot_h" \
+    --screenshot="$out" \
     "$URL" >/dev/null 2>&1
+
+  # 高く撮った場合は、指定の高さぶんだけ上から切り出して元の比率に戻す
+  if [ "$shot_h" != "$h" ] && [ -f "$out" ]; then
+    python3 - "$out" "$h" "$shot_h" <<'PYCROP' 2>/dev/null || true
+import sys
+from PIL import Image
+out, want_h, shot_h = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
+im = Image.open(out)
+# 実際の倍率から切り出す高さを決める（--force-device-scale-factor に依存しない）
+scale = im.height / shot_h
+im.crop((0, 0, im.width, min(im.height, round(want_h * scale)))).save(out)
+PYCROP
+  fi
 }
 
 echo "撮影中: $URL"

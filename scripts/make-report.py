@@ -100,9 +100,30 @@ def run(cmd, **kw):
     return subprocess.run(cmd, capture_output=True, text=True, **kw)
 
 
-def diagnose(url):
+def blank_ratio(path):
+    """画像の単色率。白紙キャプチャの検出に使う。
+
+    ヘッドレスChromeは、たまに描画が終わる前に撮ってしまい真っ白な画像を出す。
+    実測では 白紙 74% / 正常 18〜33% と明確に分かれるため 0.6 を閾値にしている。
+    Pillow が無い環境では判定を諦めて None を返す（撮影自体は続行する）。
+    """
+    try:
+        from PIL import Image
+        from collections import Counter
+    except ImportError:
+        return None
+    try:
+        im = Image.open(path).convert("RGB")
+        im.thumbnail((200, 200))
+        px = list(im.get_flattened_data() if hasattr(im, "get_flattened_data") else im.getdata())
+        return Counter(px).most_common(1)[0][1] / len(px)
+    except Exception:
+        return None
+
+
+def diagnose(url, api=API):
     # python.org 版Pythonは証明書が未設定のことがあるため、システムのcurlを使う
-    r = run(["curl", "-s", "--max-time", "120", "-X", "POST", API,
+    r = run(["curl", "-s", "--max-time", "120", "-X", "POST", api,
              "-H", "content-type: application/json",
              "-d", json.dumps({"url": url})])
     if r.returncode != 0 or not r.stdout.strip():
@@ -385,6 +406,11 @@ def main():
     ap.add_argument("--company", required=True)
     ap.add_argument("--name", default="ご担当者")
     ap.add_argument("--outdir")
+    # 本番にデプロイする前の check.ts で診断したいとき用。
+    #   npx wrangler pages dev dist --port 8788
+    #   ./scripts/make-report.py <URL> --company ... --api http://localhost:8788/api/check
+    ap.add_argument("--api", default=API,
+                    help="診断APIの接続先（既定：本番）")
     ap.add_argument("-h", "--help", action="store_true")
     args = ap.parse_args()
     if args.help:
@@ -397,7 +423,7 @@ def main():
     os.makedirs(outdir, exist_ok=True)
 
     print(f"1/5 診断中… {url}")
-    data = diagnose(url)
+    data = diagnose(url, args.api)
     print(f"    総合 {data['total']}点 ／ 指摘 {len(data.get('findings', []))}件")
 
     print("2/5 スクリーンショット撮影中…")
@@ -413,9 +439,27 @@ def main():
           f"（viewport {'あり→実機と同じ幅' if has_viewport else 'なし→縮小表示を再現'}）")
     env = {**os.environ, "MOBILE_W": str(mobile_w),
            "MOBILE_H": str(round(mobile_w * 1.15))}  # 枠の高さが隣の解説と揃う比率
-    r = run([os.path.join(ROOT, "scripts/capture-site.sh"), url, outdir], env=env)
-    if r.returncode != 0:
-        print("    ★ 撮影に失敗しました:", r.stderr[:200])
+    # ヘッドレスChromeは描画完了前に撮ってしまうことがある。白紙を1度だけ撮り直す。
+    # 気づかずに白紙のまま客先へ送るのを防ぐのが目的なので、直らなければ必ず警告する。
+    for attempt in (1, 2):
+        r = run([os.path.join(ROOT, "scripts/capture-site.sh"), url, outdir], env=env)
+        if r.returncode != 0:
+            print("    ★ 撮影に失敗しました:", r.stderr[:200])
+            break
+        blanks = []
+        for f in ("desktop.png", "mobile.png"):
+            ratio = blank_ratio(os.path.join(outdir, f))
+            if ratio is not None and ratio > 0.6:
+                blanks.append((f, ratio))
+        if not blanks:
+            break
+        names = "・".join(f"{f}（単色率{ratio*100:.0f}%）" for f, ratio in blanks)
+        if attempt == 1:
+            print(f"    白紙のキャプチャを検出： {names} → 撮り直します")
+        else:
+            print(f"    ★ 撮り直しても白紙です： {names}")
+            print("      レポートに貼る前に必ず目で確認してください。")
+
     for f in ("desktop.png", "mobile.png"):
         p = os.path.join(outdir, f)
         if os.path.exists(p):
