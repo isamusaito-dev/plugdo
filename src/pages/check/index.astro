@@ -599,6 +599,12 @@ const checkSteps = [
         score: data.total,
         score_band: data.total >= 65 ? '65以上' : '65未満',
       });
+      // Meta広告の学習用の補助イベント。
+      // 本命のCVはレポート申込（/check/thanks/ の Lead）だが、件数が少ないうちは
+      // 学習が進まないため、手前の「診断完了」も送っておく。
+      if (typeof window.fbq === 'function') {
+        try { window.fbq('trackCustom', 'DiagnosisComplete'); } catch (_) {}
+      }
       // レポート申込フォームを初期状態に戻す（再診断時）
       $('report-form-body').classList.remove('hidden');
       $('mail-form').reset();

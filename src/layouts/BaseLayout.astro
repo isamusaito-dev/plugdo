@@ -150,6 +150,7 @@ const META_PIXEL_ID = import.meta.env.PUBLIC_META_PIXEL_ID;
     <!-- Meta ピクセル（ピクセルIDが設定されている場合のみ） -->
     {
       META_PIXEL_ID && (
+        <>
         <script is:inline set:html={`
           !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
           n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -159,6 +160,16 @@ const META_PIXEL_ID = import.meta.env.PUBLIC_META_PIXEL_ID;
           fbq('init', '${META_PIXEL_ID}');
           fbq('track', 'PageView');
         `} />
+          <noscript>
+            <img
+              height="1"
+              width="1"
+              style="display:none"
+              alt=""
+              src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+            />
+          </noscript>
+        </>
       )
     }
   </head>
