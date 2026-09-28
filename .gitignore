@@ -30,3 +30,6 @@ yarn-error.log*
 
 # 実在企業向けの診断レポート作業ディレクトリ（公開リポジトリに含めない）
 work/
+
+# wrangler のローカル実行用（APIキーを含む）
+.dev.vars
