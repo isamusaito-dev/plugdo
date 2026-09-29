@@ -341,7 +341,10 @@ const checkSteps = [
               <span class="text-xs font-bold tracking-wider text-gray">/ 100点</span>
             </div>
           </div>
-          <p id="band-message" class="mx-auto mt-5 max-w-md text-base font-bold leading-relaxed text-navy"></p>
+          <!-- 点数帯のコメントは4種。最長が478px、次点が445pxで、上限448pxだと
+               折り返して「す。」だけの行ができていた。余裕をみて544pxにする。
+               文言を足すときは、ここを超えないか確認すること。 -->
+          <p id="band-message" class="mx-auto mt-5 max-w-[34rem] text-base font-bold leading-relaxed text-navy [word-break:auto-phrase] [text-wrap:pretty]"></p>
         </div>
 
         <!-- 7軸スコア（チェック項目は全公開。直し方のみ詳細レポートでゲート） -->
@@ -478,9 +481,6 @@ const checkSteps = [
             <a id="cta-consult" href="/contact/" class="btn-navy mt-4 w-full sm:w-auto">
               無料相談（オンライン30分）を予約する
             </a>
-            <div class="mt-4">
-              <a id="cta-secondary" href="/renewal/" class="text-sm font-bold text-navy underline underline-offset-4 hover:text-pink"></a>
-            </div>
           </div>
 
           <div class="mt-6 text-center">
@@ -705,19 +705,14 @@ const checkSteps = [
       // ゲート出口：主CTAは詳細レポート（メール取得）。副は無料相談＋スコア別のサービス案内。
       const gh = $('gate-headline');
       const gd = $('gate-desc');
-      const sub = $('cta-secondary');
       if (data.total < 65) {
         gh.textContent = 'この課題は、更新では直りません。';
         gd.textContent =
           '減点の多くはサイトの土台（構造・スマホ対応・速度）にあります。「どこから、どう直すか」をまとめた詳細レポートを無料でお送りします。';
-        sub.textContent = 'リニューアル（¥198,000〜）の内容を見る';
-        sub.href = '/renewal/';
       } else {
         gh.textContent = '土台は良好。運用で伸ばせます。';
         gd.textContent =
           '作り直しは不要です。「何から、どう伸ばすか」をまとめた詳細レポートを無料でお送りします。';
-        sub.textContent = 'Web運用（月¥9,800〜）の内容を見る';
-        sub.href = '/care/';
       }
 
       // 副CTA（今すぐ相談）：スコア・URLを相談フォームに引き継ぐ
