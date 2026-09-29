@@ -58,7 +58,7 @@ export const organizationLd = {
   foundingDate: COMPANY.foundingDate,
   founder: { '@type': 'Person', name: COMPANY.founder },
   description:
-    'webサイトの企画・制作・運営、webサイト/マーケティング/ブランドのコンサルティングを行う企業。Web運用サービス plugdo を運営。',
+    'Webサイトの企画・制作・運営、Webサイト/マーケティング/ブランドのコンサルティングを行う企業。Web運用サービス Plugdo を運営。',
   sameAs: [
     'https://www.instagram.com/hunches_0116/',
     'https://www.tiktok.com/@hunches_',
@@ -76,7 +76,7 @@ export const organizationLd = {
   priceRange: '¥9,800/月〜¥298,000',
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
-    name: 'plugdo サービス',
+    name: 'Plugdo サービス',
     itemListElement: [
       { '@type': 'Offer', name: 'ホームページリニューアル ライト', price: '198000', priceCurrency: 'JPY', description: '5ページ構成・スマホ対応・基本SEO・お問い合わせフォーム・公開作業（税込）' },
       { '@type': 'Offer', name: 'ホームページリニューアル スタンダード', price: '298000', priceCurrency: 'JPY', description: '10ページ構成・オリジナルデザイン・CMS導入・構造化データ/AI検索対応・公開作業（税込）' },

@@ -12,15 +12,15 @@ const targets = [
   },
   {
     title: '表示に3秒以上かかる',
-    desc: '表示が遅いサイトは読まれる前に閉じられ、検索評価も下がります。',
+    desc: '表示が遅いサイトは、ユーザーが内容を見る前に離脱する原因になります。表示速度も含めて使いやすさを改善します。',
   },
   {
     title: '情報が数年前のまま',
     desc: '営業時間・料金・実績が古いままだと、見た人の信頼を静かに損ないます。',
   },
   {
-    title: 'AI検索（ChatGPT等）に内容を読まれない構造',
-    desc: 'AIが読み取れない作りのサイトは、AI検索の回答に引用されず、新しい入口を逃します。',
+    title: '検索・AIサービスが情報を取得しにくい構造',
+    desc: '重要な情報が取得しづらい構造では、検索やAIサービスから内容を正しく認識されにくくなる場合があります。',
   },
   {
     title: '問い合わせフォーム・電話番号が見つけにくい',
@@ -31,8 +31,8 @@ const targets = [
     desc: '第三者の評価がないと、初めての人は「本当に大丈夫か」と不安になります。',
   },
   {
-    title: '会社概要・所在地が曖昧',
-    desc: '運営者情報がはっきりしないサイトは、それだけで信頼を得にくくなります。',
+    title: '運営会社の情報が十分にない',
+    desc: '会社名・事業内容・問い合わせ先などの情報が少ないと、初めて訪れた人が不安を感じることがあります。',
   },
   {
     title: '何のサービスか一目で伝わらない',
@@ -54,7 +54,7 @@ const plans = [
     priceAmount: '298,000',
     priceNote: '税込',
     period: '4〜6週間',
-    items: ['10ページ構成', 'オリジナルデザイン', 'CMS導入（自社更新可）', '構造化データ・AI検索対応', '公開作業'],
+    items: ['10ページ構成', 'オリジナルデザイン', 'CMS導入（自社更新可）', '構造化データ・検索／AI検索の基盤整備', '公開作業'],
   },
 ];
 
@@ -95,7 +95,7 @@ const faqs = [
   },
   {
     q: '補助金は使えますか？',
-    a: '小規模事業者持続化補助金の対象となる場合、実質負担を約1/3に抑えられる可能性があります。申請可否は公募要領によりますので、無料相談時に状況を確認します。',
+    a: 'リニューアル費用が小規模事業者持続化補助金などの対象となる場合があります。対象要件や補助額は公募内容・申請内容によって異なるため、最新の公募要領をご確認ください。',
   },
 ];
 
@@ -136,7 +136,7 @@ const breadcrumbLd = {
 
 <BaseLayout
   title="ホームページリニューアル ¥198,000〜 | Plugdo"
-  description="無料のAI診断で現状を採点してから、必要な分だけ作り直す。ライト¥198,000・スタンダード¥298,000（税込）。補助金対象なら実質負担は約1/3。全国対応。"
+  description="無料のAI診断で現状を確認してから、必要な部分だけリニューアル。ライト¥198,000・スタンダード¥298,000（税込）。補助金の対象となる場合もあります。全国対応。"
   jsonLd={[faqLd, serviceLd, breadcrumbLd]}
 >
   <!-- Hero -->
@@ -149,7 +149,7 @@ const breadcrumbLd = {
           <span class="font-display [font-variant-numeric:tabular-nums]">¥198,000</span><span class="text-xl align-middle text-gray md:text-2xl">（税込）</span>から。
         </h1>
         <p class="mt-5 max-w-3xl text-base leading-relaxed text-ink [word-break:auto-phrase] [text-wrap:pretty]">
-          無料のAI診断で現状を採点してから、必要な分だけ作り直す。補助金対象なら実質負担は約1/3。
+          無料のAI診断で現状を確認してから、必要な部分だけリニューアル。補助金の対象となる場合もあります。
         </p>
         <div class="mt-8 flex flex-wrap items-center gap-5">
           <a href="/check/" class="btn-pink">無料で自社サイトを診断する（30秒）</a>
@@ -287,14 +287,14 @@ const breadcrumbLd = {
       <div class="mx-auto max-w-3xl">
         <div class="text-center" data-animate="fade-in">
           <p class="section-label">- Subsidy -</p>
-          <h2 class="section-title">補助金を使うと、実質負担は約1/3。</h2>
+          <h2 class="section-title">補助金を活用できる場合があります。</h2>
         </div>
         <div class="mt-8 rounded-xl border border-gray/10 bg-paper p-7 md:p-9">
           <p class="text-sm leading-relaxed text-ink">
-            小規模事業者持続化補助金の対象になる場合、スタンダードプラン（<span class="font-display font-bold [font-variant-numeric:tabular-nums]">¥298,000</span>・税込）の実質負担は約<span class="font-display font-bold text-navy [font-variant-numeric:tabular-nums]">¥99,000</span>まで抑えられる試算です。対象になるかどうか・申請の段取りは、無料相談時にあわせてご案内します。
+            小規模事業者持続化補助金などで、Webサイト制作・改修費が補助対象となる場合があります。対象要件・補助率・上限額は公募内容や申請内容によって異なります。
           </p>
           <p class="mt-4 border-t border-mist pt-4 text-xs text-gray">
-            ※ 試算は補助率2/3の場合の一例です。申請可否は公募要領によります。
+            ※ Webサイト関連費のみでは申請できない場合があります。必ず最新の公募要領をご確認ください。
           </p>
         </div>
       </div>

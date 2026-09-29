@@ -7,15 +7,15 @@ const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
 const faqs = [
   {
     q: 'AIOとGEOの違いは何ですか？',
-    a: 'AIO（AI検索最適化）は、ChatGPTやPerplexity、Google AI Overviewsなどの生成AI検索に自社情報が正しく引用・紹介される状態をつくる施策です。GEO（Generative Engine Optimization）はその英語圏での呼称で、ほぼ同義で使われます。',
+    a: 'AIOやGEOは、生成AIを使った検索・回答サービスを意識したWebサイト改善を表す言葉です。GEOは「Generative Engine Optimization」の略称として使われていますが、名称や定義は業界内で完全に統一されているわけではありません。',
   },
   {
     q: 'AIO対応をするとGoogle検索順位も上がりますか？',
-    a: 'AIO対応（構造化データ・FAQの整備・明確なHTML構造）はGoogleの通常の検索にも好影響を与えます。ただし順位上昇を直接保証するものではなく、AIが正しく情報を読み取れる状態にすることが本来の目的です。',
+    a: 'AIO/GEOとして実施する施策だけでGoogle検索順位が上がるわけではありません。一方で、クロールしやすい構造、ユーザーに役立つ情報、技術的に健全なサイトといったSEOの基本は、AI検索への対応とも共通しています。',
   },
   {
     q: 'どのくらいの期間で効果が出ますか？',
-    a: '構造化データの反映はGoogleのクロール・インデックスのタイミングに依存するため、通常は施策後2〜8週間で変化が見られます。AI検索での引用は検索エンジンのインデックス状況にも左右されるため、3〜6ヶ月の継続的な取り組みを推奨しています。',
+    a: '検索エンジンやAIサービスへの反映時期は、クロール頻度・サイトの状態・検索内容などによって異なります。特定の期間での掲載・引用は保証できないため、継続的に状態を確認しながら改善します。',
   },
   {
     q: 'Plugdoに依頼するとどのようなことをしてもらえますか？',
@@ -46,15 +46,15 @@ const breadcrumbLd = {
 const whatWeDo = [
   {
     title: '構造化データ（JSON-LD）の実装',
-    text: 'Organization・Service・FAQPage・BreadcrumbList・Person などのschema.orgを実装し、AIがサービスの全体像を理解できる状態に整備します。',
+    text: 'Organization・Service・FAQPage・BreadcrumbList・Person などのschema.orgを実装。ページ上に表示されている情報と一致する構造化データを整備し、検索エンジンがサイトの情報を理解するための手がかりを追加します。',
   },
   {
     title: 'FAQの作成・整備',
-    text: '「どんなサービスですか？」「料金は？」「解約できますか？」などの実際の質問に答えるFAQを、可視テキストとJSON-LDの両方で整備します。',
+    text: '「どんなサービスですか？」「料金は？」「解約できますか？」など、ユーザーが実際に確認できるFAQを整備し、必要に応じて適切な構造化データを設定します。',
   },
   {
     title: 'HTMLの意味的構造改善',
-    text: '見出し（h1〜h3）の階層整理、サービス情報のテキスト化、適切なalt属性の設定など、AIが読み取りやすいHTML構造に整えます。',
+    text: '見出し（h1〜h3）の階層整理、サービス情報のテキスト化、適切なalt属性の設定など、ユーザー・検索エンジン・各種クローラーが内容を把握しやすいHTML構造に整えます。',
   },
   {
     title: 'サービス情報の一貫化',
@@ -62,18 +62,18 @@ const whatWeDo = [
   },
   {
     title: 'canonical・sitemap・robots.txt 整備',
-    text: '正規URLの指定、サイトマップへの正確なページ収録、AIクローラの許可設定を行い、インデックスの健全性を維持します。',
+    text: 'canonical・sitemap・robots.txtなどを確認し、検索エンジンやAI検索のクローラーが必要なページへ適切にアクセスできる状態を整えます。',
   },
   {
     title: '月次での継続改善',
-    text: 'AI検索の変化は速い。毎月の状況確認と改善提案を継続し、引用されやすい状態を維持・強化します。',
+    text: '検索・AIサービスの変化を確認しながら、サイトの情報や技術設定を継続的に見直します。',
   },
 ];
 
 const keyPoints = [
   {
-    q: '「引用される」のは順位ではなく、情報の正確さと構造',
-    a: 'AI検索は検索順位ではなく、サイトに書かれている情報の正確さ・一貫性・読み取りやすさで引用を判断します。1位でも構造化されていなければ引用されず、5位でも整備されていれば引用されます。',
+    q: 'AIからの参照は、検索順位だけでは決まらない',
+    a: '生成AIがどの情報を参照するかは、サービスや検索内容によって異なります。検索順位だけでなく、検索との関連性、情報の信頼性、取得しやすさなど、複数の要素が関係します。',
   },
   {
     q: 'スピードより正確さ',
@@ -81,14 +81,14 @@ const keyPoints = [
   },
   {
     q: 'SEOとAIOは対立しない、両立する',
-    a: '構造化データの整備、意味的なHTML構造、FAQの充実はGoogleの通常検索にも好影響を与えます。AIO対応はSEOと対立するものではなく、両方の基盤を同時に整える取り組みです。',
+    a: 'SEOとAI検索対応には、クロールしやすさ・分かりやすい情報設計・信頼できるコンテンツなど、共通する基盤が多くあります。',
   },
 ];
 ---
 
 <BaseLayout
-  title="AIO・GEO対応｜AI検索に引用されるサイト改善｜Plugdo"
-  description="PlugdoのAIO・GEO対応。ChatGPT、Perplexity、Google AI OverviewsなどのAI検索で自社情報が正しく理解・引用されるよう、構造化データ、FAQ、HTML構造、サービス情報を整備します。"
+  title="AIO・GEO対応｜AI検索から参照されやすいサイト改善｜Plugdo"
+  description="PlugdoのAIO・GEO対応。ChatGPT、Perplexity、Google AI Overviewsなどを意識し、検索・AIクローラーがサイトの情報を取得・理解しやすいよう、構造化データ、FAQ、HTML構造、サービス情報を整備します。"
   jsonLd={[faqLd, breadcrumbLd]}
 >
   <!-- ヒーロー -->
@@ -102,9 +102,9 @@ const keyPoints = [
         <span class="text-ink/60">AIO・GEO対応</span>
       </nav>
       <p class="section-label-left">- AIO / GEO -</p>
-      <h1 class="mt-3 text-4xl font-black text-navy md:text-5xl">AI検索に、<br />正しく引用されるサイトへ。</h1>
+      <h1 class="mt-3 text-4xl font-black text-navy md:text-5xl">AI検索から、<br />参照されやすいサイトへ。</h1>
       <p class="mt-6 max-w-xl text-base leading-relaxed text-ink">
-        ChatGPT・Perplexity・Google AI Overviewsなどの生成AI検索で、<strong class="font-bold text-navy">「御社の情報が引用される状態」</strong>をつくります。構造化データ・FAQの整備・HTML構造の見直しを月次で対応します。
+        ChatGPT・Perplexity・Googleの生成AI検索などを意識し、<strong class="font-bold text-navy">検索・AIクローラーがサイトの情報を取得・理解しやすい状態</strong>を整えます。構造化データ・FAQ・HTML構造などを確認し、検索とAIの双方に対応できるWebサイトの基盤をつくります。
       </p>
       <div class="mt-8 flex flex-wrap items-center gap-4">
         <a href="/contact/" class="btn-pink">無料相談する</a>
@@ -118,24 +118,24 @@ const keyPoints = [
     <div class="container-pd py-16 md:py-20">
       <div data-animate="fade-in">
         <p class="section-label">Problem</p>
-        <h2 class="section-title">「AI検索で自社が出てこない」<br class="hidden md:block" />その理由は、サイトの構造にあります。</h2>
+        <h2 class="section-title">「AI検索で自社が出てこない」<br class="hidden md:block" />まず、サイトの情報設計を確認します。</h2>
       </div>
       <div class="mt-12 grid gap-6 md:grid-cols-3">
         {[
           {
             no: '01',
-            title: 'AIが情報を読み取れない',
-            text: '構造化データ（JSON-LD）が未整備だと、AIはサービス内容・会社概要・価格などを正確に理解できません。結果として引用の候補から外れてしまいます。',
+            title: '重要な情報が伝わりにくい',
+            text: '会社概要・サービス内容・料金などの情報がページ上で明確になっていないと、検索エンジンやAIサービスが内容を正しく把握しづらくなる場合があります。',
           },
           {
             no: '02',
-            title: 'FAQが存在しない or 不完全',
-            text: '「〇〇を相談したい」という問いに答えるFAQが無いサイトは、生成AIの回答候補になりにくい。質問形式の情報整備がAIO施策の核です。',
+            title: 'ユーザーの疑問に答える情報が少ない',
+            text: '料金・対応範囲・利用方法など、ユーザーが実際に知りたい情報を明確に掲載します。FAQは、その情報を整理する方法のひとつです。',
           },
           {
             no: '03',
             title: 'HTMLの意味的構造が不明確',
-            text: 'h1/h2の階層が崩れている、サービス情報が画像に埋め込まれているなどの状態では、AIがテキストを正確に読み取れません。',
+            text: '見出しの階層が分かりづらい、重要な情報が画像だけで掲載されているなどの状態を見直し、ユーザーやクローラーが内容を把握しやすい構造に整えます。',
           },
         ].map((item) => (
           <div class="card" data-animate>

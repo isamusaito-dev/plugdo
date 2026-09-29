@@ -32,22 +32,22 @@ const stats = [
 const problems = [
   {
     title: '作ってから3年以上そのまま',
-    text: '情報が古いまま放置されたサイトは、見た人に「本当に営業しているのか」という不安を与えます。',
+    text: '情報が古いままのサイトは、会社やサービスそのものへの不安につながることがあります。',
     image: '/img_0002.png',
   },
   {
     title: '更新のたびに見積もりと納期待ち',
-    text: '文言ひとつ直すのに見積もり依頼と数週間の納期。だんだん更新を頼まなくなっていきます。',
+    text: '文言ひとつ直すにも、見積もり依頼と納期確認。その手間から、少しずつ更新が止まってしまいます。',
     image: '/img_0005.png',
   },
   {
     title: 'スマホで崩れている',
-    text: 'アクセスの過半はスマホから。表示が崩れているだけで、問い合わせの機会を失っています。',
+    text: 'スマホで見づらい・使いづらい状態は、問い合わせの機会を逃す原因になります。',
     image: '/img_0006.png',
   },
   {
     title: '誰に頼めばいいかわからない',
-    text: '制作会社・フリーランス・広告代理店。相場も違いもわからず、比較のしようがありません。',
+    text: '制作会社・フリーランス・広告代理店。料金も対応範囲も異なり、どこに相談すべきか判断しづらいのが実情です。',
     image: '/img_0007.png',
   },
 ];
@@ -88,11 +88,11 @@ const faqs = [
   },
   {
     q: '月2回の修正で足りますか？',
-    a: '「営業時間の変更」「写真の差し替え」といった日常の更新であれば、月2回で足りるお客様がほとんどです。更新頻度が高い場合は、回数無制限の運用スタンダード（月¥19,800）をご検討ください。',
+    a: '「営業時間の変更」「写真の差し替え」といった日常の更新であれば、月2回で足りるお客様がほとんどです。更新頻度が高い場合は、回数無制限の運用スタンダード（月¥19,800・税込）をご検討ください。',
   },
   {
     q: '補助金は使えますか？',
-    a: 'リニューアルが小規模事業者持続化補助金の対象となる場合、実質負担を約1/3に抑えられる可能性があります。申請可否は公募要領によりますので、無料相談時に状況を確認します。',
+    a: 'リニューアル費用が小規模事業者持続化補助金などの対象となる場合があります。対象要件や補助額は公募内容・申請内容によって異なるため、最新の公募要領をご確認ください。',
   },
   {
     q: '解約したらサイトはどうなりますか？',
@@ -231,7 +231,7 @@ const serviceLd = {
 
       <div class="mt-12 border-t border-navy/10 pt-8 text-center" data-animate="fade-in">
         <p class="text-base font-bold text-navy md:text-lg">
-          Plugdoは、診断で現状を数字にしてから、作り直しと運用で更新が止まらないサイトにします。
+          Plugdoは、まず診断でサイトの現状を可視化。必要に応じてリニューアルや運用を行い、継続的に改善できるサイトへ変えていきます。
         </p>
       </div>
     </div>
@@ -286,7 +286,7 @@ const serviceLd = {
   <section class="bg-mist">
     <div class="container-pd py-16 md:py-20">
       <div class="text-center" data-animate="fade-in">
-        <p class="section-label">Why plugdo</p>
+        <p class="section-label">Why Plugdo</p>
         <h2 class="section-title">選ばれる理由</h2>
         <p class="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-gray">
           デザイン・マーケティング・プロダクト開発——それぞれの領域で10年以上の実績を持つ専門家が、あなたのサイト改善を支えます。
@@ -318,14 +318,14 @@ const serviceLd = {
             <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70"></div>
             <div class="absolute left-0 top-0 p-6">
               <span class="mb-2 block h-0.5 w-8 bg-pink"></span>
-              <h3 class="text-xl font-black leading-snug text-white drop-shadow">作業者ではなく、<br />設計者。</h3>
+              <h3 class="text-xl font-black leading-snug text-white drop-shadow">作るだけでなく、<br />届け方まで考える。</h3>
             </div>
             <div class="absolute bottom-0 left-0 p-6">
               <p class="font-display text-xl font-black leading-snug text-pink drop-shadow-sm">Marketer</p>
               <p class="mt-1 text-sm font-medium text-white/80">吉楽 一平</p>
             </div>
           </div>
-          <p class="mt-4 text-sm leading-relaxed text-ink/70">webデザイナーから職歴が始まり、マーケターに転身。メガベンチャーを経て独立。SEO最適化やソーシャルメディアを活用した情報発信で、ブランドの認知度向上を得意とする。</p>
+          <p class="mt-4 text-sm leading-relaxed text-ink/70">Webデザイナーから職歴が始まり、マーケターに転身。メガベンチャーを経て独立。SEO最適化やソーシャルメディアを活用した情報発信で、ブランドの認知度向上を得意とする。</p>
         </div>
 
         <!-- 竹村 知洋 / Product Designer -->
@@ -386,12 +386,15 @@ const serviceLd = {
     )
   }
 
-  <!-- 改善ケース例 -->
+  <!-- 改善シミュレーション（モデルケース。実顧客の実測値ではない） -->
   <section class="bg-mist">
     <div class="container-pd py-16 md:py-20">
       <div class="text-center" data-animate="fade-in">
         <p class="section-label">- Case -</p>
-        <h2 class="section-title">改善ケース例</h2>
+        <h2 class="section-title">改善シミュレーション</h2>
+        <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-gray">
+          ※ 以下は改善施策を説明するためのモデルケースです。実際の成果を示すものではありません。
+        </p>
       </div>
 
       <div class="mt-10 grid gap-6 md:grid-cols-3">
@@ -413,7 +416,7 @@ const serviceLd = {
           <div class="flex flex-1 flex-col p-7">
             <svg class="mb-3 h-5 w-5 flex-shrink-0 text-navy/10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
             <p class="flex-1 text-sm leading-relaxed text-ink/70">
-              以前は制作会社に頼んで終わりでしたが、plugdoに変えてから毎月改善が進んでいます。何より「次に何をすればいいか」を一緒に考えてもらえるのが助かっています。
+              以前は制作会社に頼んで終わりでしたが、Plugdoに変えてから毎月改善が進んでいます。何より「次に何をすればいいか」を一緒に考えてもらえるのが助かっています。
             </p>
             <div class="mt-6 flex items-center gap-3 border-t border-mist pt-5">
               <img src="/avatar-01.svg" alt="税理士事務所 代表" class="h-12 w-12 flex-shrink-0 rounded-full border-2 border-mist bg-white" width="48" height="48" loading="lazy" />

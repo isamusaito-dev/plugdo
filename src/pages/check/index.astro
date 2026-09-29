@@ -196,8 +196,8 @@ const checkSteps = [
             </svg>
           </span>
           <h2 class="mt-4 text-xl font-black leading-snug text-navy md:text-2xl">
-            このサイトは、検索エンジンやAIから<br class="hidden sm:block" />
-            <span class="text-pink">中身が見えない状態</span>です
+            このサイトは、検索・AIクローラーが<br class="hidden sm:block" />
+            <span class="text-pink">内容を取得しにくい可能性</span>があります
           </h2>
           <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-ink">
             <span id="spa-framework" class="font-bold text-navy"></span>で作られており、
@@ -224,24 +224,24 @@ const checkSteps = [
             </div>
             <div class="rounded-xl border border-mist bg-paper p-5">
               <p class="text-sm font-black text-navy">Google検索</p>
-              <p class="mt-2 inline-block rounded-full bg-gold/15 px-2.5 py-0.5 text-xs font-bold text-gold">遅れる</p>
+              <p class="mt-2 inline-block rounded-full bg-gold/15 px-2.5 py-0.5 text-xs font-bold text-gold">取得に時間がかかる場合があります</p>
               <p class="mt-3 text-xs leading-relaxed text-gray">
-                JavaScriptを実行しますが、後回しの順番待ちに入るため、
-                内容の反映が遅れます。
+                GoogleはJavaScriptを処理できますが、サイトの作りによっては
+                クロールや内容の反映に時間がかかる場合があります。
               </p>
             </div>
             <div class="rounded-xl border border-pink/30 bg-pink/5 p-5">
               <p class="text-sm font-black text-navy">AI検索</p>
-              <p class="mt-2 inline-block rounded-full bg-pink/15 px-2.5 py-0.5 text-xs font-bold text-pink">見えない</p>
+              <p class="mt-2 inline-block rounded-full bg-pink/15 px-2.5 py-0.5 text-xs font-bold text-pink">取得しにくい場合があります</p>
               <p class="mt-3 text-xs leading-relaxed text-ink">
-                ChatGPTなどのクローラーはJavaScriptを実行しません。
-                <strong class="font-bold text-navy">中身の無いページとして扱われ</strong>、
-                回答に引用されません。
+                AI検索ではサービスごとに情報の取得方法が異なります。
+                <strong class="font-bold text-navy">JavaScriptへの依存が強いサイト</strong>では、
+                クローラーが本文を十分に取得できない場合があります。
               </p>
             </div>
           </div>
           <p class="mt-4 text-xs leading-relaxed text-gray">
-            ＊ AI経由で会社を調べる人が増えているため、今後この差は広がります。
+            ＊ 検索やAIサービスからサイトを見つけてもらうためにも、重要な情報をクローラーが取得できる状態にしておくことが大切です。
           </p>
         </div>
 

@@ -5,15 +5,15 @@
 //       文言の正本が別リポジトリ等にある場合は差し替えること。
 
 const before = [
-  { label: '依頼・見積もり待ち', days: '〜7日' },
-  { label: '制作会社の順番待ち', days: '〜14日' },
-  { label: '実装・確認・反映', days: '〜9日' },
+  { label: '依頼・見積もり', days: '' },
+  { label: 'スケジュール調整', days: '' },
+  { label: '実装・確認・反映', days: '' },
 ];
 
 const after = [
-  { label: '依頼（Slack・メール）', days: '当日' },
-  { label: 'AI支援で実装・確認', days: '〜5日' },
-  { label: '反映・報告', days: '〜2日' },
+  { label: 'Slack・メールで依頼', days: '' },
+  { label: '内容確認・実装', days: '' },
+  { label: '反映・報告', days: '' },
 ];
 ---
 
@@ -21,9 +21,9 @@ const after = [
   <div class="container-pd py-16 md:py-20">
     <div class="text-center" data-animate="fade-in">
       <p class="section-label">- Speed -</p>
-      <h2 class="section-title">改善の1周を、30日から7日へ。</h2>
+      <h2 class="section-title">小さな改善を、すばやく回す。</h2>
       <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-gray">
-        依頼してから反映されるまでの待ち時間を、AI実装と少数運営で圧縮します。
+        依頼してから反映されるまでの待ち時間を、AI実装と少数運営で短くしています。
       </p>
     </div>
 
@@ -32,7 +32,7 @@ const after = [
       <div class="rounded-xl border border-gray/10 bg-paper p-7">
         <div class="flex items-baseline justify-between gap-3 border-b border-mist pb-4">
           <p class="text-sm font-bold text-gray">一般的な外注</p>
-          <p class="font-display text-2xl font-black text-gray [font-variant-numeric:tabular-nums]">約30日</p>
+          <p class="text-sm font-bold text-gray">都度調整</p>
         </div>
         <ul class="mt-5 space-y-3">
           {
@@ -50,7 +50,7 @@ const after = [
       <div class="rounded-xl border border-navy/10 bg-sky/50 p-7">
         <div class="flex items-baseline justify-between gap-3 border-b border-navy/10 pb-4">
           <p class="text-sm font-bold text-navy">Plugdoの運用</p>
-          <p class="font-display text-2xl font-black text-navy [font-variant-numeric:tabular-nums]">約7日</p>
+          <p class="font-display text-base font-black text-navy [font-variant-numeric:tabular-nums]">原則48時間〜</p>
         </div>
         <ul class="mt-5 space-y-3">
           {
@@ -65,6 +65,6 @@ const after = [
       </div>
     </div>
 
-    <p class="mt-6 text-center text-xs text-gray">※ 日数は一般的な修正依頼（テキスト・画像変更等）の目安です。内容により前後します。</p>
+    <p class="mt-6 text-center text-xs text-gray">※ 軽微なテキスト・画像修正を想定しています。内容や確認事項によって対応期間は異なります。</p>
   </div>
 </section>
