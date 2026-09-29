@@ -58,11 +58,11 @@ const checkIcon =
   <div class="hero-grain pointer-events-none absolute inset-0" aria-hidden="true"></div>
 
   <div class="container-pd relative py-20 md:py-28" style="z-index:10">
-    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+    <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
 
       <!-- 左カラム: テキスト + CTA -->
       <div>
-        <h1 class="tracking-tight">
+        <h1 class="tracking-tight [word-break:auto-phrase]">
           <span class="block font-black leading-[1.2] text-[1.7rem] text-navy md:text-[2.1rem] lg:text-[2.4rem]">古くなったサイト、</span>
           <span class="mt-2 block font-black leading-[1.05] text-[2.6rem] text-navy md:text-[3.4rem] lg:text-[3.9rem]">
             まず<span
@@ -72,7 +72,8 @@ const checkIcon =
           </span>
           <span class="mt-2 block font-black leading-[1.15] text-[1.85rem] text-navy md:text-[2.3rem] lg:text-[2.65rem]">直して、育てる。</span>
         </h1>
-        <p class="mt-6 max-w-md text-base leading-[1.9] text-ink/70">
+        <!-- word-break:auto-phrase は日本語を文節で折り返す指定。「リニューアル」のような語が行中で割れるのを防ぐ。未対応ブラウザでは従来どおりの折り返しになるだけで、崩れはしない。 -->
+        <p class="mt-6 max-w-[34rem] text-base leading-[1.9] text-ink/70 [word-break:auto-phrase]">
           無料のAI診断であなたのサイトを採点。必要な分だけリニューアルして、
           その後は月<span class="font-display text-[1.28em] font-extrabold text-pink [font-variant-numeric:tabular-nums]">¥9,800</span>〜の運用で、更新が止まらないサイトに。
         </p>
@@ -99,12 +100,12 @@ const checkIcon =
       </div>
 
       <!-- 右カラム: AI診断スコアの模擬UI -->
-      <div id="hero-visual" class="relative mx-auto h-[520px] w-full max-w-[420px] lg:h-[566px]">
+      <div id="hero-visual" class="relative mx-auto h-[520px] w-full max-w-[420px] lg:h-[540px] lg:max-w-[386px]">
 
         <!-- ブラウザカード -->
         <div
           id="hero-browser"
-          class="absolute left-0 top-2 w-[min(300px,86%)] rounded-2xl border border-white/60 bg-white/70 p-4 shadow-[0_30px_70px_-25px_rgba(16,51,102,0.35)] backdrop-blur-[14px] lg:w-[340px]"
+          class="absolute left-0 top-2 w-[min(300px,86%)] rounded-2xl border border-white/60 bg-white/70 p-4 shadow-[0_30px_70px_-25px_rgba(16,51,102,0.35)] backdrop-blur-[14px] lg:w-[312px]"
         >
           <div class="flex items-center gap-1.5" aria-hidden="true">
             <span class="h-2.5 w-2.5 rounded-full bg-pink/30"></span>
@@ -129,7 +130,7 @@ const checkIcon =
         <!-- スコアカード -->
         <div
           id="hero-score-card"
-          class="absolute right-0 top-[130px] w-[min(320px,94%)] rounded-[20px] bg-white p-6 opacity-0 shadow-[0_40px_90px_-30px_rgba(20,30,70,0.35)] lg:w-[360px]"
+          class="absolute right-0 top-[130px] w-[min(320px,94%)] rounded-[20px] bg-white p-6 opacity-0 shadow-[0_40px_90px_-30px_rgba(20,30,70,0.35)] lg:w-[330px]"
         >
           <div class="flex items-center justify-between">
             <p class="text-xs font-bold uppercase tracking-widest text-gray">サイト診断スコア</p>
