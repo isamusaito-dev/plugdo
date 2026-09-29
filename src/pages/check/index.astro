@@ -1,5 +1,6 @@
 ---
 import fs from 'node:fs';
+import path from 'node:path';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
@@ -8,9 +9,18 @@ const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
 // 未配置でも壊れないよう、ビルド時に実在を確認してから描画する。
 // 差し替えるときは同じ名前で上書きすれば、この分岐はそのまま使える。
 const bannerCandidates = ['/report-banner.webp', '/report-banner.jpg', '/report-banner.png'];
+// public/ への相対パスは、このファイルの場所を変えたら必ず見直すこと。
+// 見つからなくてもエラーにならず、バナーが黙って消えるだけなので気づきにくい。
+// （実際 2026-09-15 に check.astro → check/index.astro へ移した際、
+//   ../../public が src/public を指すようになり、バナーが消えていた）
+// public/ の実体は、プロジェクト直下の public/ に固定されている。
+// import.meta.url は開発サーバーではソース、ビルド時は dist の中を指すため、
+// そこからの相対パスにするとどちらかで必ず壊れる（実際 2026-09-15 に
+// check.astro を check/index.astro へ移した際、開発中だけバナーが消えた）。
+// cwd はどちらの経路でもプロジェクト直下なので、こちらを基準にする。
 const reportBanner =
   bannerCandidates.find((p) =>
-    fs.existsSync(new URL(`../../public${p}`, import.meta.url))
+    fs.existsSync(path.join(process.cwd(), 'public', p))
   ) ?? null;
 
 const breadcrumbLd = {
