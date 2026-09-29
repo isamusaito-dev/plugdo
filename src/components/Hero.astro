@@ -5,9 +5,6 @@ const findings = [
   { label: '改善余地', point: '+11', text: '表示速度が遅い', chip: 'bg-gold text-white' },
   { label: '軽微', point: '+6', text: '問い合わせ導線が弱い', chip: 'bg-good text-white' },
 ];
-
-const checkIcon =
-  '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#1F9D6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7"/></svg>';
 ---
 
 <style>
@@ -89,14 +86,7 @@ const checkIcon =
               <path d="M2 8h12M9 3l5 5-5 5" />
             </svg>
           </a>
-          <a href="#services" class="text-sm font-bold text-navy underline underline-offset-4 hover:text-pink">料金を先に見る</a>
         </div>
-
-        <ul class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs text-gray">
-          <li class="flex items-center gap-1.5"><span set:html={checkIcon} />軽微な修正は48時間以内</li>
-          <li class="flex items-center gap-1.5"><span set:html={checkIcon} />最低契約期間なし</li>
-          <li class="flex items-center gap-1.5"><span set:html={checkIcon} />いつでも解約OK</li>
-        </ul>
       </div>
 
       <!-- 右カラム: AI診断スコアの模擬UI -->
