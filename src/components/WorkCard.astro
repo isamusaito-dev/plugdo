@@ -1,0 +1,73 @@
+---
+// 制作実績のカード。TOPの抜粋と /works/ の一覧で共通に使う。
+//
+// 画像は4:3の枠に object-contain で収める。チラシやバナーは切り取ると
+// 意味が変わるため、トリミングはしない。横長・縦長が混ざっても
+// カードの高さが揃う。
+import type { Work } from '../data/works';
+
+interface Props {
+  work: Work;
+}
+const { work } = Astro.props;
+
+// 公開サイトがあるものだけリンクにする。無いものは div のまま。
+const Tag = work.url ? 'a' : 'div';
+const linkAttrs = work.url
+  ? { href: work.url, target: '_blank', rel: 'noopener noreferrer' }
+  : {};
+---
+
+<Tag
+  {...linkAttrs}
+  class:list={[
+    'card group flex flex-col overflow-hidden no-underline',
+    work.url && 'cursor-pointer',
+  ]}
+>
+  <div class="aspect-[4/3] overflow-hidden border-b border-mist bg-mist/40">
+    <img
+      src={work.image}
+      alt={work.alt}
+      loading="lazy"
+      decoding="async"
+      class="h-full w-full object-contain object-center transition-transform duration-300 group-hover:scale-[1.03]"
+    />
+  </div>
+
+  <div class="flex flex-1 flex-col p-6">
+    <p class="text-[10px] font-bold uppercase tracking-widest text-pink">
+      {work.category}
+    </p>
+    <h3
+      class:list={[
+        'mt-1.5 text-base font-bold leading-snug text-navy',
+        work.url && 'group-hover:text-pink',
+      ]}
+    >
+      {work.name}
+    </h3>
+    <p class="mt-2 flex-1 text-sm leading-relaxed text-gray">{work.desc}</p>
+
+    {
+      work.url && (
+        <p class="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-navy">
+          サイトを見る
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4.5 2H10v5.5M10 2 2 10" />
+          </svg>
+        </p>
+      )
+    }
+  </div>
+</Tag>

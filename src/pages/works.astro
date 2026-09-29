@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkCard from '../components/WorkCard.astro';
+import CTASection from '../components/CTASection.astro';
+import { works } from '../data/works';
+
+const SITE_URL = import.meta.env.PUBLIC_SITE_URL || 'https://plugdo.jp';
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: '制作実績', item: `${SITE_URL}/works/` },
+  ],
+};
+
+// 一覧そのものを構造化データで渡す。AI検索に拾われやすくするため。
+const itemListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Plugdo 制作実績',
+  numberOfItems: works.length,
+  itemListElement: works.map((w, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: w.name,
+    description: w.desc,
+    ...(w.url ? { url: w.url } : {}),
+  })),
+};
+---
+
+<BaseLayout
+  title="制作実績"
+  description="Plugdo（株式会社ハンチス）の制作実績。サービスサイト・ポートフォリオ・医療機関LPの制作から、新規事業のデザイン支援、EC運用、ブランディングまで手がけた事例をご紹介します。"
+  canonicalPath="/works/"
+  jsonLd={[breadcrumbLd, itemListLd]}
+>
+  <!-- ページヘッダー -->
+  <section class="hero-gradient">
+    <div class="container-pd py-16 md:py-24">
+      <div class="max-w-2xl">
+        <p class="section-label-left">- Works -</p>
+        <h1 class="text-3xl font-black leading-snug text-navy md:text-4xl [word-break:auto-phrase]">
+          つくったものを、<br />そのままお見せします。
+        </h1>
+        <p class="mt-5 max-w-xl text-base leading-relaxed text-ink [word-break:auto-phrase]">
+          サイト制作のほか、新規事業の設計や販促物も手がけています。
+          その一部をご紹介します。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 実績一覧 -->
+  <section class="bg-paper">
+    <div class="container-pd py-16 md:py-20">
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {works.map((w) => <WorkCard work={w} />)}
+      </div>
+
+      <p class="mt-10 text-center text-xs leading-relaxed text-gray">
+        ※ 掲載は許可をいただいたもののみです。守秘義務により掲載できない案件もあります。
+      </p>
+    </div>
+  </section>
+
+  <CTASection />
+</BaseLayout>
