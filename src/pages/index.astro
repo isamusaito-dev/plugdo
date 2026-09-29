@@ -230,7 +230,9 @@ const serviceLd = {
       </div>
 
       <div class="mt-12 border-t border-navy/10 pt-8 text-center" data-animate="fade-in">
-        <p class="text-base font-bold text-navy md:text-lg">
+        <!-- text-wrap:balance で2行を均等に分ける。auto-phrase で「サイトへ」のような
+             語の途中での分断を防ぐ。 -->
+        <p class="mx-auto max-w-3xl text-base font-bold text-navy md:text-lg [word-break:auto-phrase] [text-wrap:balance]">
           Plugdoは、まず診断でサイトの現状を可視化。必要に応じてリニューアルや運用を行い、継続的に改善できるサイトへ変えていきます。
         </p>
       </div>
