@@ -356,6 +356,30 @@ const checkSteps = [
           <!-- CVまでのスクロールを短くするため2カラムに並べる（スマホは1カラム） -->
           <div id="axes" class="mt-5 grid gap-3 md:grid-cols-2"></div>
 
+          <!-- 検索エンジン・AI検索への対応（詳しく）。軸⑤の裏側を検索/AI検索に分けて開示する。 -->
+          <div class="mt-12">
+            <h3 class="text-lg font-black text-navy">検索エンジン・AI検索への対応（詳しく）</h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-gray">
+              Googleなどの<strong class="font-bold text-navy">検索（SEO）</strong>と、ChatGPT・Perplexityなどの<strong class="font-bold text-navy">AI検索（AIO）</strong>に、正しく見つけてもらえる状態かを詳しく見ています。
+            </p>
+            <div class="mt-4 grid gap-3 md:grid-cols-2">
+              <div class="rounded-xl border border-mist bg-paper p-5">
+                <p class="font-bold text-navy">検索エンジン（SEO）</p>
+                <ul id="seo-list" class="mt-4 space-y-3.5"></ul>
+              </div>
+              <div class="rounded-xl border border-mist bg-paper p-5">
+                <p class="flex items-center gap-2 font-bold text-navy">
+                  AI検索（AIO）
+                  <span class="rounded-full bg-navy px-2 py-0.5 text-[10px] font-bold text-paper">AI</span>
+                </p>
+                <ul id="aio-list" class="mt-4 space-y-3.5"></ul>
+              </div>
+            </div>
+            <p class="mt-3 text-xs leading-relaxed text-gray/80">
+              ＊ 検索順位そのものはキーワードやタイミングで常に変動するため、この自動診断では扱いません。順位を踏まえた具体策は無料レポートでご案内します。
+            </p>
+          </div>
+
           <!-- ゲートの予告。ここを弱くすると下のフォームまで意識が続かない。
                見出しは flex にしないこと。インラインの span が独立した行になり、
                スマホで単語の途中で改行されて読みにくくなる。 -->
@@ -598,6 +622,27 @@ const checkSteps = [
       });
     }
 
+    // ── SEO/AIO 詳細リストの描画 ──
+    function renderSeoAioList(el, items) {
+      if (!el) return;
+      el.innerHTML = '';
+      (items || []).forEach(function (it) {
+        const li = document.createElement('li');
+        li.className = 'flex gap-2.5';
+        const mark =
+          '<span class="mt-0.5 shrink-0 font-bold" style="color:' +
+          (it.ok ? '#1F9D6B' : '#E43172') + '">' + (it.ok ? '✓' : '✕') + '</span>';
+        const val = it.value
+          ? ' <span class="text-xs font-normal text-gray/70">' + esc(it.value) + '</span>'
+          : '';
+        li.innerHTML =
+          mark +
+          '<span><span class="text-sm font-bold text-navy">' + esc(it.label) + '</span>' + val +
+          '<span class="mt-0.5 block text-xs leading-relaxed text-gray">' + esc(it.note) + '</span></span>';
+        el.appendChild(li);
+      });
+    }
+
     // ── 結果レンダリング ──
     function renderResult(data) {
       lastResult = data;
@@ -687,6 +732,10 @@ const checkSteps = [
           row.querySelector('.axis-bar').style.width = ax.score + '%';
         });
       });
+
+      // 検索エンジン・AI検索への対応（詳しく）
+      renderSeoAioList($('seo-list'), data.seoAio && data.seoAio.seo);
+      renderSeoAioList($('aio-list'), data.seoAio && data.seoAio.aio);
 
       // 指摘の中身は画面に出さず、件数だけカウントアップで見せる（中身はレポートでゲート）
       const issueTotal =

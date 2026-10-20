@@ -117,9 +117,15 @@ interface Extracted {
   hasAddress: boolean;
   hasHours: boolean;
   hasArea: boolean;
-  // サイト外ファイル（ハンドラで取得して後from設定）
+  // v4 追加（SEO/AIO 詳細分析用）
+  isNoindexMeta: boolean;
+  hasTwitterCard: boolean;
+  // サイト外ファイル・レスポンスヘッダ（ハンドラで取得して後から設定）
   llmsTxtOk: boolean;
   robotsAiOk: boolean;
+  blockedAiBots: string[];
+  hasSitemap: boolean;
+  isNoindexHeader: boolean;
 }
 
 const matchText = (html: string, re: RegExp): string => {
@@ -249,8 +255,15 @@ function extract(html: string, isHttps: boolean, htmlChars: number): Extracted {
     hasAddress: /(東京都|北海道|(?:京都|大阪)府|\S{2,3}県)\S{0,20}?(市|区|郡|町|村)/.test(bodyText),
     hasHours: /(営業時間|受付時間|営業日|定休日|診療時間|営業中|平日\s*\d{1,2}[:：]\d{2})/.test(credText),
     hasArea: /(対応エリア|対応地域|提供エリア|全国対応|オンライン完結|全国どこでも|来店不要)/.test(credText),
+    isNoindexMeta:
+      /<meta[^>]+name\s*=\s*["']robots["'][^>]*content\s*=\s*["'][^"']*noindex/i.test(headHtml) ||
+      /<meta[^>]+content\s*=\s*["'][^"']*noindex[^"']*["'][^>]*name\s*=\s*["']robots["']/i.test(headHtml),
+    hasTwitterCard: /<meta[^>]+name\s*=\s*["']twitter:card["']/i.test(headHtml),
     llmsTxtOk: false, // ハンドラで上書き
     robotsAiOk: true, // ハンドラで上書き
+    blockedAiBots: [], // ハンドラで上書き
+    hasSitemap: false, // ハンドラで上書き
+    isNoindexHeader: false, // ハンドラで上書き
   };
 }
 
@@ -469,6 +482,90 @@ function buildEvidence(x: Extracted): Record<AxisKey, EvidenceItem[]> {
   };
 }
 
+// ── SEO/AIO 詳細分析（軸⑤の裏側を、検索／AI検索に分けて平易に見せる） ──
+// スコアは軸⑤に反映済み。ここは「なぜ見つけてもらえるか／もらえないか」を
+// 具体的に開示して信頼性を上げるための表示用データ（直し方は書かない＝ゲート維持）。
+
+interface SeoAioItem {
+  label: string;
+  ok: boolean;
+  value?: string;
+  note: string;
+}
+
+function buildSeoAio(x: Extracted): { seo: SeoAioItem[]; aio: SeoAioItem[] } {
+  const noindex = x.isNoindexMeta || x.isNoindexHeader;
+  const orgType = x.jsonLdTypes.some((t) =>
+    /organization|localbusiness|professionalservice|store|corporation/i.test(t)
+  );
+  const shareVal = [x.hasOgImage ? 'OGP' : '', x.hasTwitterCard ? 'Twitterカード' : '']
+    .filter(Boolean)
+    .join('・');
+
+  const seo: SeoAioItem[] = [
+    {
+      label: '検索結果に表示される設定',
+      ok: !noindex,
+      value: noindex ? '今は非表示（noindex）' : '',
+      note: 'ここが「非表示」だと、そもそも検索結果に出ません。',
+    },
+    {
+      label: '検索エンジン用のサイト地図（sitemap）',
+      ok: x.hasSitemap,
+      note: '全ページを検索エンジンに知らせ、早く見つけてもらいます。',
+    },
+    {
+      label: '重複ページの指定（canonical）',
+      ok: x.hasCanonical,
+      note: '似たページ同士が評価を奪い合うのを防ぎます。',
+    },
+    {
+      label: '検索結果に出るタイトル・説明文',
+      ok: x.title.length >= 15 && x.metaDescription.length >= 40,
+      value: `タイトル${x.title.length}字・説明文${x.metaDescription.length}字`,
+      note: 'クリックされる「見出しと説明」。短すぎ・未設定はもったいない。',
+    },
+    {
+      label: 'SNS・チャットで共有したときの見え方',
+      ok: x.hasOgImage,
+      value: shareVal,
+      note: 'SNSやLINEで共有されたときのカード表示（画像・タイトル）です。',
+    },
+  ];
+
+  const aio: SeoAioItem[] = [
+    {
+      label: 'AI検索ロボットの受け入れ',
+      ok: x.robotsAiOk,
+      value: x.blockedAiBots.length ? x.blockedAiBots.join('・') + 'を拒否中' : '',
+      note: 'ChatGPTやPerplexityのロボットを拒否していると、AIに載りません。',
+    },
+    {
+      label: 'AI向けのサイト案内（llms.txt）',
+      ok: x.llmsTxtOk,
+      note: 'AIにサイトの要点を伝える新しい仕組み。あると一歩先です。',
+    },
+    {
+      label: '会社情報の構造化データ',
+      ok: orgType,
+      note: '会社名・事業内容をAIが正確に読み取れる形で渡せます。',
+    },
+    {
+      label: 'よくある質問の構造化（FAQ）',
+      ok: x.hasFaqPageLd || x.hasFaqContent,
+      note: 'AI検索は質問と答えの形の情報を引用しやすい傾向があります。',
+    },
+    {
+      label: '読み取れた構造化データの種類',
+      ok: x.jsonLdTypes.length > 0,
+      value: x.jsonLdTypes.length ? x.jsonLdTypes.slice(0, 6).join('・') : 'なし',
+      note: '会社・商品・FAQなどを、AIが理解できる形で用意できています。',
+    },
+  ];
+
+  return { seo, aio };
+}
+
 // ── Claude 定性判定（軸①②⑥＋気づき文の生成／辛口・根拠必須） ─────
 
 interface Finding {
@@ -639,6 +736,7 @@ export async function onRequestPost(context: EventContext): Promise<Response> {
 
   let html: string;
   let htmlChars: number;
+  let xRobotsHeader = ''; // 検索非表示（noindex）をヘッダで指定している場合に拾う
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 12000);
@@ -658,6 +756,7 @@ export async function onRequestPost(context: EventContext): Promise<Response> {
     if (ct && !ct.includes('html')) {
       return json({ error: 'ホームページのURLを入力してください。' }, 400);
     }
+    xRobotsHeader = res.headers.get('x-robots-tag') || '';
     const full = await res.text();
     htmlChars = full.length;
     html = full.slice(0, 600000); // トップページのみ対象（巨大サイト対策）
@@ -703,15 +802,40 @@ export async function onRequestPost(context: EventContext): Promise<Response> {
       return null;
     }
   };
-  const [llmsTxt, robotsTxt] = await Promise.all([fetchText('/llms.txt'), fetchText('/robots.txt')]);
+  const [llmsTxt, robotsTxt, sitemapTxt] = await Promise.all([
+    fetchText('/llms.txt'),
+    fetchText('/robots.txt'),
+    fetchText('/sitemap.xml'),
+  ]);
   x.llmsTxtOk = !!llmsTxt && llmsTxt.trim().length > 40;
+  x.isNoindexHeader = /noindex/i.test(xRobotsHeader);
+  // sitemap.xml 本体か、robots.txt 内の Sitemap: 記載のどちらかがあればOK。
+  x.hasSitemap =
+    (!!sitemapTxt && /<urlset|<sitemapindex|<\?xml/i.test(sitemapTxt)) ||
+    (!!robotsTxt && /^\s*sitemap\s*:/im.test(robotsTxt));
   if (robotsTxt) {
-    // AIクローラー（GPTBot等）を名指しで全面拒否していないか。
+    // AIクローラー（GPTBot等）を名指しで全面拒否していないか。拒否中のbot名も控える。
+    const botNames: Record<string, string> = {
+      gptbot: 'GPTBot',
+      'oai-searchbot': 'OAI-SearchBot',
+      claudebot: 'ClaudeBot',
+      'claude-web': 'Claude-Web',
+      'anthropic-ai': 'anthropic-ai',
+      perplexitybot: 'PerplexityBot',
+      'google-extended': 'Google-Extended',
+      ccbot: 'CCBot',
+      bytespider: 'Bytespider',
+    };
     const blocks = robotsTxt.split(/(?=user-agent\s*:)/i);
-    const aiBotRe = /user-agent\s*:\s*(gptbot|claudebot|claude-web|anthropic-ai|perplexitybot|google-extended|ccbot)/i;
-    x.robotsAiOk = !blocks.some(
-      (b) => aiBotRe.test(b) && /disallow\s*:\s*\/\s*$/im.test(b)
-    );
+    const aiBotRe =
+      /user-agent\s*:\s*(gptbot|oai-searchbot|claudebot|claude-web|anthropic-ai|perplexitybot|google-extended|ccbot|bytespider)/i;
+    const blocked = new Set<string>();
+    for (const b of blocks) {
+      const m = b.match(aiBotRe);
+      if (m && /disallow\s*:\s*\/\s*$/im.test(b)) blocked.add(botNames[m[1].toLowerCase()] || m[1]);
+    }
+    x.blockedAiBots = [...blocked];
+    x.robotsAiOk = blocked.size === 0;
   }
 
   const det = deterministicScore(x);
@@ -754,6 +878,7 @@ export async function onRequestPost(context: EventContext): Promise<Response> {
   const remainingCount = Math.max(0, allIssues.size - findings.length);
 
   const evidenceMap = buildEvidence(x);
+  const seoAio = buildSeoAio(x);
 
   return json({
     url: target.href,
@@ -767,6 +892,7 @@ export async function onRequestPost(context: EventContext): Promise<Response> {
       color: colorFor(axisScores[k]),
       evidence: evidenceMap[k],
     })),
+    seoAio,
     findings,
     remainingCount,
   });
